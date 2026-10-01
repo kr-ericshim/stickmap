@@ -1,0 +1,207 @@
+{
+  "name": "JD VFJams transparent scrolling",
+  "position_origin": "bottom line = 0; each half-space upwards adds 1",
+  "notes": "White scrolling notation over video. Filled1 kick,5 snare,3 tom. Upper x at8/9 may distinguish stack/hat; no complete key verified, kept cymbal_unknown. Below staff x is pedal hi-hat.",
+  "min_x_fraction": 0,
+  "rules": {
+    "filled:0": {
+      "inst": "tom",
+      "confidence": 0.88
+    },
+    "filled:1": {
+      "inst": "kick",
+      "confidence": 0.98
+    },
+    "filled:2": {
+      "inst": "tom",
+      "confidence": 0.88
+    },
+    "filled:3": {
+      "inst": "tom",
+      "confidence": 0.88
+    },
+    "filled:4": {
+      "inst": "tom",
+      "confidence": 0.88
+    },
+    "filled:5": {
+      "inst": "snare",
+      "confidence": 0.98
+    },
+    "filled:6": {
+      "inst": "tom",
+      "confidence": 0.88
+    },
+    "filled:7": {
+      "inst": "tom",
+      "confidence": 0.88
+    },
+    "filled:8": {
+      "inst": "tom",
+      "confidence": 0.88
+    },
+    "cross:-3": {
+      "inst": "cymbal_unknown",
+      "confidence": 0.45
+    },
+    "circled:-3": {
+      "inst": "cymbal_unknown",
+      "confidence": 0.45
+    },
+    "cross:-2": {
+      "inst": "hihat",
+      "confidence": 0.95,
+      "articulation": "pedal"
+    },
+    "circled:-2": {
+      "inst": "hihat",
+      "confidence": 0.95,
+      "articulation": "pedal"
+    },
+    "cross:-1": {
+      "inst": "hihat",
+      "confidence": 0.95,
+      "articulation": "pedal"
+    },
+    "circled:-1": {
+      "inst": "hihat",
+      "confidence": 0.95,
+      "articulation": "pedal"
+    },
+    "cross:0": {
+      "inst": "cymbal_unknown",
+      "confidence": 0.45
+    },
+    "circled:0": {
+      "inst": "cymbal_unknown",
+      "confidence": 0.45
+    },
+    "cross:1": {
+      "inst": "cymbal_unknown",
+      "confidence": 0.45
+    },
+    "circled:1": {
+      "inst": "cymbal_unknown",
+      "confidence": 0.45
+    },
+    "cross:2": {
+      "inst": "cymbal_unknown",
+      "confidence": 0.45
+    },
+    "circled:2": {
+      "inst": "cymbal_unknown",
+      "confidence": 0.45
+    },
+    "cross:3": {
+      "inst": "cymbal_unknown",
+      "confidence": 0.45
+    },
+    "circled:3": {
+      "inst": "cymbal_unknown",
+      "confidence": 0.45
+    },
+    "cross:4": {
+      "inst": "cymbal_unknown",
+      "confidence": 0.45
+    },
+    "circled:4": {
+      "inst": "cymbal_unknown",
+      "confidence": 0.45
+    },
+    "cross:5": {
+      "inst": "side_stick",
+      "confidence": 0.95
+    },
+    "circled:5": {
+      "inst": "side_stick",
+      "confidence": 0.95
+    },
+    "cross:6": {
+      "inst": "cymbal_unknown",
+      "confidence": 0.8
+    },
+    "circled:6": {
+      "inst": "cymbal_unknown",
+      "confidence": 0.8
+    },
+    "cross:7": {
+      "inst": "cymbal_unknown",
+      "confidence": 0.8
+    },
+    "circled:7": {
+      "inst": "cymbal_unknown",
+      "confidence": 0.8
+    },
+    "cross:8": {
+      "inst": "cymbal_unknown",
+      "confidence": 0.8
+    },
+    "circled:8": {
+      "inst": "cymbal_unknown",
+      "confidence": 0.8
+    },
+    "cross:9": {
+      "inst": "cymbal_unknown",
+      "confidence": 0.8
+    },
+    "circled:9": {
+      "inst": "cymbal_unknown",
+      "confidence": 0.8
+    },
+    "cross:10": {
+      "inst": "cymbal_unknown",
+      "confidence": 0.8
+    },
+    "circled:10": {
+      "inst": "cymbal_unknown",
+      "confidence": 0.8
+    },
+    "cross:11": {
+      "inst": "cymbal_unknown",
+      "confidence": 0.8
+    },
+    "circled:11": {
+      "inst": "cymbal_unknown",
+      "confidence": 0.8
+    },
+    "cross:12": {
+      "inst": "cymbal_unknown",
+      "confidence": 0.8
+    },
+    "circled:12": {
+      "inst": "cymbal_unknown",
+      "confidence": 0.8
+    },
+    "diamond:7": {
+      "inst": "cymbal_unknown",
+      "confidence": 0.8
+    },
+    "diamond:8": {
+      "inst": "cymbal_unknown",
+      "confidence": 0.8
+    },
+    "diamond:9": {
+      "inst": "cymbal_unknown",
+      "confidence": 0.8
+    },
+    "diamond:10": {
+      "inst": "cymbal_unknown",
+      "confidence": 0.8
+    },
+    "diamond:6": {
+      "inst": "cymbal_unknown",
+      "confidence": 0.8
+    },
+    "diamond:11": {
+      "inst": "cymbal_unknown",
+      "confidence": 0.8
+    },
+    "diamond:12": {
+      "inst": "cymbal_unknown",
+      "confidence": 0.8
+    }
+  },
+  "clef_omitted_verified": "Reconstructed interior staff section: clef is offscreen to the left, source percussion staff visually confirmed.",
+  "keep_small_filled": true,
+  "template_dir": "jd_templates/vfjams"
+}

@@ -1,0 +1,121 @@
+{
+  "name": "yeol",
+  "harvest_profile": true,
+  "layout": "kr_strip",
+  "enabled": true,
+  "legend_confidence": "medium: audited notation conventions; partial key, no complete printed key",
+  "reason": "Three-song native reading reviewed. Only verified rules exported; unresolved upper cymbals/marks excluded. See validation/audit and flag-audit; no independent listening/onset audit.",
+  "min_x_fraction": 0.055,
+  "min_confidence": 0.84,
+  "verified_flags": [],
+  "open_verified": true,
+  "rules": {
+    "filled:1": {
+      "inst": "kick",
+      "confidence": 0.98,
+      "verified": true,
+      "evidence": "Native full-staff audit across three pilot songs; see truth/harvest/validation/audit/manual.json. Per-position notation inference, not physical tom size."
+    },
+    "filled:5": {
+      "inst": "snare",
+      "confidence": 0.98,
+      "verified": true,
+      "evidence": "Native full-staff audit across three pilot songs; see truth/harvest/validation/audit/manual.json. Per-position notation inference, not physical tom size."
+    },
+    "filled:2": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "filled:3": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": true,
+      "evidence": "Native full-staff audit across three pilot songs; see truth/harvest/validation/audit/manual.json. Per-position notation inference, not physical tom size."
+    },
+    "filled:4": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "filled:6": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": true,
+      "evidence": "Native full-staff audit across three pilot songs; see truth/harvest/validation/audit/manual.json. Per-position notation inference, not physical tom size."
+    },
+    "filled:7": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": true,
+      "evidence": "Native full-staff audit across three pilot songs; see truth/harvest/validation/audit/manual.json. Per-position notation inference, not physical tom size."
+    },
+    "filled:8": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "cross:9": {
+      "inst": "hihat",
+      "confidence": 0.95,
+      "articulation": "closed",
+      "verified": true,
+      "evidence": "Native full-staff audit across three pilot songs; see truth/harvest/validation/audit/manual.json. Per-position notation inference, not physical tom size. Separate o mark overrides closed to open; circled:9 is crash."
+    },
+    "circled:9": {
+      "inst": "crash",
+      "confidence": 0.95,
+      "verified": true,
+      "evidence": "Audit 258-265 and full native video frames 258/259/260 show crash strokes. Open hat instead uses a separate o above cross."
+    },
+    "cross:10": {
+      "inst": "crash",
+      "confidence": 0.95,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "circled:10": {
+      "inst": "crash",
+      "confidence": 0.95,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "cross:-2": {
+      "inst": "hihat",
+      "confidence": 0.95,
+      "articulation": "pedal",
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "cross:5": {
+      "inst": "side_stick",
+      "confidence": 0.95,
+      "verified": true,
+      "evidence": "Native full-staff audit across three pilot songs; see truth/harvest/validation/audit/manual.json. Per-position notation inference, not physical tom size."
+    },
+    "cross:8": {
+      "inst": "ride",
+      "confidence": 0.95,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "diamond:8": {
+      "inst": "ride_bell",
+      "confidence": 0.8,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    }
+  },
+  "small_staff_policy": "Native spacing below 8 px rejected; upscaling is inspection only",
+  "survey_evidence": "truth/harvest/validation/survey-0.jpg",
+  "color_notes": true,
+  "validation": {
+    "songs_required": 3,
+    "audit": "truth/harvest/validation/audit/manual.json",
+    "scope": "partial labels; unresolved mappings are withheld"
+  },
+  "mark_template_dir": "harvest_marks/yeol"
+}

@@ -1,0 +1,120 @@
+{
+  "name": "drumscribe",
+  "harvest_profile": true,
+  "layout": "drumscribe",
+  "enabled": true,
+  "legend_confidence": "medium for kick/snare/tom positions; cymbal identities unverified; grey paper weakens staff-line support on some videos",
+  "reason": "Wave-4 blind head audit: 29/29 sampled kick/snare/tom heads correct by position (pos-6 heads on the fourth line, pos-7 in the top space, pos-3 in the second space). About half the videos are \"(DRUMS ONLY)\" isolated drums. km86F-hkdYA loses most systems to weak staff-line support (grey page).",
+  "min_x_fraction": 0.055,
+  "min_confidence": 0.84,
+  "verified_flags": [],
+  "open_verified": false,
+  "rules": {
+    "filled:1": {
+      "inst": "kick",
+      "confidence": 0.98,
+      "verified": true,
+      "evidence": "Three-song blind head audit 2026-10-01: position/shape of every sampled head matched; see truth/harvest/validation/audit-wave4 (blind crops big_*.png/zoom_*.png, manual.json, accuracy.json). Per-position notation inference, not physical tom size."
+    },
+    "filled:5": {
+      "inst": "snare",
+      "confidence": 0.98,
+      "verified": true,
+      "evidence": "Three-song blind head audit 2026-10-01: position/shape of every sampled head matched; see truth/harvest/validation/audit-wave4 (blind crops big_*.png/zoom_*.png, manual.json, accuracy.json). Per-position notation inference, not physical tom size."
+    },
+    "filled:2": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "filled:3": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": true,
+      "evidence": "Three-song blind head audit 2026-10-01: position/shape of every sampled head matched; see truth/harvest/validation/audit-wave4 (blind crops big_*.png/zoom_*.png, manual.json, accuracy.json). Per-position notation inference, not physical tom size."
+    },
+    "filled:4": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "filled:6": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": true,
+      "evidence": "Three-song blind head audit 2026-10-01: position/shape of every sampled head matched; see truth/harvest/validation/audit-wave4 (blind crops big_*.png/zoom_*.png, manual.json, accuracy.json). Per-position notation inference, not physical tom size."
+    },
+    "filled:7": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": true,
+      "evidence": "Three-song blind head audit 2026-10-01: position/shape of every sampled head matched; see truth/harvest/validation/audit-wave4 (blind crops big_*.png/zoom_*.png, manual.json, accuracy.json). Per-position notation inference, not physical tom size."
+    },
+    "filled:8": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "cross:9": {
+      "inst": "hihat",
+      "confidence": 0.95,
+      "articulation": "closed",
+      "verified": false,
+      "evidence": "NOT verified: 6/6 plain crosses audited, but this engraving marks open hats with a circled cross whose detection failure mode is a plain cross (seen on nakamura); withheld until circled-cross reading is audited here."
+    },
+    "circled:9": {
+      "inst": "hihat",
+      "confidence": 0.95,
+      "articulation": "open",
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "cross:10": {
+      "inst": "crash",
+      "confidence": 0.95,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "circled:10": {
+      "inst": "crash",
+      "confidence": 0.95,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "cross:-2": {
+      "inst": "hihat",
+      "confidence": 0.95,
+      "articulation": "pedal",
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "cross:5": {
+      "inst": "side_stick",
+      "confidence": 0.95,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "cross:8": {
+      "inst": "ride",
+      "confidence": 0.95,
+      "verified": false,
+      "evidence": "NOT verified: bold parenthesised crosses on the top line (pos 8) predicted as ride; no printed key."
+    },
+    "diamond:8": {
+      "inst": "ride_bell",
+      "confidence": 0.8,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    }
+  },
+  "small_staff_policy": "Native spacing below 8 px rejected; upscaling is inspection only",
+  "survey_evidence": "truth/harvest/validation/survey-2.jpg",
+  "validation": {
+    "songs_required": 3,
+    "audit": "truth/harvest/validation/audit-wave4/manual.json",
+    "scope": "partial labels; unresolved mappings are withheld; enabled 2026-10-01 pending timing yield with the instrument-band phase gate"
+  }
+}

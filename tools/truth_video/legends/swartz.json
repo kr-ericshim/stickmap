@@ -1,0 +1,120 @@
+{
+  "name": "swartz",
+  "harvest_profile": true,
+  "layout": "page",
+  "enabled": true,
+  "legend_confidence": "medium for kick/snare/tom positions (MuseScore full-page capture, 11-16 px spacing); cymbal identities unverified",
+  "reason": "Wave-4b blind head audit: 35/36 sampled kick/snare/tom heads correct by staff position (one top-line tom ambiguous); crosses on the top line and a heavy cross one space above are position-consistent but have no printed key and stay withheld. Two systems per screen; rows not visited by the cursor are rejected.",
+  "min_x_fraction": 0.055,
+  "min_confidence": 0.84,
+  "verified_flags": [],
+  "open_verified": false,
+  "rules": {
+    "filled:1": {
+      "inst": "kick",
+      "confidence": 0.98,
+      "verified": true,
+      "evidence": "Three-song blind head audit 2026-10-01 (truth/harvest/validation/audit-wave4b): position/shape of every sampled kick/snare/tom head matched (tom_pos_8: 5/6, one head within a quarter space of the top line). Per-position notation inference, not physical tom size."
+    },
+    "filled:5": {
+      "inst": "snare",
+      "confidence": 0.98,
+      "verified": true,
+      "evidence": "Three-song blind head audit 2026-10-01 (truth/harvest/validation/audit-wave4b): position/shape of every sampled kick/snare/tom head matched (tom_pos_8: 5/6, one head within a quarter space of the top line). Per-position notation inference, not physical tom size."
+    },
+    "filled:2": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "filled:3": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": true,
+      "evidence": "Three-song blind head audit 2026-10-01 (truth/harvest/validation/audit-wave4b): position/shape of every sampled kick/snare/tom head matched (tom_pos_8: 5/6, one head within a quarter space of the top line). Per-position notation inference, not physical tom size."
+    },
+    "filled:4": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "filled:6": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": true,
+      "evidence": "Three-song blind head audit 2026-10-01 (truth/harvest/validation/audit-wave4b): position/shape of every sampled kick/snare/tom head matched (tom_pos_8: 5/6, one head within a quarter space of the top line). Per-position notation inference, not physical tom size."
+    },
+    "filled:7": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": true,
+      "evidence": "Three-song blind head audit 2026-10-01 (truth/harvest/validation/audit-wave4b): position/shape of every sampled kick/snare/tom head matched (tom_pos_8: 5/6, one head within a quarter space of the top line). Per-position notation inference, not physical tom size."
+    },
+    "filled:8": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": true,
+      "evidence": "Three-song blind head audit 2026-10-01 (truth/harvest/validation/audit-wave4b): position/shape of every sampled kick/snare/tom head matched (tom_pos_8: 5/6, one head within a quarter space of the top line). Per-position notation inference, not physical tom size."
+    },
+    "cross:9": {
+      "inst": "hihat",
+      "confidence": 0.95,
+      "articulation": "closed",
+      "verified": false,
+      "evidence": "NOT verified: no plain pos-9 cross sampled in this channel."
+    },
+    "circled:9": {
+      "inst": "hihat",
+      "confidence": 0.95,
+      "articulation": "open",
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "cross:10": {
+      "inst": "crash",
+      "confidence": 0.95,
+      "verified": false,
+      "evidence": "NOT verified: heavy serif cross one space above the staff (MuseScore crash/china glyph variant); identity unknown."
+    },
+    "circled:10": {
+      "inst": "crash",
+      "confidence": 0.95,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "cross:-2": {
+      "inst": "hihat",
+      "confidence": 0.95,
+      "articulation": "pedal",
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "cross:5": {
+      "inst": "side_stick",
+      "confidence": 0.95,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "cross:8": {
+      "inst": "ride",
+      "confidence": 0.95,
+      "verified": false,
+      "evidence": "NOT verified: crosses on the top line every eighth (MuseScore default = ride, but likely played on hi-hat in these CCM charts); no printed key."
+    },
+    "diamond:8": {
+      "inst": "ride_bell",
+      "confidence": 0.8,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    }
+  },
+  "small_staff_policy": "Native spacing below 8 px rejected; upscaling is inspection only",
+  "survey_evidence": "truth/harvest/validation/survey-3.jpg",
+  "validation": {
+    "songs_required": 3,
+    "audit": "truth/harvest/validation/audit-wave4b/manual.json",
+    "scope": "partial labels; unresolved mappings are withheld; enabled 2026-10-01 pending timing yield with the instrument-band phase gate"
+  }
+}

@@ -1,0 +1,1 @@
+Yeol open.png: explicit separate o at native video jsIRuZZRwDQ 267.738 s, center (174.2, 577.5), 15 by 16 px crop normalized to 11 px staff spacing. Source full frame is truth/harvest/validation/open-example-258.jpg. This is distinct from circled:9, which is crash. Template-development frame is not a fresh validation sample.

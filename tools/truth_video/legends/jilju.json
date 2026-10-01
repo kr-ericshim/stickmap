@@ -1,0 +1,121 @@
+{
+  "name": "jilju",
+  "harvest_profile": true,
+  "layout": "kr_strip",
+  "enabled": true,
+  "legend_confidence": "medium: core glyphs audited; bottom-ROI repaired and checked on all three pilot songs",
+  "reason": "Initial white-room/window false staves fixed by inspected bottom-staff ROI (top line below 65% image height). All three new native strips visually rechecked. Only confirmed core labels exported; upper cymbal identities remain unresolved.",
+  "min_x_fraction": 0.055,
+  "min_confidence": 0.84,
+  "verified_flags": [],
+  "open_verified": false,
+  "rules": {
+    "filled:1": {
+      "inst": "kick",
+      "confidence": 0.98,
+      "verified": true,
+      "evidence": "Positive full-staff crops in audit-wave3/manual.json; post-ROI native source recheck in jilju-roi-check.jpg across G5imYhFzV9g, qm7yAPWVJNU and ALU5Yu2Pk1E."
+    },
+    "filled:5": {
+      "inst": "snare",
+      "confidence": 0.98,
+      "verified": true,
+      "evidence": "Positive full-staff crops in audit-wave3/manual.json; post-ROI native source recheck in jilju-roi-check.jpg across G5imYhFzV9g, qm7yAPWVJNU and ALU5Yu2Pk1E."
+    },
+    "filled:2": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "filled:3": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": true,
+      "evidence": "Positive full-staff crops in audit-wave3/manual.json; post-ROI native source recheck in jilju-roi-check.jpg across G5imYhFzV9g, qm7yAPWVJNU and ALU5Yu2Pk1E."
+    },
+    "filled:4": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "filled:6": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": true,
+      "evidence": "Positive full-staff crops in audit-wave3/manual.json; post-ROI native source recheck in jilju-roi-check.jpg across G5imYhFzV9g, qm7yAPWVJNU and ALU5Yu2Pk1E."
+    },
+    "filled:7": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": true,
+      "evidence": "Positive full-staff crops in audit-wave3/manual.json; post-ROI native source recheck in jilju-roi-check.jpg across G5imYhFzV9g, qm7yAPWVJNU and ALU5Yu2Pk1E."
+    },
+    "filled:8": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "cross:9": {
+      "inst": "hihat",
+      "confidence": 0.95,
+      "articulation": "closed",
+      "verified": true,
+      "evidence": "Positive full-staff crops in audit-wave3/manual.json; post-ROI native source recheck in jilju-roi-check.jpg across G5imYhFzV9g, qm7yAPWVJNU and ALU5Yu2Pk1E."
+    },
+    "circled:9": {
+      "inst": "hihat",
+      "confidence": 0.95,
+      "articulation": "open",
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "cross:10": {
+      "inst": "crash",
+      "confidence": 0.95,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "circled:10": {
+      "inst": "crash",
+      "confidence": 0.95,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "cross:-2": {
+      "inst": "hihat",
+      "confidence": 0.95,
+      "articulation": "pedal",
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "cross:5": {
+      "inst": "side_stick",
+      "confidence": 0.95,
+      "verified": true,
+      "evidence": "Positive full-staff crops in audit-wave3/manual.json; post-ROI native source recheck in jilju-roi-check.jpg across G5imYhFzV9g, qm7yAPWVJNU and ALU5Yu2Pk1E."
+    },
+    "cross:8": {
+      "inst": "ride",
+      "confidence": 0.95,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "diamond:8": {
+      "inst": "ride_bell",
+      "confidence": 0.8,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    }
+  },
+  "small_staff_policy": "Native spacing below 8 px rejected; upscaling is inspection only",
+  "survey_evidence": "truth/harvest/validation/survey-1.jpg",
+  "staff_y_min_fraction": 0.65,
+  "validation": {
+    "songs": 3,
+    "audit": "truth/harvest/validation/audit-wave3/manual.json",
+    "geometry_recheck": "truth/harvest/validation/jilju-roi-check.jpg"
+  }
+}

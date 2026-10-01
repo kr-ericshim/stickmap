@@ -1,0 +1,115 @@
+{
+  "name": "moyin",
+  "harvest_profile": true,
+  "layout": "page",
+  "enabled": false,
+  "legend_confidence": "unverified for export; positions audited (wave 4b)",
+  "reason": "Disabled: full-page scores with a box cursor and green note colouring; the page cursor is not tracked (254-290 of ~290 systems per song fall back to interval priors) so no system passes the timing gates. Wave-4b blind audit: kick/snare/tom positions 50/54 by staff position (4 quarter-space ambiguities at 9 px spacing), crosses position-consistent, 6 \"open\" articulations unverifiable. Needs colour-note timing (as atthedrum) or a page-cursor tracker before a legend can matter.",
+  "min_x_fraction": 0.055,
+  "min_confidence": 0.84,
+  "verified_flags": [],
+  "open_verified": false,
+  "rules": {
+    "filled:1": {
+      "inst": "kick",
+      "confidence": 0.98,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "filled:5": {
+      "inst": "snare",
+      "confidence": 0.98,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "filled:2": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "filled:3": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "filled:4": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "filled:6": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "filled:7": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "filled:8": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "cross:9": {
+      "inst": "hihat",
+      "confidence": 0.95,
+      "articulation": "closed",
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "circled:9": {
+      "inst": "hihat",
+      "confidence": 0.95,
+      "articulation": "open",
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "cross:10": {
+      "inst": "crash",
+      "confidence": 0.95,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "circled:10": {
+      "inst": "crash",
+      "confidence": 0.95,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "cross:-2": {
+      "inst": "hihat",
+      "confidence": 0.95,
+      "articulation": "pedal",
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "cross:5": {
+      "inst": "side_stick",
+      "confidence": 0.95,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "cross:8": {
+      "inst": "ride",
+      "confidence": 0.95,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "diamond:8": {
+      "inst": "ride_bell",
+      "confidence": 0.8,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    }
+  },
+  "small_staff_policy": "Native spacing below 8 px rejected; upscaling is inspection only",
+  "survey_evidence": "truth/harvest/validation/survey-2.jpg"
+}

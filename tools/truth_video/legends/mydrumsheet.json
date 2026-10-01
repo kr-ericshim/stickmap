@@ -1,0 +1,138 @@
+{
+  "name": "mydrumsheet",
+  "harvest_profile": true,
+  "layout": "kr_strip",
+  "enabled": true,
+  "legend_confidence": "high for printed hi-hat/ride key; medium for audited kick/snare/tom/crash conventions",
+  "reason": "Three-song reading audit; intro supplies explicit hi-hat/ride key reversing the generic KBdrums positions. Cursor/audio agreement is weak in many systems and remains independently gated.",
+  "min_x_fraction": 0.055,
+  "min_confidence": 0.84,
+  "verified_flags": [
+    "ghost"
+  ],
+  "open_verified": false,
+  "rules": {
+    "filled:1": {
+      "inst": "kick",
+      "confidence": 0.98,
+      "verified": true,
+      "evidence": "Native full-staff visual audit: truth/harvest/validation/audit-wave2/manual.json; inferred notation convention, physical tom size not inferred."
+    },
+    "filled:5": {
+      "inst": "snare",
+      "confidence": 0.98,
+      "verified": true,
+      "evidence": "Native full-staff visual audit: truth/harvest/validation/audit-wave2/manual.json; inferred notation convention, physical tom size not inferred."
+    },
+    "filled:2": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "filled:3": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": true,
+      "evidence": "Native full-staff visual audit: truth/harvest/validation/audit-wave2/manual.json; inferred notation convention, physical tom size not inferred."
+    },
+    "filled:4": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "filled:6": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": true,
+      "evidence": "Native full-staff visual audit: truth/harvest/validation/audit-wave2/manual.json; inferred notation convention, physical tom size not inferred."
+    },
+    "filled:7": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": true,
+      "evidence": "Native full-staff visual audit: truth/harvest/validation/audit-wave2/manual.json; inferred notation convention, physical tom size not inferred."
+    },
+    "filled:8": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "cross:9": {
+      "inst": "ride",
+      "confidence": 0.98,
+      "verified": true,
+      "evidence": "Explicit Ride Cymbal head half-space above top staff line in same printed intro key."
+    },
+    "circled:9": {
+      "inst": "hihat",
+      "confidence": 0.95,
+      "articulation": "open",
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "cross:10": {
+      "inst": "crash",
+      "confidence": 0.95,
+      "verified": true,
+      "evidence": "Native full-staff visual audit: truth/harvest/validation/audit-wave2/manual.json; inferred notation convention, physical tom size not inferred."
+    },
+    "circled:10": {
+      "inst": "crash",
+      "confidence": 0.95,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "cross:-2": {
+      "inst": "hihat",
+      "confidence": 0.95,
+      "articulation": "pedal",
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "cross:5": {
+      "inst": "side_stick",
+      "confidence": 0.95,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "cross:8": {
+      "inst": "hihat",
+      "articulation": "closed",
+      "confidence": 0.98,
+      "verified": true,
+      "evidence": "Explicit HI-HAT on top staff line in printed intro key, j3jmresIot4 at 6 s; local o marks must be checked separately."
+    },
+    "diamond:8": {
+      "inst": "ride_bell",
+      "confidence": 0.8,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    }
+  },
+  "small_staff_policy": "Native spacing below 8 px rejected; upscaling is inspection only",
+  "survey_evidence": "truth/harvest/validation/survey-1.jpg",
+  "validation": {
+    "audit": "truth/harvest/validation/audit-wave2/manual.json",
+    "songs": 3,
+    "scope": "partial core labels"
+  },
+  "printed_key": {
+    "video": "j3jmresIot4",
+    "seconds": 6,
+    "artifact": "truth/harvest/validation/mydrumsheet-key.png",
+    "interpretation": "Printed HI-HAT head on top line (pos 8); Ride Cymbal a half-space above (pos 9)."
+  },
+  "ghost_template": {
+    "path": "harvest_templates/mydrumsheet/ghost.png",
+    "reference_spacing": 9.39022463701945,
+    "anchor": [
+      16.5,
+      12.368421052631575
+    ],
+    "threshold": 0.92
+  },
+  "ghost_evidence": "Supplied native 3YeeT5glEIo_t40 frame: one development glyph, ten other explicit parenthesized snare glyphs, and unparenthesized controls. Same-frame spatial checks, not independent performance validation. No confirmed ghost in the three timed pilots."
+}

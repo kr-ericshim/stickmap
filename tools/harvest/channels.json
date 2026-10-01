@@ -1,0 +1,142 @@
+{
+  "_note": "Channels whose videos show drum notation synced to the performance. layout names the reader template; include/exclude are regexes on the title; newest limits sampling to the newest share of uploads (older ones have no score on screen). A top-level exclude applies to every channel: drumless backing tracks carry notation over audio without drums.",
+  "channels": [
+    {
+      "name": "atthedrum",
+      "id": "UCA9Wm919AcIoZ9_7V0uR1ug",
+      "layout": "kr_strip",
+      "genre": "kpop pop ccm"
+    },
+    {
+      "name": "allyeodrum",
+      "id": "UCJPvv0hCRPskkLQwmi1AI2A",
+      "layout": "kr_strip",
+      "genre": "pop rock kpop"
+    },
+    {
+      "name": "drumshin",
+      "id": "UChpIB6wgMiFzmELDqjPmLwg",
+      "layout": "kr_strip",
+      "genre": "ccm gospel",
+      "include": "악보|Sheet",
+      "newest": 0.5
+    },
+    {
+      "name": "drummate",
+      "id": "UCByiP0JSmUCaJSYy_Liy0-w",
+      "layout": "kr_strip",
+      "genre": "kpop pop rock",
+      "include": "Sheet Music|악보",
+      "newest": 0.5
+    },
+    {
+      "name": "yeol",
+      "id": "UCn4YsP7BKuJKNWRL-N6L5lA",
+      "layout": "kr_strip",
+      "genre": "kpop"
+    },
+    {
+      "name": "mydrumsheet",
+      "id": "UCM4USHFJQShxtyOR69UB0Zw",
+      "layout": "kr_strip",
+      "genre": "kpop pop"
+    },
+    {
+      "name": "chock",
+      "id": "UC_xEmIGozfQLT1gkv9IvARQ",
+      "layout": "kr_strip",
+      "genre": "kpop trot"
+    },
+    {
+      "name": "drumclass",
+      "id": "UC-NVIeZ86pWvaBcfmWOYdHg",
+      "layout": "kr_strip",
+      "genre": "kpop hiphop"
+    },
+    {
+      "name": "drumplace",
+      "id": "UCoY1-6vTkyIF_C7gPL3XeSA",
+      "layout": "kr_strip",
+      "genre": "kpop band"
+    },
+    {
+      "name": "jilju",
+      "id": "UCSptvt_IzpQIHUjHIOfAUSA",
+      "layout": "kr_strip",
+      "genre": "gayo trot, many drummers"
+    },
+    {
+      "name": "taktak",
+      "id": "UC8gn1cor1Up9nEO2XGtzWcw",
+      "layout": "kr_strip",
+      "genre": "kpop krock"
+    },
+    {
+      "name": "dama",
+      "id": "UCP8c6E7VIbuWuAdkMLG2mDg",
+      "layout": "kr_strip",
+      "genre": "ccm worship",
+      "include": "Sheet|Score|鼓譜",
+      "newest": 0.6
+    },
+    {
+      "name": "nakamura",
+      "id": "UCl96r_WdhymtdaBkHv6S1fQ",
+      "layout": "kr_strip",
+      "genre": "jpop anime",
+      "newest": 0.5
+    },
+    {
+      "name": "drumscribe",
+      "id": "UCGNcppf5dfV-D1vyyvm0Cdg",
+      "layout": "drumscribe",
+      "genre": "rock alt pop, half drums-only",
+      "include": "DRUM SCORE"
+    },
+    {
+      "name": "moyin",
+      "id": "UCFb74pJeFGOZZ-nfm4DiPqQ",
+      "layout": "page",
+      "genre": "fusion jazz-funk gospel chops",
+      "include": "Drum Score"
+    },
+    {
+      "name": "swartz",
+      "id": "UCwxZgpf3822hS86qrqgf9Ug",
+      "layout": "page",
+      "genre": "ccm gospel worship",
+      "include": "Sheet Music"
+    },
+    {
+      "name": "dailychops",
+      "id": "UCHWc4MJb7Jp0qWhu_PWNYzA",
+      "layout": "dailychops",
+      "genre": "fusion funk chops",
+      "include": "Transcription"
+    },
+    {
+      "name": "olliewoods",
+      "id": "UCceB0EleKJcNx-fzM_VGv8Q",
+      "layout": "olliewoods",
+      "genre": "gospel chops fusion",
+      "include": "Transcription",
+      "min": 20
+    },
+    {
+      "name": "leminhtri",
+      "id": "UC4N3rYYVL7hZGRSnKEWmHnw",
+      "layout": "kr_strip",
+      "genre": "worship",
+      "include": "Sheet"
+    },
+    {
+      "name": "christal",
+      "id": "UCMGxZ4EshAzecBbejFutmKg",
+      "layout": "kr_strip",
+      "genre": "worship",
+      "include": "Drum Cover|Tutorial|Sheet",
+      "max": 480
+    }
+  ],
+  "exclude": "drumless|드럼리스|드럼 ?없는|minus ?one|no drums"
+}

@@ -1,0 +1,120 @@
+{
+  "name": "drumplace",
+  "harvest_profile": true,
+  "layout": "kr_strip",
+  "enabled": true,
+  "legend_confidence": "medium for audited core notation; o-mark detection unverified",
+  "reason": "Three-song audit. Five sampled open hats were predicted closed; unresolved-upper-mark guard withholds them. Open-hat mapping remains disabled; only reviewed core positions and unmarked closed hats can export.",
+  "min_x_fraction": 0.055,
+  "min_confidence": 0.84,
+  "verified_flags": [],
+  "open_verified": false,
+  "rules": {
+    "filled:1": {
+      "inst": "kick",
+      "confidence": 0.98,
+      "verified": true,
+      "evidence": "Native full-staff visual audit at truth/harvest/validation/audit-wave3/manual.json; explicit upper o marks must remain excluded until their detection is validated."
+    },
+    "filled:5": {
+      "inst": "snare",
+      "confidence": 0.98,
+      "verified": true,
+      "evidence": "Native full-staff visual audit at truth/harvest/validation/audit-wave3/manual.json; explicit upper o marks must remain excluded until their detection is validated."
+    },
+    "filled:2": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "filled:3": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": true,
+      "evidence": "Native full-staff visual audit at truth/harvest/validation/audit-wave3/manual.json; explicit upper o marks must remain excluded until their detection is validated."
+    },
+    "filled:4": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "filled:6": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": true,
+      "evidence": "Native full-staff visual audit at truth/harvest/validation/audit-wave3/manual.json; explicit upper o marks must remain excluded until their detection is validated."
+    },
+    "filled:7": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": true,
+      "evidence": "Native full-staff visual audit at truth/harvest/validation/audit-wave3/manual.json; explicit upper o marks must remain excluded until their detection is validated."
+    },
+    "filled:8": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "cross:9": {
+      "inst": "hihat",
+      "confidence": 0.95,
+      "articulation": "closed",
+      "verified": true,
+      "evidence": "Native full-staff visual audit at truth/harvest/validation/audit-wave3/manual.json; explicit upper o marks must remain excluded until their detection is validated."
+    },
+    "circled:9": {
+      "inst": "hihat",
+      "confidence": 0.95,
+      "articulation": "open",
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "cross:10": {
+      "inst": "crash",
+      "confidence": 0.95,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "circled:10": {
+      "inst": "crash",
+      "confidence": 0.95,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "cross:-2": {
+      "inst": "hihat",
+      "confidence": 0.95,
+      "articulation": "pedal",
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "cross:5": {
+      "inst": "side_stick",
+      "confidence": 0.95,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "cross:8": {
+      "inst": "ride",
+      "confidence": 0.95,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    },
+    "diamond:8": {
+      "inst": "ride_bell",
+      "confidence": 0.8,
+      "verified": false,
+      "evidence": "candidate only; requires channel-specific visual audit"
+    }
+  },
+  "small_staff_policy": "Native spacing below 8 px rejected; upscaling is inspection only",
+  "survey_evidence": "truth/harvest/validation/survey-1.jpg",
+  "validation": {
+    "songs": 3,
+    "audit": "truth/harvest/validation/audit-wave3/manual.json",
+    "scope": "core labels; unrecognized upper marks withheld"
+  }
+}
