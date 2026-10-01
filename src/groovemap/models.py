@@ -48,16 +48,31 @@ def track_beats(audio_wav: Path, *, device: str) -> tuple[list[float], list[floa
     return [float(b) for b in beats], [float(d) for d in downbeats]
 
 
-def drum_activations(wav: Path, *, device: str) -> np.ndarray:
-    """ADTOF frame activations, shape [frames, 5] at ADTOF_FPS, columns as ADTOF_CLASSES."""
+# ADTOF fine-tuned on drum transcription videos (tools/finetune): it finds more toms and kicks in
+# fast fills. It learned from drum stems only, so the full mix keeps the original weights.
+STEM_WEIGHTS = Path(__file__).with_name("adtof-groovemap-v2.pt")
+
+
+def drum_activations(wav: Path, *, device: str, weights: Path | None = None) -> np.ndarray:
+    """ADTOF frame activations, shape [frames, 5] at ADTOF_FPS, columns as ADTOF_CLASSES.
+
+    `weights` replaces the original model's weights (a state dict of the same network).
+    """
     import adtof_pytorch as adtof
 
     model = adtof.create_frame_rnn_model(adtof.calculate_n_bins())
     model = adtof.load_pytorch_weights(model, adtof.get_default_weights_path(), strict=False)
+    if weights is not None:
+        model.load_state_dict(torch.load(weights, map_location="cpu"))
     model.eval().to(device)
     features = adtof.load_audio_for_model(str(wav)).to(device)
     with torch.no_grad():
         return model(features).cpu().numpy()[0]
+
+
+def stem_activations(drums_wav: Path, *, device: str) -> np.ndarray:
+    """ADTOF frame activations of the drum stem, from the fine-tuned model."""
+    return drum_activations(drums_wav, device=device, weights=STEM_WEIGHTS)
 
 
 # ADTOF's picker measures each peak against the average of the 100 ms before it,

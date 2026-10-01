@@ -50,6 +50,18 @@ def test_a_remade_stem_invalidates_what_was_made_from_it(package):
         "drums.htdemucs.wav", "activations.drums-htdemucs.npy", "snare.htdemucs.npy", "attacks.htdemucs.npy"}
 
 
+def test_new_fine_tuned_weights_remake_the_stem_activations_only(package):
+    before = fingerprint._compute()
+    weights = package / fingerprint.PRODUCER_FILES["stem_onsets"][0]
+    weights.write_bytes(weights.read_bytes() + b"retrained")
+    after = fingerprint._compute()
+    stamps = lambda prints: {name: fingerprint.cache_stamp(name, prints) for name in (
+        "drums.htdemucs.wav", "activations.mix.npy", "activations.drums-htdemucs.npy", "snare.htdemucs.npy")}
+    old, new = stamps(before), stamps(after)
+    assert {name for name in old if old[name] != new[name]} == {"activations.drums-htdemucs.npy", "snare.htdemucs.npy"}
+    assert after["score"] != before["score"]  # a score kept after its caches were cleared is dated too
+
+
 def test_source_edited_after_start_is_not_vouched_for(package, monkeypatch):
     monkeypatch.setattr(fingerprint, "AT_START", fingerprint._compute())
     assert fingerprint.snapshot(check=True) == fingerprint.AT_START

@@ -3,8 +3,9 @@
 A fingerprint hashes the syntax tree of a function and of everything in this package it
 reaches: functions, classes and module-level values, followed through imports and
 `module.name` references. Comments, docstrings and code the function never reaches do not
-count, so editing a tom rule leaves the drum-separation fingerprint alone. Model weights and
-third-party libraries are not covered. Read from source, without importing: torch stays unloaded.
+count, so editing a tom rule leaves the drum-separation fingerprint alone. The fine-tuned
+weights shipped in the package count; other model weights and third-party libraries do not.
+Read from source, without importing: torch stays unloaded.
 """
 
 from __future__ import annotations
@@ -23,9 +24,12 @@ PRODUCERS = {
     "separate": ("models", "separate_drums"),
     "beats": ("models", "track_beats"),
     "onsets": ("models", "drum_activations"),
+    "stem_onsets": ("models", "stem_activations"),
     "snare": ("dynamics", "snare_response"),
     "attacks": ("fills", "attack_times"),
 }
+# Files a producer reads besides its code: the fine-tuned weights shipped in the package.
+PRODUCER_FILES = {"stem_onsets": ("adtof-groovemap-v2.pt",)}
 # Everything from cached model outputs to score.json, MusicXML and MIDI.
 SCORE_ROOT = ("pipeline", "run")
 
@@ -129,8 +133,9 @@ def of(root: tuple[str, str], *files: str) -> str:
 def _compute() -> dict[str, Any]:
     _module.cache_clear()
     return {
-        "score": of(SCORE_ROOT, "engraving.mss"),
-        "producers": {kind: of(root) for kind, root in PRODUCERS.items()},
+        # The score is remade from the stem activations, so new weights date it even where those caches are gone.
+        "score": of(SCORE_ROOT, "engraving.mss", *PRODUCER_FILES["stem_onsets"]),
+        "producers": {kind: of(root, *PRODUCER_FILES.get(kind, ())) for kind, root in PRODUCERS.items()},
     }
 
 
@@ -168,7 +173,7 @@ def cache_stamp(filename: str, fingerprints: dict[str, Any] | None) -> str | Non
     if filename == "activations.mix.npy":
         return made["onsets"]
     if match := re.fullmatch(r"activations\.drums-(.+)\.npy", filename):
-        return _join(made["onsets"], cache_stamp(f"drums.{match[1]}.wav", fingerprints))
+        return _join(made["stem_onsets"], cache_stamp(f"drums.{match[1]}.wav", fingerprints))
     if match := re.fullmatch(r"snare\.(.+)\.npy", filename):
         return _join(made["snare"], cache_stamp(f"activations.drums-{match[1]}.npy", fingerprints))
     if match := re.fullmatch(r"attacks\.(.+)\.npy", filename):

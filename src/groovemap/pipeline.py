@@ -149,8 +149,10 @@ def run(
         target.write_text(json.dumps({"beats": found_beats, "downbeats": found_downbeats}))
 
     def onsets(target: Path) -> None:
-        source = audio if opts.onset_input == "mix" else drums
-        np.save(target, models.drum_activations(source, device=device))
+        if opts.onset_input == "mix":
+            np.save(target, models.drum_activations(audio, device=device))
+        else:
+            np.save(target, models.stem_activations(drums, device=device))
 
     def onsets_on_mix(target: Path) -> None:
         np.save(target, models.drum_activations(audio, device=device))
