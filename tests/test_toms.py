@@ -2,7 +2,7 @@ import numpy as np
 import soundfile as sf
 
 from groovemap.score import Hit
-from groovemap.toms import HIGH, LOW, MID, _sizes, tom_sizes
+from groovemap.toms import HIGH, LOW, MID, _groups, _sizes, tom_sizes
 
 SR = 44100
 
@@ -28,12 +28,30 @@ def test_toms_are_named_by_their_place_in_the_kit(tmp_path):
 
 
 def test_kit_layouts():
-    assert _sizes([80.0]) == [LOW] and _sizes([130.0]) == [HIGH] and _sizes([180.0]) == [HIGH]
-    assert _sizes([85.0, 140.0]) == [LOW, HIGH]  # one rack tom is written as the high tom
-    assert _sizes([82.0, 114.0, 142.0]) == [LOW, MID, HIGH]
-    assert _sizes([120.0, 150.0, 190.0]) == [LOW, MID, HIGH]  # tuned high: the lowest is still the floor tom
-    assert _sizes([74.0, 101.0]) == [LOW, LOW]
-    assert _sizes([72.0, 103.0, 137.0, 177.0, 215.0]) == [LOW, LOW, MID, HIGH, HIGH]
+    assert _sizes(1) == [LOW]
+    assert _sizes(2) == [LOW, HIGH]  # one rack tom is written as the high tom
+    assert _sizes(3) == [LOW, MID, HIGH]
+    assert _sizes(4) == [LOW, LOW, MID, HIGH]
+    assert _sizes(5) == [LOW, LOW, MID, HIGH, HIGH]
+
+
+def spread(*drums):
+    """Ten hits per (Hz, count) drum, wobbling a little."""
+    return [hz * 2 ** (((i * 7) % 5 - 2) * 0.1 / 12) for hz, count in drums for i in range(count)]
+
+
+def test_groups_go_by_where_the_toms_lie_against_each_other_not_in_hertz():
+    # A gospel kit: low, close toms, all of them under 110 Hz.
+    assert len(_groups(spread((60, 10), (85, 10), (107, 10)))) == 3
+    # The same kit an octave up is grouped the same way.
+    low, high = _groups(spread((60, 10), (85, 10), (107, 10))), _groups(spread((120, 10), (170, 10), (214, 10)))
+    assert np.allclose(np.array(high) / np.array(low), 2, rtol=0.02)
+    # A floor tom whose pitch wobbles between two close peaks is one drum.
+    assert len(_groups(spread((70, 12), (82, 4), (140, 10)))) == 2
+    # A few hits far above the toms (a snare, a ringing mode) are not a rack tom.
+    assert len(_groups(spread((70, 20), (100, 15), (130, 15), (230, 4)))) == 3
+    # With only a few toms, every pitch counts.
+    assert len(_groups([90.0, 170.0, 170.0])) == 2
 
 
 def test_a_few_stray_toms_go_by_pitch_alone_and_a_kick_does_not_pass_for_a_floor_tom(tmp_path):
@@ -63,3 +81,17 @@ def test_a_song_full_of_them_is_played_on_a_kit_tuned_that_high(tmp_path):
     sized = tom_sizes(bells(tmp_path / "drums.wav", toms, pings), hits)
     assert [hit.time for hit in sized] == toms + pings
     assert all(hit.inst in (LOW, MID, HIGH) for hit in sized)
+
+
+def test_a_floor_tom_at_the_bottom_of_the_band_is_not_read_by_its_ringing_mode(tmp_path):
+    # A floor tom at 56 Hz rings a mode 1.6 times higher, at half the strength.
+    audio = np.zeros(int(12.0 * SR), dtype=np.float32)
+    t = np.arange(int(0.3 * SR)) / SR
+    strokes = [(0.5 + 0.45 * i, (56, 70, 110)[i % 3]) for i in range(24)]
+    for time, hz in strokes:
+        ring = np.sin(2 * np.pi * hz * t) + (0.5 * np.sin(2 * np.pi * 1.6 * hz * t) if hz == 56 else 0)
+        start = int(time * SR)
+        audio[start:start + len(t)] += (ring * np.exp(-t * 12)).astype(np.float32)
+    sf.write(tmp_path / "drums.wav", np.stack([audio, audio], axis=1), SR)
+    sized = tom_sizes(tmp_path / "drums.wav", [Hit(time, "tom", 0.8) for time, _ in strokes])
+    assert [hit.inst for hit in sized] == [(LOW, MID, HIGH)[i % 3] for i in range(24)]

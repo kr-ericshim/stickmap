@@ -1,10 +1,13 @@
 """Which tom each tom hit was played on: high, mid or low.
 
 A kit's toms are tuned well apart, so the pitch a drum rings at right after
-each hit falls into a few groups per song. Floor toms are written low, the
-largest rack tom mid and the smaller ones high. In a fast fill the strokes
-ring into each other: what was already sounding and any kick or snare that
-lands with the tom are taken off before the pitch is read.
+each hit falls into a few groups per song. Only how the groups lie against
+each other names them, never where they lie in hertz: kits are tuned anywhere
+from a gospel kit's low, close toms to a jazz kit's high ones. The lowest group
+is the floor tom, the highest rack tom is written high and the one below it
+mid. In a fast fill the strokes ring into each other: what was already
+sounding and any kick or snare that lands with the tom are taken off before
+the pitch is read.
 
 Now and then the detector hears a tom in something no drum head rang in, with
 next to nothing below a few hundred hertz. Those few are taken out. A song full
@@ -31,16 +34,22 @@ _RING = (0.06, 0.14)  # seconds listened to: up to the next tom, within these li
 _CLEAR = 0.015  # seconds before the onset where the "before" window ends
 _CARRY = 0.7  # how much of what rang before is taken off
 _BAND = (55.0, 420.0)  # Hz: where a tom's pitch is looked for
+# A drum head rings at its pitch and at modes 1.5-1.6 times higher, which in a short
+# window can come out louder: the pitch is the lowest peak at least this share of the loudest.
+_LOWEST = 0.3
 _FIT = (45.0, 2000.0)  # Hz: where a kick or snare landing with the tom is matched and removed
 _ALONE = 0.10  # seconds from any tom or the other drum: a kick or snare to learn its sound from
-_FLOOR = 105.0  # a tom ringing below this is a floor tom
-_BANDS = (112.0, 150.0)  # low | mid | high for a tom that belongs to no group
 _HEAD = (60.0, 450.0)  # Hz: where a struck drum head rings
 _HEARD = (60.0, 12000.0)  # Hz: the whole of a hit's sound
 _HEADLESS = 0.1  # a "tom" with less than this share of its sound where a head rings was not played on a drum
 _KIT = (24, 0.15)  # this many headless "toms", and this share of the song's toms: the kit is tuned that high
 _SPREAD = 0.9  # semitones: how far one drum's pitch wanders between hits
 _APART = 2.5  # semitones: two toms are tuned at least this far apart
+# Semitones: the two lowest groups are one floor tom when this close, or within the
+# second distance when the lower one has under _WEAK as many hits as the upper.
+_SAME_FLOOR = (3.0, 7.0)
+_WEAK = 0.5
+_APART_HIGH = 5.0  # semitones: a top group this far above the next and as weak is not a rack tom
 
 
 class _Stem:
@@ -95,8 +104,13 @@ def _pitch(stem: _Stem, time: float, next_tom: float | None, others: np.ndarray)
         amounts = nnls(others[fit] * weight[:, None], struck[fit] * weight)[0]
         struck = np.maximum(struck - others @ amounts, 0)
     band = (stem.freqs >= _BAND[0]) & (stem.freqs <= _BAND[1])
-    smooth = gaussian_filter1d(struck[band], 1)
-    return float(stem.freqs[band][np.argmax(smooth)]) if smooth.any() else None
+    smooth = gaussian_filter1d(struck, 1)  # over the whole spectrum, so a peak at the band's edge is one
+    if not smooth[band].any():
+        return None
+    loudest = smooth[band].max()
+    peaks, _ = find_peaks(smooth, height=_LOWEST * loudest)
+    peaks = peaks[band[peaks]]
+    return float(stem.freqs[peaks[0]] if len(peaks) else stem.freqs[band][np.argmax(smooth[band])])
 
 
 def _headless(stem: _Stem, time: float) -> bool:
@@ -121,33 +135,53 @@ def _without_strays(stem: _Stem, hits: list[Hit]) -> list[Hit]:
     return [hit for i, hit in enumerate(hits) if i not in strays]
 
 
-def _centres(pitches: list[float]) -> list[float]:
-    """The pitches the song's toms ring at, lowest first: the peaks of where the hits crowd."""
-    semitones = 12 * np.log2(pitches)
-    grid = np.linspace(12 * np.log2(_BAND[0]), 12 * np.log2(_BAND[1]), 512)
-    density = np.exp(-0.5 * ((grid[:, None] - semitones[None, :]) / _SPREAD) ** 2).sum(axis=1)
-    peaks, _ = find_peaks(density, distance=int(_APART / (grid[1] - grid[0])))
-    enough = max(3, 0.04 * len(pitches))
-    supported = [p for p in peaks if np.sum(np.abs(semitones - grid[p]) < 1.5 * _SPREAD) >= enough]
-    strongest = sorted(supported, key=lambda p: -density[p])[:5]
-    return sorted(float(2 ** (grid[p] / 12)) for p in strongest)
+def _groups(pitches: list[float]) -> list[float]:
+    """The pitches the song's toms ring at, lowest first: the peaks of where the hits crowd.
 
-
-def _sizes(centres: list[float]) -> list[str]:
-    """The size of each tom, given the pitches of all of them, lowest first.
-
-    As drummers write them: floor toms low, the smallest rack tom high, and
-    with two or more rack toms the largest of them mid.
+    A peak needs a few hits behind it; in a song with only a few toms every
+    peak counts. Two low peaks close together, or a weak one just under a
+    stronger one, are one floor tom whose pitch wobbles. A weak peak well
+    above all the others is not a rack tom (a snare or a ringing mode).
     """
-    if len(centres) == 1:
-        return [LOW if centres[0] < _BANDS[0] else HIGH]
-    floors = [c for c in centres if c < _FLOOR] or centres[:1]
-    racks = len(centres) - len(floors)
-    return [LOW] * len(floors) + [MID] * (racks > 1) + [HIGH] * min(racks, max(1, racks - 1))
+    semitones = 12 * np.log2(pitches)
+    grid = np.arange(semitones.min() - 3 * _SPREAD, semitones.max() + 3 * _SPREAD + 0.075, 0.075)
+    density = np.exp(-0.5 * ((grid[:, None] - semitones[None, :]) / _SPREAD) ** 2).sum(axis=1)
+    peaks, _ = find_peaks(density, distance=round(_APART / 0.075))
+    enough = max(3, 0.01 * len(pitches))
+    supported = [p for p in peaks if np.sum(np.abs(semitones - grid[p]) < 1.5 * _SPREAD) >= enough] or list(peaks)
+    centres = np.sort(grid[sorted(supported, key=lambda p: -density[p])[:5]]) if supported else np.array([np.median(semitones)])
+
+    def support(centres: np.ndarray) -> np.ndarray:
+        return np.bincount(np.abs(semitones[:, None] - centres).argmin(axis=1), minlength=len(centres))
+
+    counts = support(centres)
+    while len(centres) >= 2:
+        gap = centres[1] - centres[0]
+        if not (gap < _SAME_FLOOR[0] or (gap < _SAME_FLOOR[1] and counts[0] < _WEAK * counts[1])):
+            break
+        centres = np.r_[np.average(centres[:2], weights=counts[:2]), centres[2:]]
+        counts = support(centres)
+    while len(centres) >= 3:
+        gap = centres[-1] - centres[-2]
+        if not (gap > _APART_HIGH and counts[-1] < _WEAK * counts[:-1].max()):
+            break
+        centres = centres[:-1]
+        counts = support(centres)
+    return [float(2 ** (c / 12)) for c in centres]
 
 
-def _band(pitch: float) -> str:
-    return LOW if pitch < _BANDS[0] else MID if pitch < _BANDS[1] else HIGH
+def _sizes(count: int) -> list[str]:
+    """The size of each of `count` toms, lowest first.
+
+    As drummers write them: the lowest is a floor tom, one rack tom is written
+    high, and with more the smallest is high and the next mid. A five-tom kit
+    has two floor toms; any other larger kit has its extra toms low.
+    """
+    if count <= 2:
+        return [LOW, HIGH][:count]
+    if count == 5:
+        return [LOW, LOW, MID, HIGH, HIGH]
+    return [LOW] * (count - 2) + [MID, HIGH]
 
 
 def tom_sizes(drums_wav: Path, hits: list[Hit]) -> list[Hit]:
@@ -165,15 +199,12 @@ def tom_sizes(drums_wav: Path, hits: list[Hit]) -> list[Hit]:
         for n, (i, time) in enumerate(zip(toms, times))
     }
     known = [pitch for pitch in pitches.values() if pitch]
-    centres = _centres(known) if len(known) >= 3 else []
-    sizes = _sizes(centres) if centres else []
+    centres = _groups(known) if known else []
+    sizes = _sizes(len(centres))
     sized = list(hits)
     for i, pitch in pitches.items():
         if not pitch:
             continue  # stays a plain (mid) tom
-        if centres:
-            nearest = min(range(len(centres)), key=lambda k: abs(np.log2(pitch / centres[k])))
-            sized[i] = replace(hits[i], inst=sizes[nearest])
-        else:
-            sized[i] = replace(hits[i], inst=_band(pitch))
+        nearest = min(range(len(centres)), key=lambda k: abs(np.log2(pitch / centres[k])))
+        sized[i] = replace(hits[i], inst=sizes[nearest])
     return sized
