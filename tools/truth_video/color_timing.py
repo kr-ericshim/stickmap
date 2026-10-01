@@ -24,12 +24,29 @@ def transition(values, frames, fps, stable=None):
                 uncertainty_seconds=1/fps,method='stable head ink; chroma rising edge with two-frame persistence')
 
 
-def attach(folder):
+def anchors(s, fps):
+    """Require broad, ordered visual evidence, including simultaneous heads."""
+    xs,groups=moments(s);cx=[];ct=[]
+    for x,group in zip(xs,groups):
+        ts=[s['notes'][i]['visual_timing']['time'] for i in group if 'visual_timing' in s['notes'][i]]
+        if ts and np.ptp(ts)<=1.5/fps:
+            cx.append(float(x));ct.append(float(np.median(ts)))
+    if (len(cx)>=6 and len(cx)>=len(xs)*.7 and np.all(np.diff(ct)>0)
+            and np.ptp(cx)>.7*np.ptp(xs)):
+        return cx,ct
+    return [],[]
+
+
+def attach(folder, page_notes=False):
     folder=Path(folder);scan=json.loads((folder/'scan.json').read_text())
     systems=json.loads((folder/'strip.json').read_text());records={r['system']:r for r in scan['records']}
     samples={};patches={}
     for s in systems:
-        if any(not reason.startswith('channel disabled:') for reason in s['staff'].get('reasons',[])):continue
+        # An opt-in full-page reader may establish a row visit from local note
+        # colour even when the box was missed. All other staff failures remain.
+        if any(not reason.startswith('channel disabled:') and
+               not (page_notes and reason=='page row not visited by cursor')
+               for reason in s['staff'].get('reasons',[])):continue
         gray=cv2.imread(str(folder/f"system_{s['system']:03d}.png"),0)
         sp=s['staff']['spacing'];arr=[]
         for n in s['notes']:
@@ -67,14 +84,15 @@ def attach(folder):
             found=transition(vals,frames,scan['fps'],stable)
             if found:
                 n['visual_timing']=found;evidence.append(dict(system=s['system'],note=i,**found))
-        xs,groups=moments(s);cx=[];ct=[]
-        for x,group in zip(xs,groups):
-            ts=[s['notes'][i]['visual_timing']['time'] for i in group if 'visual_timing' in s['notes'][i]]
-            if ts and np.ptp(ts)<=1.5/scan['fps']:
-                cx.append(float(x));ct.append(float(np.median(ts)))
         # Never extrapolate far from sparse color changes or reorder a reset.
-        if len(cx)>=6 and len(cx)>=len(xs)*.7 and np.all(np.diff(ct)>0) and np.ptp(cx)>.7*np.ptp(xs):
+        cx,ct=anchors(s,scan['fps'])
+        if cx:
             s['color_x']=cx;s['color_t']=ct
+            if page_notes and 'page row not visited by cursor' in s['staff']['reasons']:
+                s['staff']['reasons'].remove('page row not visited by cursor')
+                s['display_interval']=s['interval']
+                s['interval']=[ct[0],ct[-1]+1/scan['fps']]
+                s['staff']['row_visit_evidence']='at least six stable local colour edges, >=70% of moments and >70% of their x span'
     (folder/'strip.json').write_text(json.dumps(systems,indent=2))
     (folder/'color-timing.json').write_text(json.dumps(dict(fps=scan['fps'],events=evidence,
         limitation='Video frame timing only; no subframe precision or independent audio onset verification'),indent=2))

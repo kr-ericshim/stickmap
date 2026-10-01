@@ -12,9 +12,11 @@ import harvest
 from manifest_io import read,append
 
 
+SCRATCH=Path(tempfile.gettempdir())/'groovemap-truth-video-tests';SCRATCH.mkdir(parents=True,exist_ok=True)
+
 class BatchSafety(unittest.TestCase):
     def test_watch_retries_a_busy_song_without_consuming_limit(self):
-        with tempfile.TemporaryDirectory(dir='truth') as name:
+        with tempfile.TemporaryDirectory(dir=SCRATCH) as name:
             root=Path(name);append(root/'manifest.jsonl',video='id',channel='atthedrum',slug='fixture',status='fetched')
             calls=[]
             def process(*args):
@@ -28,7 +30,7 @@ class BatchSafety(unittest.TestCase):
 
     def test_timeout_publishes_empty_diagnostic_and_preserves_sources(self):
         import subprocess
-        with tempfile.TemporaryDirectory(dir='truth') as name:
+        with tempfile.TemporaryDirectory(dir=SCRATCH) as name:
             root=Path(name);song=root/'songs/fixture';song.mkdir(parents=True)
             (song/'video.mp4').write_bytes(b'video');(song/'attacks.htdemucs.npy').write_bytes(b'attacks')
             append(root/'manifest.jsonl',video='id',channel='atthedrum',slug='fixture',status='fetched')
@@ -40,7 +42,7 @@ class BatchSafety(unittest.TestCase):
             self.assertTrue((song/'truth/QUALITY.md').exists());self.assertEqual((song/'video.mp4').read_bytes(),b'video')
 
     def test_song_lock_is_exclusive_and_released(self):
-        with tempfile.TemporaryDirectory(dir='truth') as name:
+        with tempfile.TemporaryDirectory(dir=SCRATCH) as name:
             p=Path(name)/'lock'
             with batch.lock(p) as first:
                 self.assertTrue(first)
@@ -48,7 +50,7 @@ class BatchSafety(unittest.TestCase):
             with batch.lock(p) as third:self.assertTrue(third)
 
     def test_recover_completed_export_without_running_reader(self):
-        with tempfile.TemporaryDirectory(dir='truth') as name:
+        with tempfile.TemporaryDirectory(dir=SCRATCH) as name:
             root=Path(name);song=root/'songs'/'fixture';out=song/'truth';out.mkdir(parents=True)
             (song/'video.mp4').write_bytes(b'fixture');(song/'attacks.htdemucs.npy').write_bytes(b'fixture')
             profile,path=batch.channel_profile('atthedrum')
@@ -61,7 +63,7 @@ class BatchSafety(unittest.TestCase):
             self.assertEqual(recovered,result);self.assertEqual(read(root/'manifest.jsonl')['id']['status'],'read')
 
     def test_compaction_retains_truth_overlays_caches_and_live_song(self):
-        with tempfile.TemporaryDirectory(dir='truth') as name:
+        with tempfile.TemporaryDirectory(dir=SCRATCH) as name:
             root=Path(name);songs=root/'songs';song=songs/'finished';truth=song/'truth';truth.mkdir(parents=True)
             (truth/'truth.json').write_text('[]');(truth/'overlay.png').write_bytes(b'png')
             for f in ('video.mp4','audio.wav','drums.htdemucs.wav','attacks.htdemucs.npy','meta.json'):(song/f).write_bytes(b'fixture')

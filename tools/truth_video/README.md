@@ -508,3 +508,74 @@ coincident instruments can make the source of a detector hit ambiguous. `nothing
 means no exported note within the window, not independently verified silence.
 P/R itself remains one-to-one. Ghost negatives mean no confirmed printed mark;
 flag recall and underlying transcription fidelity were not exhaustively audited.
+
+## Chops channels (2026-10-02)
+
+`moyin`, `olliewoods`, `golly` and `ivannikov` have separate partial legends.
+Only audited filled kick/snare/tom positions are verified; no cymbal or technique
+mapping was enabled without channel-specific evidence. Blind native crops,
+manual decisions (including failures), colour-edge comparisons and clef reviews
+are under `truth/harvest/validation/*20261002/`. The measured yield and remaining
+blocks are in `truth/harvest/validation/chops-20261002/REPORT.md`.
+
+MoYin opts into `color_notes` and `page_color_notes`. The latter allows a page
+row's visit to be established by at least six stable head-local colour edges,
+covering >=70% of notated moments and >70% of their x span in increasing time.
+A pale box background cannot establish that visit. Every other staff failure,
+all audio timing gates and the instrument-band phase checks remain mandatory.
+The sampled source heads turn blue or green inside the box. Their one-frame
+threshold-crossing quantization is not a total acoustic onset error bound.
+
+The four chops profiles opt into `strict_clef_pair`: a percussion clef is
+searched relative to sustained five-line ink, before the actual first head's
+left edge (including heads immediately after the staff start), requiring one
+close pair of partial-height vertical strokes. Head and attached-stem columns
+are excluded from the search. This also rejects the old
+margin check's false confirmations from ordinary note stems. Existing profiles
+retain their original clef check exactly. Missing/low-contrast clefs remain
+rejected; no `clef_omitted_verified` waiver was added. S.O.A.R. remains rejected
+at its retained native resolution.
+
+Golly restricts its geometry search to the actual bottom score, excluding drum
+footage that produced a false staff in the trial. Ivannikov rejects staff crops
+obscured by large opaque chromatic promotional lettering. This additional
+rejection is opt-in and applies to static/page scans and scrolling blocks.
+Scrolling exports still require `scrolling_verified`; the promotional-overlay
+check does not constitute channel-level scrolling validation.
+
+Ivannikov also opts into `native_frame_fallback`. If a median fails staff
+search, at least six retained native frames and >=75% agreeing five-line
+geometries, with <=1.1 px line disagreement and stable notation ink, may supply
+one actual source frame. The selected frame still passes every ordinary staff,
+8 px, clef, head and timing/phase gate. Every detected head must recur with the
+same shape and staff position, within 0.35 native spacing in x/y, in a strict
+majority of the agreeing reservoir frames. A source frame with any unsupported
+head is skipped; if none qualifies, the fallback is rejected. `scan.json`
+records the source frame, required majority and supporting frames per head;
+the failed median is retained. This restores Jojo Mayer's first staff
+(the real native fixture is tested), but its timing/phase failure still prevents
+export. No interpolation/upscaling is used.
+
+Retained Golly/Ivannikov samples can be admitted without fetching anything:
+
+```bash
+.venv/bin/python tools/truth_video/import_samples.py --only golly ivannikov
+.venv/bin/python tools/truth_video/batch.py --only golly ivannikov --retry-unreadable --refresh-read
+```
+
+The importer moves existing directories into `truth/harvest/songs/`, appends
+`fetched` records with local provenance, refuses identity/destination conflicts,
+and can recover a move interrupted before journal registration. It does not
+copy/download audio or video. Missing retained video is recorded and the batch
+fails closed. The ten samples from this pass now live in the canonical harvest
+folders, rather than `truth/samples/`. Both new channel configurations use a
+20-second sampling minimum so their 40-68 second chops are not silently skipped
+by the fetcher's default 75-second filter; all truth acceptance gates stay fixed.
+
+`result.json` now includes `timing_only_systems` and
+`timing_only_system_ids`: strict-rejected systems whose every reason starts with
+`held-out agreement`, `fitted attack agreement`, `ambiguous alignment` or
+`no-cursor alignment`, matching `fill_seq.TIMING` / `tools/finetune/dense.py`.
+These counts do not include phase, monotonicity, spacing, clef or reading failures.
+They are candidates only; dense.py's assignment, coverage and run filters still
+apply. The reader tests place temporary fixtures in `.eval-cache/channels/tmp/`.

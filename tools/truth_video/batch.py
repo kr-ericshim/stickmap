@@ -19,6 +19,9 @@ import uuid
 
 HERE=Path(__file__).resolve().parent
 ROOT=HERE.parents[1]
+# Matches fill_seq.TIMING, used by tools/finetune/dense.py. Phase, monotonicity
+# and every notation/staff failure are deliberately outside this set.
+TIMING_ONLY_REASONS=('held-out agreement','fitted attack agreement','ambiguous alignment','no-cursor alignment')
 sys.path.insert(0,str(HERE.parent/'harvest'))
 from manifest_io import read as manifest_read, append as manifest_append
 from layouts import channel_profile
@@ -62,12 +65,14 @@ def signature(song,profile):
     return h.hexdigest()
 
 
-def scan_signature(song,layout,scroll_probe=False,y_min_fraction=0):
+def scan_signature(song,layout,scroll_probe=False,y_min_fraction=0,reject_overlays=False,native_fallback=False):
     h=hashlib.sha256(str(layout).encode())
     for name in ('layouts.py','harvest_scan.py','heads.py'):
         h.update((HERE/name).read_bytes())
     if scroll_probe:h.update((HERE/'harvest_scroll.py').read_bytes())
     if y_min_fraction:h.update(str(y_min_fraction).encode())
+    if reject_overlays:h.update(b'reject chromatic overlays')
+    if native_fallback:h.update(b'native frame consensus after failed median')
     p=song/'video.mp4'
     h.update(f'{p.stat().st_size}:{p.stat().st_mtime_ns}'.encode())
     return h.hexdigest()
@@ -78,6 +83,8 @@ def summarize(folder):
     b=json.loads((folder/'alignment.scoring.json').read_text())
     strict=json.loads((folder/'truth.json').read_text())
     scoring=json.loads((folder/'truth.scoring.json').read_text())
+    timing_only=[s['system'] for s in a['systems'] if not s['usable'] and s['reasons']
+                 and all(r.startswith(TIMING_ONLY_REASONS) for r in s['reasons'])]
     def counts(notes):
         c=Counter((f"hihat_{n.get('articulation','unverified')}" if n['inst']=='hihat' else
                    f"tom_pos_{n['pos']}" if n['inst']=='tom' else n['inst']) for n in notes)
@@ -88,6 +95,7 @@ def summarize(folder):
                 systems=len(a['systems']),strict_seconds=a['trustworthy_seconds'],
                 scoring_seconds=b['trustworthy_seconds'],strict_notes=len(strict),scoring_notes=len(scoring),
                 strict_labels=counts(strict),scoring_labels=counts(scoring),
+                timing_only_systems=len(timing_only),timing_only_system_ids=timing_only,
                 rejection_counts=dict(Counter(r for s in a['systems'] for r in s['reasons'])))
 
 
@@ -98,6 +106,7 @@ def quality_report(folder,profile,stats):
            'Scoring includes strict. Timing is held-out prediction against supplied class-agnostic attacks, not independent hand-timed acoustic truth.',
            'Unverified mappings/marks are excluded; false flags are not verified negatives. Native staff spacing below 8 px remains rejected.','',
            f'Strict: {stats["strict_seconds"]:.2f} s, {stats["strict_notes"]} notes. Scoring: {stats["scoring_seconds"]:.2f} s, {stats["scoring_notes"]} notes.','',
+           f'Strict systems rejected for timing reasons only: {stats.get("timing_only_systems",0)}. Matches dense.py reason prefixes; its attack-assignment, verified-label and dense-run filters still apply.','',
            'Audio sanity (audio-sanity.json): '+('; '.join(stats.get('audio_flags') or [])or 'no flags')+'. Phase: notated kicks/snares must sit on low/mid onset bands better than every rhythmic alias (alignment.json `phase`).','',
            '| System | Moments | Mode | Held-out 20 / 40 ms | Kick/snare band agreement (best alias) | Strict / scoring | Reasons |',
            '|---|---:|---|---|---|---|---|']
@@ -116,7 +125,9 @@ def worker(song,out,profile_path,reuse=None):
     out.mkdir(parents=True,exist_ok=True)
     scroll_probe=profile.get('probe_scrolling',layout in ('drumscribe','dailychops'))
     y_min=profile.get('staff_y_min_fraction',0)
-    sig=scan_signature(song,layout,scroll_probe,y_min)
+    reject_overlays=profile.get('reject_chromatic_overlays',False)
+    native_fallback=profile.get('native_frame_fallback',False)
+    sig=scan_signature(song,layout,scroll_probe,y_min,reject_overlays,native_fallback)
     reused=False
     if reuse and (reuse/'result.json').exists():
         old=json.loads((reuse/'result.json').read_text())
@@ -132,18 +143,19 @@ def worker(song,out,profile_path,reuse=None):
             moving,probes=harvest_scroll.probe(song/'video.mp4',geometry)
             dump(out/'motion-probe.json',dict(scrolling=moving,probes=probes))
         if moving:
-            data=harvest_scroll.write(song/'video.mp4',out,geometry)
+            data=harvest_scroll.write(song/'video.mp4',out,geometry,reject_overlays=reject_overlays)
             if not profile.get('scrolling_verified'):
                 for r in data['records']:r['scroll_reasons'].append('scrolling reading not validated for this channel')
                 dump(out/'scan.json',data)
-        else:harvest_scan.write(song/'video.mp4',out,layout,y_min)
+        else:harvest_scan.write(song/'video.mp4',out,layout,y_min,
+                               reject_overlays=reject_overlays,native_fallback=native_fallback)
     systems=strip.read(out,profile_path)
     # Detector-free audio sanity: a near-silent stem or an attack deficit is
     # recorded with the export; the alignment gates still decide every system.
     import sanity
     audio=sanity.check(song,systems);dump(out/'audio-sanity.json',audio)
     if profile.get('color_notes') and not json.loads((out/'scan.json').read_text()).get('reconstructed_scroll'):
-        color_timing.attach(out)
+        color_timing.attach(out,page_notes=profile.get('page_color_notes',False))
     build_truth(song,out);tiers.write(out)
     stats=summarize(out);stats['audio_flags']=audio['flags'];quality_report(out,profile,stats)
     systems=json.loads((out/'strip.json').read_text())

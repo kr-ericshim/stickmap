@@ -136,6 +136,22 @@
       "genre": "worship",
       "include": "Drum Cover|Tutorial|Sheet",
       "max": 480
+    },
+    {
+      "name": "golly",
+      "id": "UCat7co4xwI6W9to2B2yubhA",
+      "layout": "kr_strip",
+      "genre": "gospel chops fusion",
+      "include": "Analyzing Gospel Chops",
+      "min": 20
+    },
+    {
+      "name": "ivannikov",
+      "id": "UCKpdKiCmqZMRNudByu1-yHw",
+      "layout": "drumscribe",
+      "genre": "jazz fusion solos",
+      "include": "Transcription",
+      "min": 20
     }
   ],
   "exclude": "drumless|드럼리스|드럼 ?없는|minus ?one|no drums"

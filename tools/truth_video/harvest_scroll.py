@@ -44,10 +44,10 @@ def probe(video,geometry):
     return sum(bool(e and e['dx'] < -2) for e in evidence)>=2,evidence
 
 
-def write(video,out,geometry):
+def write(video,out,geometry,reject_overlays=False):
     out=Path(out);out.mkdir(parents=True,exist_ok=True)
     cap=cv2.VideoCapture(str(video));fps=cap.get(5);total=int(cap.get(7))
-    records=[];evidence=[];n=0;block=[];stride=max(1,round(fps*.2));block_frames=max(1,round(fps*4))
+    records=[];evidence=[];n=0;block=[];obstructed=0;stride=max(1,round(fps*.2));block_frames=max(1,round(fps*4))
 
     def finish(samples,end):
         if len(samples)<5:return
@@ -57,6 +57,7 @@ def write(video,out,geometry):
             if delta is None or delta['dx']>2:
                 reasons.append('scroll translation ambiguous or rightward discontinuity');break
             offset+=delta['dx'];offsets.append(offset);qs.append(delta)
+        if obstructed>=2:reasons.append('large chromatic overlay obscures staff')
         sid=len(records)
         evidence.append(dict(system=sid,start_frame=start,end_frame=end,matches=qs,reasons=reasons))
         if reasons:
@@ -91,9 +92,12 @@ def write(video,out,geometry):
         while True:
             ok,f=cap.read()
             if not ok:break
-            if n and n%block_frames==0:finish(block,n);block=[]
+            if n and n%block_frames==0:finish(block,n);block=[];obstructed=0
             if n%stride==0:
                 crop=f[geometry['top']:geometry['bottom']];block.append((n,ink(crop),cursor(crop)))
+                if reject_overlays:
+                    from harvest_scan import chromatic_obstructions
+                    obstructed+=bool(chromatic_obstructions(crop,float(np.median(geometry['native_spacing']))))
             n+=1
         finish(block,n)
     finally:cap.release()

@@ -1,0 +1,160 @@
+{
+  "name": "ivannikov",
+  "harvest_profile": true,
+  "layout": "drumscribe",
+  "enabled": true,
+  "legend_confidence": "Audited kick/snare/tom positions only; no printed cymbal key",
+  "reason": "Fresh blind audit 35/36; large promotional overlays rejected; native spacing below 8 px rejected. Cymbals and flags withheld.",
+  "min_x_fraction": 0.055,
+  "min_confidence": 0.84,
+  "verified_flags": [],
+  "open_verified": false,
+  "rules": {
+    "filled:1": {
+      "inst": "kick",
+      "confidence": 0.98,
+      "verified": true,
+      "evidence": "Fresh blind audit of native staff candidates 2026-10-02: truth/harvest/validation/audit-chops-ivannikov-20261002/manual.json. Position only; no physical tom-size claim."
+    },
+    "filled:5": {
+      "inst": "snare",
+      "confidence": 0.98,
+      "verified": true,
+      "evidence": "Fresh blind audit of native staff candidates 2026-10-02: truth/harvest/validation/audit-chops-ivannikov-20261002/manual.json. Position only; no physical tom-size claim."
+    },
+    "filled:2": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": false,
+      "evidence": "Not audited for this channel; withheld"
+    },
+    "filled:3": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": true,
+      "evidence": "Fresh blind audit of native staff candidates 2026-10-02: truth/harvest/validation/audit-chops-ivannikov-20261002/manual.json. Position only; no physical tom-size claim."
+    },
+    "filled:4": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": true,
+      "evidence": "Fresh blind audit of native staff candidates 2026-10-02: truth/harvest/validation/audit-chops-ivannikov-20261002/manual.json. Position only; no physical tom-size claim."
+    },
+    "filled:6": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": true,
+      "evidence": "Fresh blind audit of native staff candidates 2026-10-02: truth/harvest/validation/audit-chops-ivannikov-20261002/manual.json. Position only; no physical tom-size claim."
+    },
+    "filled:7": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": true,
+      "evidence": "Fresh blind audit of native staff candidates 2026-10-02: truth/harvest/validation/audit-chops-ivannikov-20261002/manual.json. Position only; no physical tom-size claim."
+    },
+    "filled:8": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": false,
+      "evidence": "Not audited for this channel; withheld"
+    },
+    "cross:9": {
+      "inst": "hihat",
+      "confidence": 0.95,
+      "articulation": "closed",
+      "verified": false,
+      "evidence": "Not audited for this channel; withheld"
+    },
+    "circled:9": {
+      "inst": "hihat",
+      "confidence": 0.95,
+      "articulation": "open",
+      "verified": false,
+      "evidence": "Not audited for this channel; withheld"
+    },
+    "cross:10": {
+      "inst": "crash",
+      "confidence": 0.95,
+      "verified": false,
+      "evidence": "Not audited for this channel; withheld"
+    },
+    "circled:10": {
+      "inst": "crash",
+      "confidence": 0.95,
+      "verified": false,
+      "evidence": "Not audited for this channel; withheld"
+    },
+    "cross:-2": {
+      "inst": "hihat",
+      "confidence": 0.95,
+      "articulation": "pedal",
+      "verified": false,
+      "evidence": "Not audited for this channel; withheld"
+    },
+    "cross:5": {
+      "inst": "side_stick",
+      "confidence": 0.95,
+      "verified": false,
+      "evidence": "Not audited for this channel; withheld"
+    },
+    "cross:8": {
+      "inst": "ride",
+      "confidence": 0.95,
+      "verified": false,
+      "evidence": "Not audited for this channel; withheld"
+    },
+    "diamond:8": {
+      "inst": "ride_bell",
+      "confidence": 0.8,
+      "verified": false,
+      "evidence": "Not audited for this channel; withheld"
+    }
+  },
+  "small_staff_policy": "Native spacing below 8 px rejected; upscaling is inspection only",
+  "validation": {
+    "audit": "truth/harvest/validation/audit-chops-ivannikov-20261002/manual.json",
+    "accuracy": {
+      "inspected": 36,
+      "correct": 35,
+      "positions": {
+        "1": {
+          "inspected": 6,
+          "correct": 6
+        },
+        "7": {
+          "inspected": 6,
+          "correct": 6
+        },
+        "4": {
+          "inspected": 6,
+          "correct": 6
+        },
+        "5": {
+          "inspected": 6,
+          "correct": 6
+        },
+        "3": {
+          "inspected": 6,
+          "correct": 5
+        },
+        "6": {
+          "inspected": 6,
+          "correct": 6
+        }
+      },
+      "errors": [
+        {
+          "id": "ivannikov-14",
+          "predicted": "tom_pos_3",
+          "actual": "not_note"
+        }
+      ]
+    },
+    "previous_failed_audit": "truth/harvest/validation/audit-chops-20261002/accuracy.json",
+    "scope": "Fresh crop sample after excluding unvisited page rows; one remaining promotional-letter false head recorded. Large chromatic overlays now reject the entire staff; timing and phase gates remain mandatory."
+  },
+  "probe_scrolling": true,
+  "reject_chromatic_overlays": true,
+  "strict_clef_pair": true,
+  "native_frame_fallback": true
+}

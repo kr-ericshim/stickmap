@@ -2,9 +2,9 @@
   "name": "olliewoods",
   "harvest_profile": true,
   "layout": "olliewoods",
-  "enabled": false,
-  "legend_confidence": "unverified",
-  "reason": "Disabled: chop transcriptions with a small staff (8-9 px) and no confirmed percussion clef on most systems; 0-11 timing-passing systems per song and one song at 16 px only 19 s. Too little verifiable material for a channel key.",
+  "enabled": true,
+  "legend_confidence": "Audited kick/snare/tom positions only; no printed cymbal key",
+  "reason": "Blind audit 35/35; native spacing, timing and phase gates unchanged. Cymbals and technique flags withheld.",
   "min_x_fraction": 0.055,
   "min_confidence": 0.84,
   "verified_flags": [],
@@ -13,103 +13,138 @@
     "filled:1": {
       "inst": "kick",
       "confidence": 0.98,
-      "verified": false,
-      "evidence": "candidate only; requires channel-specific visual audit"
+      "verified": true,
+      "evidence": "Blind native head audit 2026-10-02: truth/harvest/validation/audit-chops-20261002/manual.json. Notation position only; no physical tom-size claim."
     },
     "filled:5": {
       "inst": "snare",
       "confidence": 0.98,
-      "verified": false,
-      "evidence": "candidate only; requires channel-specific visual audit"
+      "verified": true,
+      "evidence": "Blind native head audit 2026-10-02: truth/harvest/validation/audit-chops-20261002/manual.json. Notation position only; no physical tom-size claim."
     },
     "filled:2": {
       "inst": "tom",
       "confidence": 0.88,
       "verified": false,
-      "evidence": "candidate only; requires channel-specific visual audit"
+      "evidence": "Not audited for this channel; withheld"
     },
     "filled:3": {
       "inst": "tom",
       "confidence": 0.88,
-      "verified": false,
-      "evidence": "candidate only; requires channel-specific visual audit"
+      "verified": true,
+      "evidence": "Blind native head audit 2026-10-02: truth/harvest/validation/audit-chops-20261002/manual.json. Notation position only; no physical tom-size claim."
     },
     "filled:4": {
       "inst": "tom",
       "confidence": 0.88,
       "verified": false,
-      "evidence": "candidate only; requires channel-specific visual audit"
+      "evidence": "Not audited for this channel; withheld"
     },
     "filled:6": {
       "inst": "tom",
       "confidence": 0.88,
-      "verified": false,
-      "evidence": "candidate only; requires channel-specific visual audit"
+      "verified": true,
+      "evidence": "Blind native head audit 2026-10-02: truth/harvest/validation/audit-chops-20261002/manual.json. Notation position only; no physical tom-size claim."
     },
     "filled:7": {
       "inst": "tom",
       "confidence": 0.88,
-      "verified": false,
-      "evidence": "candidate only; requires channel-specific visual audit"
+      "verified": true,
+      "evidence": "Blind native head audit 2026-10-02: truth/harvest/validation/audit-chops-20261002/manual.json. Notation position only; no physical tom-size claim."
     },
     "filled:8": {
       "inst": "tom",
       "confidence": 0.88,
-      "verified": false,
-      "evidence": "candidate only; requires channel-specific visual audit"
+      "verified": true,
+      "evidence": "Blind native head audit 2026-10-02: truth/harvest/validation/audit-chops-20261002/manual.json. Notation position only; no physical tom-size claim."
     },
     "cross:9": {
       "inst": "hihat",
       "confidence": 0.95,
       "articulation": "closed",
       "verified": false,
-      "evidence": "candidate only; requires channel-specific visual audit"
+      "evidence": "Not audited for this channel; withheld"
     },
     "circled:9": {
       "inst": "hihat",
       "confidence": 0.95,
       "articulation": "open",
       "verified": false,
-      "evidence": "candidate only; requires channel-specific visual audit"
+      "evidence": "Not audited for this channel; withheld"
     },
     "cross:10": {
       "inst": "crash",
       "confidence": 0.95,
       "verified": false,
-      "evidence": "candidate only; requires channel-specific visual audit"
+      "evidence": "Not audited for this channel; withheld"
     },
     "circled:10": {
       "inst": "crash",
       "confidence": 0.95,
       "verified": false,
-      "evidence": "candidate only; requires channel-specific visual audit"
+      "evidence": "Not audited for this channel; withheld"
     },
     "cross:-2": {
       "inst": "hihat",
       "confidence": 0.95,
       "articulation": "pedal",
       "verified": false,
-      "evidence": "candidate only; requires channel-specific visual audit"
+      "evidence": "Not audited for this channel; withheld"
     },
     "cross:5": {
       "inst": "side_stick",
       "confidence": 0.95,
       "verified": false,
-      "evidence": "candidate only; requires channel-specific visual audit"
+      "evidence": "Not audited for this channel; withheld"
     },
     "cross:8": {
       "inst": "ride",
       "confidence": 0.95,
       "verified": false,
-      "evidence": "candidate only; requires channel-specific visual audit"
+      "evidence": "Not audited for this channel; withheld"
     },
     "diamond:8": {
       "inst": "ride_bell",
       "confidence": 0.8,
       "verified": false,
-      "evidence": "candidate only; requires channel-specific visual audit"
+      "evidence": "Not audited for this channel; withheld"
     }
   },
   "small_staff_policy": "Native spacing below 8 px rejected; upscaling is inspection only",
-  "survey_evidence": "truth/harvest/validation/survey-3.jpg"
+  "validation": {
+    "audit": "truth/harvest/validation/audit-chops-20261002/manual.json",
+    "accuracy": {
+      "inspected": 35,
+      "correct": 35,
+      "positions": {
+        "1": {
+          "inspected": 6,
+          "correct": 6
+        },
+        "8": {
+          "inspected": 5,
+          "correct": 5
+        },
+        "6": {
+          "inspected": 6,
+          "correct": 6
+        },
+        "3": {
+          "inspected": 6,
+          "correct": 6
+        },
+        "5": {
+          "inspected": 6,
+          "correct": 6
+        },
+        "7": {
+          "inspected": 6,
+          "correct": 6
+        }
+      },
+      "errors": []
+    },
+    "scope": "Assistant visual audit of detected notation heads; partial positive labels; not recall, listening, or independent human review"
+  },
+  "strict_clef_pair": true
 }

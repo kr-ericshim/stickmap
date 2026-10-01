@@ -15,6 +15,8 @@ from evaluate import family, score
 ROOT=Path(__file__).resolve().parents[2]
 
 
+SCRATCH=Path(tempfile.gettempdir())/'groovemap-truth-video-tests';SCRATCH.mkdir(parents=True,exist_ok=True)
+
 class ReaderTests(unittest.TestCase):
     def test_one_to_one_attacks(self):
         self.assertEqual(len(match([1,1.01],[1.005],.02)),1)
@@ -73,7 +75,7 @@ class ReaderTests(unittest.TestCase):
         self.assertIn('uneven staff lines',staff_checks(im,lines,space,[])['reasons'])
 
     def test_page_and_red_cursor(self):
-        with tempfile.TemporaryDirectory(dir=ROOT/'truth') as temp:
+        with tempfile.TemporaryDirectory(dir=SCRATCH) as temp:
             folder=Path(temp);video=folder/'page.avi'
             writer=cv2.VideoWriter(str(video),cv2.VideoWriter_fourcc(*'MJPG'),30,(800,350))
             for i in range(90):

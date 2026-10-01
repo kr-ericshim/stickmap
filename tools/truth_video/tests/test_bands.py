@@ -60,6 +60,8 @@ def synthetic_bands(times, insts, seconds=30.):
     return bands.with_peaks(out)
 
 
+SCRATCH=Path(tempfile.gettempdir())/'groovemap-truth-video-tests';SCRATCH.mkdir(parents=True,exist_ok=True)
+
 class BandEvidence(unittest.TestCase):
     def test_synthesized_drums_put_kicks_low_and_snares_mid(self):
         times,insts=groove()
@@ -87,7 +89,7 @@ class BandEvidence(unittest.TestCase):
 
     def test_cache_round_trip_and_missing_stem(self):
         times,insts=groove(bars=2)
-        with tempfile.TemporaryDirectory(dir=ROOT/'truth') as temp:
+        with tempfile.TemporaryDirectory(dir=SCRATCH) as temp:
             song=Path(temp)
             self.assertIsNone(bands.load(song))
             import soundfile as sf
@@ -145,7 +147,7 @@ class PhaseAliasAlignment(unittest.TestCase):
 
     def test_build_truth_without_stem_exports_nothing(self):
         times,insts=groove()
-        with tempfile.TemporaryDirectory(dir=ROOT/'truth') as temp:
+        with tempfile.TemporaryDirectory(dir=SCRATCH) as temp:
             song=Path(temp)/'song';folder=Path(temp)/'truth';song.mkdir();folder.mkdir()
             np.save(song/'attacks.htdemucs.npy',continuing_attacks(times))
             (folder/'strip.json').write_text(json.dumps([self.system(times,insts)]))

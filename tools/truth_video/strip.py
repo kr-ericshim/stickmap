@@ -75,7 +75,7 @@ def label_heads(gray, legend):
             n['ghost_confidence']=round(score,3) if n['ghost'] else None
             if n['ghost']:
                 n['marks'].append(dict(mark='ghost_parentheses',confidence=round(score,3),method='calibrated complete parenthesized head glyph'))
-    checks=staff_checks(gray,lines,space,notes)
+    checks=staff_checks(gray,lines,space,notes,strict_clef=legend.get('strict_clef_pair',False))
     if legend.get('harvest_profile'):
         _,_,components,_=cv2.connectedComponentsWithStats((gray<140).astype(np.uint8))
         for n in notes:
@@ -179,6 +179,7 @@ def read(folder, legend=None):
                     s['notes'].append(n)
             s['notes'].sort(key=lambda n:n['x'])
             s['staff']['reasons'].extend(r.get('scroll_reasons',[]))
+            s['staff']['reasons'].extend(r.get('reading_reasons',[]))
             s['staff']['reasons'].extend(reading_rejections.get(str(s['system']),[]))
             if r.get('read_x'):
                 lo,hi=sorted(r['read_x'])

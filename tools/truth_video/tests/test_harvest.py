@@ -18,16 +18,18 @@ from harvest_scroll import shift
 import harvest_scan
 
 
+SCRATCH=Path(tempfile.gettempdir())/'groovemap-truth-video-tests';SCRATCH.mkdir(parents=True,exist_ok=True)
+
 class Harvest(unittest.TestCase):
     def test_manifest_partial_last_line_and_updates(self):
-        with tempfile.TemporaryDirectory(dir='truth') as name:
+        with tempfile.TemporaryDirectory(dir=SCRATCH) as name:
             p=Path(name)/'manifest.jsonl';append(p,video='a',status='fetched',channel='x');append(p,video='a',status='read')
             with p.open('ab') as f:f.write(b'{"video":')
             self.assertEqual(read(p)['a']['status'],'read');self.assertEqual(read(p)['a']['channel'],'x')
             with self.assertRaises(ValueError):append(p,video='b',status='fetched')
 
     def test_manifest_bad_committed_line_is_visible_error(self):
-        with tempfile.TemporaryDirectory(dir='truth') as name:
+        with tempfile.TemporaryDirectory(dir=SCRATCH) as name:
             p=Path(name)/'manifest.jsonl';p.write_text('broken\n')
             with self.assertRaises(ValueError):read(p)
 
@@ -64,7 +66,7 @@ class Harvest(unittest.TestCase):
                 if self.i==len(frames):return False,None
                 f=frames[self.i];self.i+=1;return True,f
             def release(self):pass
-        with tempfile.TemporaryDirectory(dir='truth') as name:
+        with tempfile.TemporaryDirectory(dir=SCRATCH) as name:
             geometry=dict(layout='kr_strip',top=0,bottom=len(base),left=0,right=base.shape[1],native_spacing=[11])
             with patch('harvest_scan.detect',return_value=geometry),patch('harvest_scan.cv2.VideoCapture',Capture):
                 data=harvest_scan.write('fixture.mp4',name)

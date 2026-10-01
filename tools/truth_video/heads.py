@@ -47,7 +47,7 @@ def staff_lines(gray):
     return found[0]
 
 
-def staff_checks(gray, lines, space, notes):
+def staff_checks(gray, lines, space, notes, strict_clef=False):
     dark = gray < 150
     ys = np.array(lines).astype(int)
     support = [float((gray[y] < 230).mean()) for y in ys]
@@ -58,6 +58,38 @@ def staff_checks(gray, lines, space, notes):
     clef_cols = np.where((middle > .85) & (np.arange(gray.shape[1]) < gray.shape[1]*.12))[0]
     clef_runs = np.split(clef_cols, np.where(np.diff(clef_cols)>1)[0]+1)
     clef = [float(np.mean(r)) for r in clef_runs if len(r)>=max(2,round(space*.2))]
+    # A score may be inset farther than 12% of the frame (Ollie Woods).
+    # Audited opt-in profiles use sustained five-line ink before the first
+    # note. Legacy profiles retain their original check exactly.
+    if strict_clef:
+        clef=[]
+        common=(gray[ys] < 230).mean(axis=0)>=.8
+        columns=np.flatnonzero(common)
+        spans=np.split(columns,np.where(np.diff(columns)>2)[0]+1)
+        starts=[int(r[0]) for r in spans if len(r)>=space*8]
+        if starts:
+            start=starts[0]
+            # Include heads immediately after the staff start. Skipping the
+            # first two spaces lets their stems masquerade as a clef pair.
+            first=min((n['x']-max(space*.7,n.get('w',0)/2) for n in notes
+                       if n['x']>=start-space),default=gray.shape[1])
+            end=min(start+space*4,start+gray.shape[1]*.12,first)
+            # Up/down stems attach near either head edge. Exclude that full
+            # column neighbourhood, including stems left of a head's body.
+            note_columns=np.zeros(gray.shape[1],dtype=bool)
+            for n in notes:
+                radius=max(space,n.get('w',0)/2)
+                note_columns[max(0,int(np.floor(n['x']-radius))):
+                             min(gray.shape[1],int(np.ceil(n['x']+radius))+1)]=True
+            cols=np.flatnonzero((middle>.85)&(np.arange(gray.shape[1])>=start)&
+                                (np.arange(gray.shape[1])<end)&~note_columns)
+            runs=np.split(cols,np.where(np.diff(cols)>1)[0]+1)
+            strokes=[r for r in runs if max(2,round(space*.2))<=len(r)<=round(space*.75)
+                     and dark[ys[0]:ys[-1]+1,r].mean()<.85]
+            pairs=[(a,b) for a,b in zip(strokes,strokes[1:])
+                   if space*.35<=b.mean()-a.mean()<=space*1.5]
+            if len(pairs)==1:
+                clef=[float(r.mean()) for r in pairs[0]]
     reasons, warnings = [], []
     if np.max(np.abs(np.diff(lines)-space)) > 1.1:
         reasons.append('uneven staff lines')

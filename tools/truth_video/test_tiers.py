@@ -7,6 +7,8 @@ import unittest
 from tiers import scoring_reasons,write
 
 
+SCRATCH=Path(tempfile.gettempdir())/'groovemap-truth-video-tests';SCRATCH.mkdir(parents=True,exist_ok=True)
+
 class Tiers(unittest.TestCase):
     def row(self):
         return dict(reasons=['held-out agreement below 55% / 80%'],times=[1,2,3,4,5,6],moments=6,
@@ -31,7 +33,7 @@ class Tiers(unittest.TestCase):
 
     def test_real_strict_files_unchanged_and_extras_disjoint(self):
         source=Path('truth/ken-jezer')
-        with tempfile.TemporaryDirectory(dir='truth') as name:
+        with tempfile.TemporaryDirectory(dir=SCRATCH) as name:
             out=Path(name)
             for file in ['strip.json','truth.json','alignment.json']:
                 (out/file).write_bytes((source/file).read_bytes())
