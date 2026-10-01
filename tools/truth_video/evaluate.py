@@ -43,7 +43,7 @@ def confusion(truth, hits, tol=0.05):
 
 def detect(song, sensitivity=1.0, stage="full"):
     from groovemap import models
-    from groovemap.fills import tom_runs
+    from groovemap.fills import fill_snares, tom_runs
     from groovemap.toms import tom_sizes
     from groovemap.score import Hit
     act, mix = np.load(song / "activations.drums-htdemucs.npy"), np.load(song / "activations.mix.npy")
@@ -52,8 +52,9 @@ def detect(song, sensitivity=1.0, stage="full"):
         import adtof_pytorch as adtof
         peaks = adtof.PeakPicker(thresholds=thr, fps=100).pick(act[None], labels=adtof.LABELS_5)[0]
         return sorted([Hit(float(t), inst, 1.0) for lab, inst in zip(adtof.LABELS_5, models.ADTOF_CLASSES) for t in peaks[lab]], key=lambda h: h.time)
-    hits = models.pick_hits(act, thr, mix=mix, snare=np.load(song / "snare.htdemucs.npy"))
-    hits = tom_runs(hits, act, mix, np.load(song / "attacks.htdemucs.npy"), thr)
+    snare, attacks = np.load(song / "snare.htdemucs.npy"), np.load(song / "attacks.htdemucs.npy")
+    hits = models.pick_hits(act, thr, mix=mix, snare=snare)
+    hits = fill_snares(tom_runs(hits, act, mix, attacks, thr), act, snare, attacks)
     if stage == 'pre-toms':
         return hits
     stem = song / "drums.htdemucs.wav"

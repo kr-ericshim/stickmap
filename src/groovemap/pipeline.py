@@ -13,7 +13,7 @@ import numpy as np
 
 from . import fingerprint, kit, library, models, render
 from .fetch import SongMeta
-from .fills import attack_times, tom_runs
+from .fills import attack_times, fill_snares, tom_runs
 from .midi import to_midi
 from .musicxml import to_musicxml
 from .quantize import quantize
@@ -181,6 +181,10 @@ def run(
             named = kit.rename(hits, sound_map, opts.sound_names, drums, attacks)
             log(f"sound map: {len(opts.sound_names)} names applied, {len(hits)} hits -> {len(named)}")
             hits = named
+        else:
+            # Quiet snares in fills only where the user has not named the song's sounds: an
+            # attack they sorted into a group of its own must not come back as a snare.
+            hits = fill_snares(hits, activations, np.load(snare_npy), attacks)
         hits = tom_sizes(drums, hits)
     common = dict(title=meta.title, subtitle=meta.uploader, grid=opts.grid,
                   triplets=opts.triplets, beat_shift=opts.beat_shift, tempo_scale=opts.tempo_scale)
