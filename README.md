@@ -130,6 +130,8 @@ songs/<곡>/
 
 ## 개발
 
+WSL GPU에서 학습·추론·채점하는 절차는 [docs/wsl-gpu.md](docs/wsl-gpu.md)에 있다.
+
 ```bash
 uv run pytest -q
 npm --prefix web run dev     # 웹 개발 서버 :5173, /api는 :8765로 넘긴다 (serve를 따로 띄울 것)
