@@ -16,6 +16,8 @@ def marks(gray, space, extra=None):
     paths=list((HERE/'marks').glob('*.png'))
     if extra:paths+=list((HERE/extra).glob('*.png'))
     for path in paths:
+        # 'open_round.png' and 'open_oval.png' are two glyph variants of one mark.
+        mark=path.stem.split('_')[0]
         template=cv2.imread(str(path),0)
         template=cv2.resize(template,None,fx=space/11,fy=space/11)
         h,w=template.shape
@@ -23,14 +25,15 @@ def marks(gray, space, extra=None):
             continue
         response=cv2.matchTemplate(gray,template,cv2.TM_CCOEFF_NORMED)
         maximum=cv2.dilate(response,np.ones((max(3,round(space)),max(3,round(space))),np.uint8))
-        ys,xs=np.where((response==maximum)&(response>(.83 if path.stem!='closed' else .86)))
+        ys,xs=np.where((response==maximum)&(response>(.83 if mark!='closed' else .86)))
         for x,y in zip(xs,ys):
-            found.append(dict(mark=path.stem,x=float(x+(w-1)/2),y=float(y+(h-1)/2),confidence=float(response[y,x])))
+            found.append(dict(mark=mark,x=float(x+(w-1)/2),y=float(y+(h-1)/2),confidence=float(response[y,x])))
     return found
 
 
 def label_heads(gray, legend):
-    found,lines,space=heads(gray, HERE/legend['template_dir'] if legend.get('template_dir') else None)
+    found,lines,space=heads(gray, HERE/legend['template_dir'] if legend.get('template_dir') else None,
+                          prefer_line_span=legend.get('prefer_staff_line_span',False))
     notes=[]
     for h in found:
         if h['x'] < gray.shape[1]*legend['min_x_fraction']:
@@ -52,6 +55,8 @@ def label_heads(gray, legend):
     notes=[h for h in notes if h not in grace and
            (not h.get('small',False) or (legend.get('keep_small_filled') and
             h['shape']=='filled' and not h.get('grace') and h['w']>=space*.85))]
+    from ties import mark_continuations
+    mark_continuations(gray,notes,lines,space)
     for m in marks(gray,space,legend.get('mark_template_dir')):
         candidates=[n for n in notes if abs(n['x']-m['x'])<space*.8]
         if m['mark'] in ('open','closed'):
@@ -67,20 +72,32 @@ def label_heads(gray, legend):
             else:
                 n[m['mark']]=True
             n['marks'].append(m)
-    if legend.get('ghost_template'):
+    ghost_templates=legend.get('ghost_templates',[])
+    if legend.get('ghost_template'):ghost_templates=[legend['ghost_template'],*ghost_templates]
+    if ghost_templates:
         from harvest_flags import ghost_score
         for n in notes:
-            score=ghost_score(gray,n,space,legend['ghost_template'])
-            n['ghost']=score>=legend['ghost_template']['threshold']
+            scores=[ghost_score(gray,n,space,config) for config in ghost_templates]
+            score=max(scores)
+            n['ghost']=any(q>=cfg['threshold'] for q,cfg in zip(scores,ghost_templates))
             n['ghost_confidence']=round(score,3) if n['ghost'] else None
             if n['ghost']:
                 n['marks'].append(dict(mark='ghost_parentheses',confidence=round(score,3),method='calibrated complete parenthesized head glyph'))
     checks=staff_checks(gray,lines,space,notes,strict_clef=legend.get('strict_clef_pair',False))
+    if legend.get('clef_template') and not checks['clef_confirmed']:
+        from harvest_flags import clef_score
+        score=clef_score(gray,lines,space,notes,legend['clef_template'])
+        checks['clef_template_score']=score
+        if score>=legend['clef_template']['threshold']:
+            checks['clef_confirmed']=True
+            checks['reasons']=[r for r in checks['reasons'] if r!='percussion clef / first bar not confirmed']
+            checks['clef_evidence']=legend['clef_template']['evidence']
     if legend.get('harvest_profile'):
         _,_,components,_=cv2.connectedComponentsWithStats((gray<140).astype(np.uint8))
         for n in notes:
             rule=legend['rules'].get(f"{n['shape']}:{n['pos']}",{})
             n['exportable']=bool(rule.get('verified') and n['confidence']>=legend.get('min_confidence',.82))
+            if n.get('tied_continuation'):n['exportable']=False
             n['legend_evidence']=rule.get('evidence','unverified mapping')
             for flag in ('ghost','accent','flam','roll'):
                 if flag not in legend.get('verified_flags',[]):
@@ -106,6 +123,43 @@ def label_heads(gray, legend):
         checks['reasons']=[r for r in checks['reasons'] if r!='percussion clef / first bar not confirmed']
         checks['clef_evidence']=legend['clef_omitted_verified']
     return notes,checks
+
+
+def stable_strip_runs(folder,records,legend):
+    """Local continuation evidence for explicitly inspected native strips.
+
+    At least three consecutive, unique, supported staffs must agree. Missing
+    geometry, page rows, native size/support failures and scene changes end a
+    run. This removes only the clef-absence reason, never a label/timing gate.
+    """
+    if not (legend.get('harvest_profile') and legend.get('score_region') and
+            legend.get('enabled') and legend.get('strict_clef_pair')):
+        return {}
+    evidence={};run=[];positions=[];spaces=[]
+    def finish():
+        if len(run)>=3:
+            proof=dict(systems=[r['system'] for r in run],
+                       method='three consecutive supported native staffs in inspected score region')
+            for r in run:evidence[r['system']]=proof
+    for r in records:
+        gray=cv2.imread(str(folder/f"system_{r['system']:03d}.png"),0)
+        found=staffs(gray,prefer_line_span=legend.get('prefer_staff_line_span',False)) if gray is not None else []
+        valid=len(found)==1 and r.get('page_rows',1)==1 and not r.get('reading_reasons')
+        if valid:
+            ls,sp=found[0]
+            checks=staff_checks(gray,ls,sp,[])
+            valid=not [q for q in checks['reasons'] if q!='percussion clef / first bar not confirmed']
+        if not valid:
+            finish();run=[];positions=[];spaces=[];continue
+        native=np.asarray(ls)+r.get('crop',[0])[0]
+        if run and (r['start']<run[-1]['start'] or r['start']>run[-1]['end'] or
+                    r.get('foreground')!=run[-1].get('foreground') or
+                    np.ptp(spaces+[sp])>1.1 or
+                    np.max(np.ptp(np.asarray(positions+[native]),axis=0))>np.median(spaces+[sp])*.5):
+            finish();run=[];positions=[];spaces=[]
+        run.append(r);positions.append(native);spaces.append(sp)
+    finish()
+    return evidence
 
 
 def overlay(gray, s, path):
@@ -137,6 +191,13 @@ def read(folder, legend=None):
     legend_path=Path(legend) if legend else HERE/'legends/kbdrums.json'
     legend=json.loads(legend_path.read_text())
     d=json.loads((folder/'scan.json').read_text());fps=d['fps']
+    variant=('white_overlay' if d.get('foreground')=='white_overlay' else
+             'static_light' if d.get('layout')=='dailychops' and not d.get('reconstructed_scroll') else None)
+    overrides=legend.get('variants',{}).get(variant,{})
+    if overrides:
+        legend={**legend,**overrides,'rules':{**legend['rules'],**overrides.get('rules',{})}}
+    elif (variant=='static_light' and legend.get('static_light_min_x_fraction') is not None):
+        legend={**legend,'min_x_fraction':legend['static_light_min_x_fraction']}
     records=d.get('records')
     if records is None:
         cur=np.array(d['cursor']);starts=d['systems']+[len(cur)];records=[]
@@ -149,6 +210,10 @@ def read(folder, legend=None):
     rejection_path=folder/'reading-rejections.json'
     reading_rejections=json.loads(rejection_path.read_text()) if rejection_path.exists() else {}
     systems=[]
+    from media import source_video_id
+    video_id=source_video_id(d['video']) if d.get('video') else None
+    source_rejections=legend.get('source_rejections',{}).get(video_id,[])
+    continuation=stable_strip_runs(folder,records,legend) if not d.get('reconstructed_scroll') else {}
     for r in records:
         page_rows=r.get('page_rows',sum(q['start']==r['start'] for q in records))
         if not d.get('record_cursors') and sum(q['start']==r['start'] for q in records)==1:
@@ -179,8 +244,39 @@ def read(folder, legend=None):
                     s['notes'].append(n)
             s['notes'].sort(key=lambda n:n['x'])
             s['staff']['reasons'].extend(r.get('scroll_reasons',[]))
+            clef_evidence = (legend.get('white_overlay_clef_omitted_verified')
+                             if d.get('foreground') == 'white_overlay'
+                             else legend.get('scroll_clef_omitted_verified'))
+            if d.get('foreground')=='white_overlay':
+                proof=r.get('staff_geometry') or d.get('opening_clef')
+                s['staff']['clef_guard']=dict(
+                    reconstructed_scroll=bool(d.get('reconstructed_scroll')),
+                    registration_reasons=r.get('scroll_reasons',[]),
+                    local_staff_geometry=bool(r.get('staff_geometry')),
+                    opening_clef=bool(d.get('opening_clef')),
+                    profile_continuation_approved=bool(clef_evidence),
+                    continuation_applied=bool(d.get('reconstructed_scroll') and
+                        not r.get('scroll_reasons') and proof and clef_evidence))
+                if not proof:clef_evidence=None
+                elif clef_evidence:s['staff']['continuation_evidence']=proof
+            if d.get('reconstructed_scroll') and not r.get('scroll_reasons') and clef_evidence:
+                s['staff']['reasons']=[q for q in s['staff']['reasons']
+                                      if q!='percussion clef / first bar not confirmed']
+                s['staff']['clef_evidence']=clef_evidence
+            if r['system'] in continuation:
+                s['staff']['reasons']=[q for q in s['staff']['reasons']
+                                      if q!='percussion clef / first bar not confirmed']
+                s['staff']['continuation_evidence']=continuation[r['system']]
             s['staff']['reasons'].extend(r.get('reading_reasons',[]))
             s['staff']['reasons'].extend(reading_rejections.get(str(s['system']),[]))
+            for exclusion in source_rejections:
+                a,b=exclusion['interval']
+                if s['interval'][0]<b and s['interval'][1]>a:
+                    s['staff']['reasons'].append(exclusion['reason'])
+                    s['staff'].setdefault('source_rejections',[]).append(exclusion)
+                    for note in s['notes']:
+                        note['exportable']=False
+                        note['reading_exclusion']=exclusion['reason']
             if r.get('read_x'):
                 lo,hi=sorted(r['read_x'])
                 s['notes']=[n for n in s['notes'] if lo<=n['x']<=hi]
@@ -204,15 +300,20 @@ def read(folder, legend=None):
                 first=np.r_[True,np.diff(np.maximum.accumulate(xs))>.5] if len(xs) else np.array([],bool)
                 s['cursor_x']=xs[first].tolist();s['cursor_t']=ts[first].tolist()
                 s['cursor_coverage']=float(np.ptp(xs)/gray.shape[1]) if len(xs) else 0
-                if legend.get('harvest_profile') and len(xs)>3 and s['cursor_coverage']>.35:
+                partial_visit=legend.get('trim_partial_cursor') and len(xs)>=6
+                if legend.get('harvest_profile') and len(xs)>3 and (s['cursor_coverage']>.35 or partial_visit):
                     lo,hi=float(xs.min()-s['staff']['spacing']),float(xs.max()+s['staff']['spacing'])
                     s['unvisited_heads']=[n for n in s['notes'] if not lo<=n['x']<=hi]
                     s['notes']=[n for n in s['notes'] if lo<=n['x']<=hi]
                     s['read_x']=[lo,hi]
+                    if partial_visit:
+                        s['reading_span_evidence']='at least six cursor anchors; retain only visited head positions; colour/timing gates unchanged'
             else:
                 s['cursor_coverage']=0
         except ValueError as e:
-            s['staff']=dict(reasons=[str(e)],warnings=[],lines=[])
+            s['staff']=dict(reasons=[str(e),*r.get('scroll_reasons',[]),
+                                    *r.get('reading_reasons',[]),
+                                    *reading_rejections.get(str(s['system']),[])],warnings=[],lines=[])
         overlay(gray,s,check/f"system_{s['system']:03d}.png")
         systems.append(s)
     keep={f"system_{s['system']:03d}.png" for s in systems}

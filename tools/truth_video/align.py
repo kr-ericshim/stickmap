@@ -34,6 +34,7 @@ def moments(s):
     groups=[]
     tolerance=s.get('staff',{}).get('spacing',11)*s.get('moment_tolerance',.55)
     for i,n in sorted(enumerate(s['notes']),key=lambda pair:pair[1]['x']):
+        if n.get('tied_continuation'):continue
         if groups and n['x']-np.mean([s['notes'][j]['x'] for j in groups[-1]])<tolerance:
             groups[-1].append(i)
         else:groups.append([i])
@@ -234,7 +235,7 @@ def emit(s, result):
         for time,group in zip(result['times'],result['moment_groups']):
             for index in group:
                 n=s['notes'][index]
-                if n.get('exportable') is False:
+                if n.get('exportable') is False or n.get('tied_continuation'):
                     continue
                 events.append({**n,'time':float(time),'system':s['system'],
                                'timing_confidence':round(result['held_out']['within_40ms'],3)})
@@ -252,6 +253,26 @@ def rejudge_phase(s, result, song_phase):
     result['usable']=not result['reasons']
     result['duration_seconds']=float(result['times'][-1]-result['times'][0]) if result['usable'] else 0
     return emit(s,result)
+
+
+def unique_events(events):
+    """One positive per identical audio time, instrument and staff position.
+
+    Adjacent page visits may observe the same boundary head twice. Keep the
+    strict observation when tiers differ and retain the contributing systems.
+    Do not merge nearby times or transfer technique flags between observations.
+    """
+    seen={}
+    for event in events:
+        key=(event['time'],event['inst'],event.get('pos'),event.get('articulation'))
+        if key not in seen:
+            seen[key]=event.copy();continue
+        old=seen[key]
+        systems=sorted(set(old.get('observed_systems',[old['system']])+[event['system']]))
+        if event.get('tier')=='strict' and old.get('tier')!='strict':
+            old=event.copy();seen[key]=old
+        old['observed_systems']=systems
+    return sorted(seen.values(),key=lambda event:event['time'])
 
 
 def build_truth(song, folder, bands='auto'):
@@ -309,7 +330,7 @@ def build_truth(song, folder, bands='auto'):
             truth=[]
             for r,s in zip(reports,systems):
                 if r.get('phase'):truth.extend(rejudge_phase(s,r,song_phase))
-    truth.sort(key=lambda e:e['time'])
+    truth=unique_events(truth)
     # Each scored interval belongs to one accepted system; gaps never become negatives.
     intervals=[[r['times'][0],r['times'][-1]] for r in reports if r['usable']]
     merged=[]

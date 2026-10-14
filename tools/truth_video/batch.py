@@ -25,6 +25,7 @@ TIMING_ONLY_REASONS=('held-out agreement','fitted attack agreement','ambiguous a
 sys.path.insert(0,str(HERE.parent/'harvest'))
 from manifest_io import read as manifest_read, append as manifest_append
 from layouts import channel_profile
+from media import VIDEO_NAMES, video_path
 
 
 def dump(path,value):
@@ -59,23 +60,80 @@ def signature(song,profile):
     for p in sorted(HERE.glob('*.py')):h.update(p.name.encode());h.update(p.read_bytes())
     for directory in ('templates','harvest_templates','marks','harvest_marks','ornaments'):
         for p in sorted((HERE/directory).rglob('*.png')):h.update(str(p.relative_to(HERE)).encode());h.update(p.read_bytes())
-    for name in ('video.mp4','attacks.htdemucs.npy'):
+    for name in (*VIDEO_NAMES,'attacks.htdemucs.npy'):
         p=song/name
         if p.exists():h.update(f'{name}:{p.stat().st_size}:{p.stat().st_mtime_ns}'.encode())
     return h.hexdigest()
 
 
-def scan_signature(song,layout,scroll_probe=False,y_min_fraction=0,reject_overlays=False,native_fallback=False):
+def scan_signature(song,layout,scroll_probe=False,y_min_fraction=0,reject_overlays=False,native_fallback=False,
+                   white_overlay=False,split_scroll=False,approval_state=None):
     h=hashlib.sha256(str(layout).encode())
-    for name in ('layouts.py','harvest_scan.py','heads.py'):
+    for name in ('layouts.py','harvest_scan.py','heads.py','media.py'):
         h.update((HERE/name).read_bytes())
     if scroll_probe:h.update((HERE/'harvest_scroll.py').read_bytes())
     if y_min_fraction:h.update(str(y_min_fraction).encode())
     if reject_overlays:h.update(b'reject chromatic overlays')
     if native_fallback:h.update(b'native frame consensus after failed median')
-    p=song/'video.mp4'
-    h.update(f'{p.stat().st_size}:{p.stat().st_mtime_ns}'.encode())
+    if white_overlay:h.update(b'validated bottom white overlay')
+    if split_scroll:h.update(b'explicit rejected gaps between registered scroll segments')
+    h.update(json.dumps(approval_state,sort_keys=True).encode())
+    p=video_path(song)
+    h.update(f'{p.name}:{p.stat().st_size}:{p.stat().st_mtime_ns}'.encode())
     return h.hexdigest()
+
+
+def scan_approvals(profile):
+    return {k:profile.get(k) for k in ('enabled','scrolling_verified','white_overlay_verified',
+            'scroll_clef_omitted_verified','white_overlay_clef_omitted_verified')}
+
+
+def region_scan_signature(signature,profile):
+    if not profile.get('score_region'):return signature
+    options={k:profile.get(k) for k in
+        ('score_region','foreground','cursor_style','prefer_staff_line_span','score_variants')}
+    return hashlib.sha256((signature+json.dumps(options,sort_keys=True)).encode()).hexdigest()
+
+
+def apply_scan_gates(data,profile):
+    """Current approval gates apply equally to fresh and reused scans."""
+    if data.get('reconstructed_scroll'):
+        reason='scrolling reading not validated for this channel'
+        for r in data['records']:
+            reasons=[q for q in r.get('scroll_reasons',[]) if q!=reason]
+            if not profile.get('scrolling_verified'):reasons.append(reason)
+            r['scroll_reasons']=reasons
+    if data.get('foreground')=='white_overlay':
+        reason='white-overlay reading not validated for this channel'
+        for r in data['records']:
+            reasons=[q for q in r.get('reading_reasons',[]) if q!=reason]
+            if not profile.get('white_overlay_verified'):reasons.append(reason)
+            r['reading_reasons']=reasons
+    return data
+
+
+class MirrorWriteError(RuntimeError):
+    pass
+
+
+def write_destination(root,scratch_out=None):
+    root=Path(root).resolve()
+    if scratch_out is not None:
+        scratch_out=Path(scratch_out).resolve()
+        canonical=(ROOT/'truth/harvest').resolve()
+        if scratch_out.is_relative_to(root) or scratch_out.is_relative_to(canonical):
+            raise MirrorWriteError('scratch output must be outside the source harvest root')
+        return scratch_out
+    if (root/'.wsl-mirror').exists():
+        raise MirrorWriteError('WSL owns this harvest mirror; use --scratch-out for local pilot output')
+    return None
+
+
+def check_worker_destination(song,out):
+    roots={*(Path(song).resolve().parents),(ROOT/'truth/harvest').resolve()}
+    for root in roots:
+        if (root/'.wsl-mirror').exists() and Path(out).resolve().is_relative_to(root):
+            raise MirrorWriteError('WSL owns this harvest mirror; worker output must be outside it')
 
 
 def summarize(folder):
@@ -118,37 +176,65 @@ def quality_report(folder,profile,stats):
     (folder/'QUALITY.md').write_text('\n'.join(lines)+'\n')
 
 
-def worker(song,out,profile_path,reuse=None):
+def worker(song,out,profile_path,reuse=None,notation_scan=None):
+    check_worker_destination(song,out)
     import harvest_scan, strip, color_timing, tiers
     from align import build_truth
     profile=json.loads(profile_path.read_text());layout=profile.get('layout')
+    video=video_path(song)
     out.mkdir(parents=True,exist_ok=True)
     scroll_probe=profile.get('probe_scrolling',layout in ('drumscribe','dailychops'))
     y_min=profile.get('staff_y_min_fraction',0)
     reject_overlays=profile.get('reject_chromatic_overlays',False)
     native_fallback=profile.get('native_frame_fallback',False)
-    sig=scan_signature(song,layout,scroll_probe,y_min,reject_overlays,native_fallback)
+    sig=scan_signature(song,layout,scroll_probe,y_min,reject_overlays,native_fallback,
+                       bool(profile.get('white_overlay_verified')),profile.get('split_scroll_discontinuities',False),
+                       scan_approvals(profile))
+    sig=region_scan_signature(sig,profile)
     reused=False
+    # Explicit native ROI/foreground is an audited profile option. It is kept
+    # separate from DailyChops' continuously registered white scrolling path.
+    inspected_geometry=None
+    if profile.get('score_region'):
+        from layouts import detect_region
+        inspected_geometry=detect_region(video,profile)
     if reuse and (reuse/'result.json').exists():
         old=json.loads((reuse/'result.json').read_text())
         if old.get('scan_signature')==sig and (reuse/'scan.json').exists():
             for p in [reuse/'scan.json',*reuse.glob('system_*.png')]:shutil.copy2(p,out/p.name)
             reused=True
+    if not reused and notation_scan and (notation_scan/'scan.json').exists():
+        # Pilot-only opt-in reuse. Require this source's size/mtime and the
+        # scanner signature captured by the diagnostic scan, independently of
+        # the later visual-audit legend decisions.
+        evidence_path=notation_scan/'scan-signature.json'
+        evidence=json.loads(evidence_path.read_text()) if evidence_path.exists() else {}
+        if evidence.get('scan_signature')==sig:
+            for p in [notation_scan/'scan.json',*notation_scan.glob('system_*.png')]:shutil.copy2(p,out/p.name)
+            reused=True
     if not reused:
         moving=False
         if scroll_probe:
             import harvest_scroll
-            from layouts import detect
-            geometry=detect(song/'video.mp4',layout,y_min)
-            moving,probes=harvest_scroll.probe(song/'video.mp4',geometry)
+            from layouts import detect, detect_white_overlay
+            try:
+                geometry=inspected_geometry or detect(video,layout,y_min)
+            except ValueError:
+                if not profile.get('white_overlay_verified'): raise
+                geometry=detect_white_overlay(video)
+                geometry['split_scroll_discontinuities']=profile.get('split_scroll_discontinuities',False)
+            moving,probes=harvest_scroll.probe(video,geometry)
             dump(out/'motion-probe.json',dict(scrolling=moving,probes=probes))
-        if moving:
-            data=harvest_scroll.write(song/'video.mp4',out,geometry,reject_overlays=reject_overlays)
-            if not profile.get('scrolling_verified'):
-                for r in data['records']:r['scroll_reasons'].append('scrolling reading not validated for this channel')
-                dump(out/'scan.json',data)
-        else:harvest_scan.write(song/'video.mp4',out,layout,y_min,
-                               reject_overlays=reject_overlays,native_fallback=native_fallback)
+            geometry['global_motion_confirmed']=moving
+        if moving or (scroll_probe and geometry.get('foreground')=='white_overlay'):
+            # A sparse global probe is diagnostic, not a video-wide veto.
+            # White segments independently prove geometry, translation, cursor
+            # support and traversed span; static/ambiguous intervals reject.
+            data=harvest_scroll.write(video,out,geometry,reject_overlays=reject_overlays)
+        else:harvest_scan.write(video,out,layout,y_min,
+                               reject_overlays=reject_overlays,native_fallback=native_fallback,
+                               geometry=inspected_geometry)
+    dump(out/'scan.json',apply_scan_gates(json.loads((out/'scan.json').read_text()),profile))
     systems=strip.read(out,profile_path)
     # Detector-free audio sanity: a near-silent stem or an attack deficit is
     # recorded with the export; the alignment gates still decide every system.
@@ -156,7 +242,13 @@ def worker(song,out,profile_path,reuse=None):
     audio=sanity.check(song,systems);dump(out/'audio-sanity.json',audio)
     if profile.get('color_notes') and not json.loads((out/'scan.json').read_text()).get('reconstructed_scroll'):
         color_timing.attach(out,page_notes=profile.get('page_color_notes',False))
-    build_truth(song,out);tiers.write(out)
+    if any((root/'.wsl-mirror').exists() for root in song.resolve().parents):
+        # A scratch attempt may read mirror inputs, but must not create or
+        # refresh an acoustic cache alongside the canonical source files.
+        import bands
+        build_truth(song,out,bands=bands.load(song,cache=False))
+    else:build_truth(song,out)
+    tiers.write(out)
     stats=summarize(out);stats['audio_flags']=audio['flags'];quality_report(out,profile,stats)
     systems=json.loads((out/'strip.json').read_text())
     dump(out/'label-coverage.json',dict(
@@ -167,31 +259,57 @@ def worker(song,out,profile_path,reuse=None):
                  for n in s['notes'] if not n.get('exportable',True)]) for s in systems]))
     dump(out/'legend.json',profile)
     dump(out/'result.json',dict(complete=True,signature=signature(song,profile),scan_signature=sig,
-                               channel=profile['name'],enabled=profile.get('enabled',False),**stats))
+                               channel=profile['name'],enabled=profile.get('enabled',False),
+                               reused_diagnostic_scan=bool(reused and notation_scan),**stats))
 
 
-def process(root,row,profile,path,timeout):
+def process(root,row,profile,path,timeout,scratch_out=None):
+    root=Path(root)
+    scratch_out=write_destination(root,scratch_out)
+    journal=(scratch_out or root)/'manifest.jsonl'
+    try:
+        return _process(root,row,profile,path,timeout,scratch_out)
+    except Exception as e:
+        # Song-specific bugs, including setup/result parsing errors, must not
+        # terminate the cohort. Writer-policy errors are checked above.
+        reason=f'{type(e).__name__}: {e}'
+        manifest_append(journal,video=row['video'],slug=row.get('slug'),channel=row.get('channel'),
+                        status='unreadable',truth_reason=reason)
+        print(f'{row["video"]}: unreadable: {reason}',file=sys.stderr,flush=True)
+        return None
+
+
+def _process(root,row,profile,path,timeout,scratch_out):
     song=song_path(root,row)
-    with lock(song/'.truth.lock') as acquired:
+    destination=scratch_out/row['slug'] if scratch_out else song
+    journal=(scratch_out or root)/'manifest.jsonl'
+    def commit(**fields):
+        manifest_append(journal,video=row['video'],slug=row['slug'],channel=row.get('channel'),**fields)
+    with lock(destination/'.truth.lock') as acquired:
         if not acquired:return None
         # Re-read after lock acquisition to avoid a second worker duplicating a
         # completed attempt. A stale fetched snapshot never overwrites read.
         current=manifest_read(root/'manifest.jsonl').get(row['video'],{})
         if current.get('status')=='compacted':return None
-        sig=signature(song,profile);out=song/'truth'
+        sig=signature(song,profile);out=destination/'truth'
         if (out/'result.json').exists():
             old=json.loads((out/'result.json').read_text())
             if old.get('complete') and old.get('signature')==sig:
                 result=old
                 status='read' if result['scoring_systems'] and result['scoring_notes'] else 'unreadable'
-                manifest_append(root/'manifest.jsonl',video=row['video'],status=status,
+                commit(status=status,
                                 truth_signature=sig,truth_reason=None if status=='read' else result.get('rejection_counts',{}))
                 return result
-        for name in ('video.mp4','attacks.htdemucs.npy'):
+        try:
+            video_path(song)
+        except ValueError as e:
+            commit(status='unreadable',truth_reason=str(e))
+            return None
+        for name in ('attacks.htdemucs.npy',):
             if not (song/name).is_file():
-                manifest_append(root/'manifest.jsonl',video=row['video'],status='unreadable',truth_reason=f'missing {name}')
+                commit(status='unreadable',truth_reason=f'missing {name}')
                 return None
-        attempt=song/('.truth-work-'+uuid.uuid4().hex[:12]);attempt.mkdir()
+        attempt=destination/('.truth-work-'+uuid.uuid4().hex[:12]);attempt.mkdir()
         snapshot=attempt/'profile.json';dump(snapshot,profile)
         args=[sys.executable,str(HERE/'batch.py'),'--worker',str(song),str(attempt),str(snapshot)]
         if out.exists():args.extend(['--reuse',str(out)])
@@ -207,8 +325,9 @@ def process(root,row,profile,path,timeout):
             if result['signature']!=sig:raise RuntimeError('reader inputs changed during attempt; retry required')
             live,_=channel_profile(row.get('channel'))
             if live!=profile:raise RuntimeError('channel profile changed during attempt; retry required')
-        except (subprocess.TimeoutExpired,RuntimeError,ValueError) as e:
-            dump(attempt/'failure.json',dict(reason=str(e)))
+        except Exception as e:
+            reason=f'{type(e).__name__}: {e}'
+            dump(attempt/'failure.json',dict(reason=reason,error_type=type(e).__name__))
             # Publish an explicit empty diagnostic export, retaining failed
             # candidate files and prior successful attempts for review.
             for name in ('truth.json','truth.scoring.json','truth.additional.json','alignment.json','alignment.scoring.json'):
@@ -218,15 +337,15 @@ def process(root,row,profile,path,timeout):
             for name in ('truth.json','truth.scoring.json','truth.additional.json'):dump(attempt/name,[])
             result=dict(complete=False,signature=sig,channel=profile['name'],enabled=profile.get('enabled',False),
                         systems=0,strict_systems=0,scoring_systems=0,strict_seconds=0,scoring_seconds=0,
-                        strict_notes=0,scoring_notes=0,strict_labels={},scoring_labels={},rejection_counts={str(e):1})
+                        strict_notes=0,scoring_notes=0,strict_labels={},scoring_labels={},rejection_counts={reason:1})
             dump(attempt/'result.json',result);dump(attempt/'legend.json',profile)
-            (attempt/'QUALITY.md').write_text('# Unreadable attempt\n\n'+str(e)+'\n\nNo truth exported. See run.log and failure.json. Prior attempts retained in truth-history/.\n')
+            (attempt/'QUALITY.md').write_text('# Unreadable attempt\n\n'+reason+'\n\nNo truth exported. See run.log and failure.json. Prior attempts retained in truth-history/.\n')
         if out.exists():
-            history=song/'truth-history';history.mkdir(exist_ok=True)
+            history=destination/'truth-history';history.mkdir(exist_ok=True)
             os.rename(out,history/attempt.name.removeprefix('.truth-work-'))
         os.rename(attempt,out)
         status='read' if result['scoring_systems'] and result['scoring_notes'] else 'unreadable'
-        manifest_append(root/'manifest.jsonl',video=row['video'],status=status,truth_signature=sig,
+        commit(status=status,truth_signature=sig,
                         truth_reason=None if status=='read' else (result['rejection_counts'] or {'no readable systems':1}),
                         truth_strict_systems=result['strict_systems'],truth_scoring_systems=result['scoring_systems'],
                         truth_audio_flags=result.get('audio_flags',[]))
@@ -234,7 +353,8 @@ def process(root,row,profile,path,timeout):
         return result
 
 
-def report(root):
+def report(root,scratch_out=None):
+    scratch_out=write_destination(root,scratch_out)
     rows=manifest_read(root/'manifest.jsonl');channels={}
     config=json.loads((HERE.parent/'harvest/channels.json').read_text())['channels']
     for c in config:
@@ -248,11 +368,13 @@ def report(root):
         c=channels.get(row.get('channel'))
         if c is None:continue
         if row.get('status') in ('fetched','read','unreadable','compacted'):c['available']+=1
-        try:p=song_path(root,row)/'truth/result.json'
+        try:
+            source=song_path(root,row)
+            p=(scratch_out/source.name if scratch_out else source)/'truth/result.json'
         except ValueError:continue
         if not p.exists():continue
         r=json.loads(p.read_text());c['attempted']+=1;c['read']+=bool(r['scoring_notes'])
-        for k in ('strict_systems','scoring_systems','systems','strict_seconds','scoring_seconds','strict_notes','scoring_notes'):c[k]+=r[k]
+        for k in ('strict_systems','scoring_systems','systems','strict_seconds','scoring_seconds','strict_notes','scoring_notes'):c[k]+=r.get(k,0)
         for k in ('strict_labels','scoring_labels','rejection_counts'):c[k].update(r[k])
         if r.get('audio_flags'):
             c['audio_flags'].update(r['audio_flags']);c['audio_flagged'].append(row['video'])
@@ -275,14 +397,16 @@ def report(root):
         lines+=['',f'## {name}',c['reason'],f'Rejections: {dict(c["rejection_counts"])}']
         if c['audio_flags']:lines.append(f'Audio sanity flags: {dict(c["audio_flags"])} on {c["audio_flagged"]}')
         if c['audit']:lines.append('Per-label visual audit: '+json.dumps(c['audit'].get('labels',{}),ensure_ascii=False))
-    dump(root/'channel-results.json',channels)
-    (root/'CHANNEL_RESULTS.md').write_text('\n'.join(lines)+'\n')
+    destination=scratch_out or root;destination.mkdir(parents=True,exist_ok=True)
+    dump(destination/'channel-results.json',channels)
+    (destination/'CHANNEL_RESULTS.md').write_text('\n'.join(lines)+'\n')
     return channels
 
 
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--root',type=Path,default=ROOT/'truth/harvest')
+    p.add_argument('--scratch-out',type=Path,help='write attempts, journal and report outside the source harvest root')
     p.add_argument('--only',nargs='+');p.add_argument('--validate',action='store_true',help='attempt disabled channels; exports remain gated')
     p.add_argument('--per-channel',type=int,help='maximum songs per channel in this invocation')
     p.add_argument('--limit',type=int);p.add_argument('--watch',action='store_true');p.add_argument('--poll',type=float,default=60)
@@ -291,12 +415,20 @@ def main():
     p.add_argument('--refresh-read',action='store_true',help='rebuild read exports only when code, input, or legend fingerprint changed')
     p.add_argument('--worker',nargs=3,type=Path,help=argparse.SUPPRESS);p.add_argument('--reuse',type=Path,help=argparse.SUPPRESS)
     a=p.parse_args()
-    if a.worker:worker(*a.worker,a.reuse);return
-    if a.report:report(a.root);return
+    if a.worker:
+        canonical=(ROOT/'truth/harvest').resolve()
+        if (canonical/'.wsl-mirror').exists() and a.worker[1].resolve().is_relative_to(canonical):
+            p.error('WSL owns this harvest mirror; worker output must be outside it')
+        worker(*a.worker,a.reuse);return
+    try:write_destination(a.root,a.scratch_out)
+    except MirrorWriteError as e:p.error(str(e))
+    def publish_report():
+        return report(a.root,a.scratch_out) if a.scratch_out else report(a.root)
+    if a.report:publish_report();return
     attempted=set();counts=Counter()
     try:
         while True:
-            if a.limit is not None and len(attempted)>=a.limit:report(a.root);return
+            if a.limit is not None and len(attempted)>=a.limit:publish_report();return
             rows=manifest_read(a.root/'manifest.jsonl')
             # Round-robin by channel makes validation diverse while fetch grows.
             queues=defaultdict(list)
@@ -312,22 +444,28 @@ def main():
                 for name in list(queues):
                     if not queues[name] or (a.per_channel is not None and counts[name]>=a.per_channel):
                         del queues[name];continue
-                    if a.limit is not None and len(attempted)>=a.limit:report(a.root);return
+                    if a.limit is not None and len(attempted)>=a.limit:publish_report();return
                     if shutil.disk_usage(a.root).free/1e9<a.min_free_gb:
-                        print('Disk reserve reached; no deletion performed',flush=True);report(a.root);return
+                        print('Disk reserve reached; no deletion performed',flush=True);publish_report();return
                     row,profile,path=queues[name].pop(0)
                     # Reload profile before each song so disabling is immediate.
                     profile,path=channel_profile(name)
                     if not(profile.get('enabled') or a.validate):continue
                     attempted.add(row['video']);counts[name]+=1
                     try:
-                        outcome=process(a.root,row,profile,path,a.timeout)
-                        if outcome is None and manifest_read(a.root/'manifest.jsonl').get(row['video'],{}).get('status')=='fetched':
+                        outcome=(process(a.root,row,profile,path,a.timeout,a.scratch_out) if a.scratch_out
+                                 else process(a.root,row,profile,path,a.timeout))
+                        journal=(a.scratch_out or a.root)/'manifest.jsonl'
+                        if outcome is None and manifest_read(journal).get(row['video'],{}).get('status','fetched')=='fetched':
                             # Another reader held the lock. Retry on a later
                             # watch poll if it exits without committing status.
                             attempted.discard(row['video']);counts[name]-=1
-                    except (OSError,ValueError) as e:print(f'{row["video"]}: {e}',file=sys.stderr,flush=True)
-            report(a.root)
+                    except Exception as e:
+                        manifest_append((a.scratch_out or a.root)/'manifest.jsonl',video=row['video'],
+                                        slug=row.get('slug'),channel=name,status='unreadable',
+                                        truth_reason=f'{type(e).__name__}: {e}')
+                        print(f'{row["video"]}: unreadable: {type(e).__name__}: {e}',file=sys.stderr,flush=True)
+            publish_report()
             if not a.watch:return
             time.sleep(max(1,a.poll))
     except KeyboardInterrupt:

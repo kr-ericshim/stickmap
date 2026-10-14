@@ -1,0 +1,202 @@
+{
+  "name": "woshudiue",
+  "harvest_profile": true,
+  "layout": "kr_strip",
+  "enabled": true,
+  "legend_confidence": "Six audited filled positions; calibrated explicit snare parentheses. All cymbals/other flags withheld",
+  "reason": "36/36 contextual native-pair recheck (initial decisions retained); fresh ghost positives8/8 with3 missed positive controls; TEST-ONLY, no drum detector/scorer invocation",
+  "min_x_fraction": 0.03,
+  "min_confidence": 0.84,
+  "verified_flags": [
+    "ghost"
+  ],
+  "open_verified": false,
+  "rules": {
+    "filled:1": {
+      "inst": "kick",
+      "confidence": 0.98,
+      "verified": true,
+      "evidence": "Native paired woshudiue audit, six per verified filled position across two pilots: .eval-cache/pilot1080/audit-woshudiue-context/accuracy.json; partial notation convention, no tom size/key claim"
+    },
+    "filled:5": {
+      "inst": "snare",
+      "confidence": 0.98,
+      "verified": true,
+      "evidence": "Native paired woshudiue audit, six per verified filled position across two pilots: .eval-cache/pilot1080/audit-woshudiue-context/accuracy.json; partial notation convention, no tom size/key claim"
+    },
+    "filled:2": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": false,
+      "evidence": "Unverified woshudiue mapping; withheld"
+    },
+    "filled:3": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": true,
+      "evidence": "Native paired woshudiue audit, six per verified filled position across two pilots: .eval-cache/pilot1080/audit-woshudiue-context/accuracy.json; partial notation convention, no tom size/key claim"
+    },
+    "filled:4": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": false,
+      "evidence": "Unverified woshudiue mapping; withheld"
+    },
+    "filled:6": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": true,
+      "evidence": "Native paired woshudiue audit, six per verified filled position across two pilots: .eval-cache/pilot1080/audit-woshudiue-context/accuracy.json; partial notation convention, no tom size/key claim"
+    },
+    "filled:7": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": true,
+      "evidence": "Native paired woshudiue audit, six per verified filled position across two pilots: .eval-cache/pilot1080/audit-woshudiue-context/accuracy.json; partial notation convention, no tom size/key claim"
+    },
+    "filled:8": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": true,
+      "evidence": "Native paired woshudiue audit, six per verified filled position across two pilots: .eval-cache/pilot1080/audit-woshudiue-context/accuracy.json; partial notation convention, no tom size/key claim"
+    },
+    "cross:9": {
+      "inst": "hihat",
+      "confidence": 0.95,
+      "articulation": "closed",
+      "verified": false,
+      "evidence": "Unverified woshudiue mapping; withheld"
+    },
+    "circled:9": {
+      "inst": "hihat",
+      "confidence": 0.95,
+      "articulation": "open",
+      "verified": false,
+      "evidence": "Unverified woshudiue mapping; withheld"
+    },
+    "cross:10": {
+      "inst": "crash",
+      "confidence": 0.95,
+      "verified": false,
+      "evidence": "Unverified woshudiue mapping; withheld"
+    },
+    "circled:10": {
+      "inst": "crash",
+      "confidence": 0.95,
+      "verified": false,
+      "evidence": "Unverified woshudiue mapping; withheld"
+    },
+    "cross:-2": {
+      "inst": "hihat",
+      "confidence": 0.95,
+      "articulation": "pedal",
+      "verified": false,
+      "evidence": "Unverified woshudiue mapping; withheld"
+    },
+    "cross:5": {
+      "inst": "side_stick",
+      "confidence": 0.95,
+      "verified": false,
+      "evidence": "Unverified woshudiue mapping; withheld"
+    },
+    "cross:8": {
+      "inst": "ride",
+      "confidence": 0.95,
+      "verified": false,
+      "evidence": "Unverified woshudiue mapping; withheld"
+    },
+    "diamond:8": {
+      "inst": "ride_bell",
+      "confidence": 0.8,
+      "verified": false,
+      "evidence": "Unverified woshudiue mapping; withheld"
+    }
+  },
+  "small_staff_policy": "Native spacing below 8 px rejected; upscaling is inspection only",
+  "survey_evidence": "truth/harvest/validation/survey-3.jpg",
+  "ghost_template": {
+    "path": "harvest_templates/woshudiue/ghost.png",
+    "reference_spacing": 13.30268571590716,
+    "anchor": [
+      21.14606741573033,
+      10.943820224719104
+    ],
+    "instruments": [
+      "snare"
+    ],
+    "positions": [
+      5
+    ],
+    "threshold": 0.95,
+    "side_columns": [
+      [
+        0,
+        11
+      ],
+      [
+        31,
+        43
+      ]
+    ],
+    "side_min_score": 0.65,
+    "evidence": "Native SHvfn-bM_rg s5 development; disjoint positive/control audit in .eval-cache/pilot1080/audit-ghost-fresh"
+  },
+  "probe_scrolling": false,
+  "color_notes": true,
+  "strict_clef_pair": true,
+  "prefer_staff_line_span": true,
+  "clef_template": {
+    "path": "harvest_templates/woshudiue/clef.png",
+    "reference_spacing": 13.30268571590716,
+    "bottom_to_top_spaces": 3.2847365128865276,
+    "max_x_fraction": 0.045,
+    "threshold": 0.98,
+    "side_columns": [
+      [
+        0,
+        10
+      ],
+      [
+        10,
+        20
+      ]
+    ],
+    "side_min_score": 0.95,
+    "evidence": "Native grey paired-bar percussion clef confirmed in both pilots; .eval-cache/pilot1080/clef-audit; both strokes must match >=.98 composite and >=.95 each side"
+  },
+  "ghost_templates": [
+    {
+      "path": "harvest_templates/woshudiue/ghost-wide.png",
+      "reference_spacing": 14.708533418404468,
+      "anchor": [
+        23.064220183486214,
+        12.596330275229349
+      ],
+      "instruments": [
+        "snare"
+      ],
+      "positions": [
+        5
+      ],
+      "threshold": 0.95,
+      "side_columns": [
+        [
+          0,
+          13
+        ],
+        [
+          35,
+          48
+        ]
+      ],
+      "side_min_score": 0.65,
+      "evidence": "Native 8Eh6uT0j_D4 s5 development; disjoint positive/control audit in .eval-cache/pilot1080/audit-ghost-fresh"
+    }
+  ],
+  "test_only": true,
+  "validation": {
+    "audit": ".eval-cache/pilot1080/audit-woshudiue-context/accuracy.json",
+    "ghost": ".eval-cache/pilot1080/audit-ghost-fresh/accuracy.json",
+    "scope": "Partial positive notation; no independent human review or acoustic fidelity"
+  }
+}

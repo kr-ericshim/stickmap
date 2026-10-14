@@ -156,5 +156,6 @@
   "probe_scrolling": true,
   "reject_chromatic_overlays": true,
   "strict_clef_pair": true,
+  "prefer_staff_line_span": true,
   "native_frame_fallback": true
 }

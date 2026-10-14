@@ -5,7 +5,7 @@ import numpy as np
 from scipy.signal import find_peaks
 
 
-def staffs(gray, min_space=6):
+def staffs(gray, min_space=6, prefer_line_span=False):
     profile = np.median(gray, axis=1).astype(float)
     background = np.percentile(profile, 90)
     dips, _ = find_peaks(background-profile, height=6, distance=2)
@@ -20,9 +20,13 @@ def staffs(gray, min_space=6):
             if max(abs(np.array(rows)-expected)) > max(.8, space*.1):
                 continue
             strength = np.mean(background-profile[rows])
-            candidates.append((strength, rows, space))
+            # Dense beams can be darker than the five grey staff lines. An
+            # audited opt-in reader ranks the weakest horizontal line span
+            # before darkness, so four true lines plus one beam do not win.
+            span=min(float((gray[y]<230).mean()) for y in rows) if prefer_line_span else 0
+            candidates.append((span, strength, rows, space))
     kept = []
-    for strength, rows, space in sorted(candidates, reverse=True):
+    for span, strength, rows, space in sorted(candidates, reverse=True):
         if any(not (rows[-1] < ls[0]-sp or rows[0] > ls[-1]+sp) for ls,sp in kept):
             continue
         kept.append((list(map(float, rows)), float((rows[-1]-rows[0])/4)))
@@ -40,16 +44,19 @@ def staffs(gray, min_space=6):
     return sorted(refined)
 
 
-def staff_lines(gray):
-    found = staffs(gray)
+def staff_lines(gray, prefer_line_span=False):
+    found = staffs(gray, prefer_line_span=prefer_line_span)
     if len(found) != 1:
         raise ValueError(f'expected one staff, found {len(found)}')
     return found[0]
 
 
-def staff_checks(gray, lines, space, notes, strict_clef=False):
+def staff_checks(gray, lines, space, notes, strict_clef=False, clef_origin=None):
     dark = gray < 150
-    ys = np.array(lines).astype(int)
+    # Staff centroids are subpixel coordinates. Truncation samples the blank
+    # row above a one-pixel line (e.g. 110.99 -> 110), creating false support
+    # and clef failures. Measure the nearest actual native row instead.
+    ys = np.rint(lines).astype(int)
     support = [float((gray[y] < 230).mean()) for y in ys]
     bars = np.where(dark[ys[0]:ys[-1]+1].mean(axis=0) > .88)[0]
     runs = np.split(bars, np.where(np.diff(bars)>2)[0]+1)
@@ -68,12 +75,18 @@ def staff_checks(gray, lines, space, notes, strict_clef=False):
         spans=np.split(columns,np.where(np.diff(columns)>2)[0]+1)
         starts=[int(r[0]) for r in spans if len(r)>=space*8]
         if starts:
-            start=starts[0]
+            staff_start=starts[0]
+            # Native white-overlay openings fade their horizontal lines at
+            # the left edge while leaving the printed clef visible. An
+            # inspected source crop may supply that header origin. Stroke
+            # widths/heights, pair uniqueness and head/stem exclusions stay
+            # identical; ordinary profiles retain their original search.
+            start=staff_start if clef_origin is None else max(0,min(staff_start,round(clef_origin)))
             # Include heads immediately after the staff start. Skipping the
             # first two spaces lets their stems masquerade as a clef pair.
             first=min((n['x']-max(space*.7,n.get('w',0)/2) for n in notes
                        if n['x']>=start-space),default=gray.shape[1])
-            end=min(start+space*4,start+gray.shape[1]*.12,first)
+            end=min(staff_start+space*4,staff_start+gray.shape[1]*.12,first)
             # Up/down stems attach near either head edge. Exclude that full
             # column neighbourhood, including stems left of a head's body.
             note_columns=np.zeros(gray.shape[1],dtype=bool)
@@ -135,8 +148,8 @@ def parenthesis_scores(ink, space, x, y):
     return scores
 
 
-def heads(gray, template_dir=None):
-    lines, space = staff_lines(gray)
+def heads(gray, template_dir=None, prefer_line_span=False):
+    lines, space = staff_lines(gray,prefer_line_span=prefer_line_span)
     dark = (gray < 110).astype(np.uint8)
     kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(round(space*.85),round(space*.62)))
     core = cv2.morphologyEx(dark, cv2.MORPH_OPEN, kernel)

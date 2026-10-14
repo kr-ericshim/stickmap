@@ -2,7 +2,7 @@
 import argparse
 import json
 from pathlib import Path
-from align import moments
+from align import moments,unique_events
 
 
 THRESHOLDS = dict(fitted_40ms=.90, held_out_40ms=.85,
@@ -32,7 +32,7 @@ def write(folder):
     folder = Path(folder)
     r = json.loads((folder/'alignment.json').read_text())
     systems = {s['system']: s for s in json.loads((folder/'strip.json').read_text())}
-    events, extra, intervals = [], [], []
+    events, intervals = [], []
     for s in r['systems']:
         s['strict_usable'] = s['usable']
         s['scoring_reasons'] = [] if s['usable'] else scoring_reasons(s)
@@ -44,13 +44,14 @@ def write(folder):
         intervals.append([s['times'][0], s['times'][-1]])
         for time, group in zip(s['times'], groups):
             for i in group:
-                if systems[s['system']]['notes'][i].get('exportable') is False:
+                if (systems[s['system']]['notes'][i].get('exportable') is False or
+                        systems[s['system']]['notes'][i].get('tied_continuation')):
                     continue
                 e = {**systems[s['system']]['notes'][i], 'time': time, 'system': s['system'],
                      'timing_confidence': round(s['held_out']['within_40ms'], 3), 'tier': s['tier']}
                 events.append(e)
-                if not s['usable']:
-                    extra.append(e)
+    events=unique_events(events)
+    extra=[event for event in events if event['tier']=='scoring']
     merged = []
     for a,b in sorted(intervals):
         if merged and a <= merged[-1][1]:

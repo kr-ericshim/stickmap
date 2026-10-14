@@ -1,5 +1,175 @@
 # Ground truth from transcription videos
 
+## New-channel native paper variants (2026-10-03)
+
+[READER_VARIANTS.md](../../truth/harvest/READER_VARIANTS.md) documents the
+Tim Buell textured light paper, AlexBlack white paper and Baquetazo yellow
+paper failures, final bounded notation checks and retained crop audits.
+Explicit `score_variants` choose supported native paper polarity locally;
+the original dark-paper extractors and every label/native/timing/phase gate
+remain in force. Baquetazo's light paper uses a separate sustained green
+cursor, excluding brown note stems and yellow bar shading. An empty initial
+staff survey proceeds to local segment rejection, never a `no native
+five-line` program exception. Score-free gaps and polarity changes split
+continuation evidence. Aaron's explicitly annotated electronic-pad opening
+is withheld for this source only.
+
+`reader_window.py` provides fresh-output, <=20-second **notation-only** checks
+with original frame indices; it never reads acoustic/detector caches or
+exports timed truth. Use it for sealed VAULT debug sources. The final four
+16-second checks have 16 reader-clean systems out of 17 records; strict and
+scoring yield remain unmeasured. DailyChops white-overlay `clef_guard`
+diagnostics explain which existing continuation condition failed; Guiliana
+has not been locally inspected and has no new absence waiver.
+
+## Xiangsong Instagram sealed-VAULT reader (2026-10-03)
+
+The separate native `xiangsong` vertical bottom-page layout, partial legend,
+source/reader crop audit and four offline reels are documented in
+[XIANGSONG.md](../../truth/harvest/XIANGSONG.md). It reuses the Ollie Shorts page
+reader with opt-in bilateral paper-edge support and a unique translucent blue
+plate. Verified filled kick/snare/tom positions and calibrated explicit snare
+parentheses are retained; physical cymbal names/articulations remain withheld.
+Native 8 px, printed-clef, timing/control and band-phase gates are unchanged.
+Final yield is 0 strict / 47 scoring notes (9 ghost positives), in 2 systems of
+one of four pilots. Routine fetch remains disabled for limited yield and because
+the current fetch path runs drum transcription.
+
+**This is a sealed VAULT test channel. Never run drum detectors/scorers on it or
+add it to vault train_channels.** `pilot_new.py` extracts embedded video audio
+when audio.m4a is absent, uses cached local weights only and records test-only
+metadata. Use `--channels xiangsong`, 1–4 total CPU workers and a fresh output
+folder for re-reads. All pilot artifacts remain in `.eval-cache/pilot_new/xiangsong`.
+False ghost flags are not verified non-ghost notes; the fresh 24/24 positive
+audit also finds 10 missed ghosts among 24 negative predictions.
+
+## Ollie Woods Shorts offline reader (2026-10-03)
+
+The separate `olliewoods_shorts` native vertical bottom-page layout and legend
+are documented in [OLLIEWOODS_SHORTS.md](../../truth/harvest/OLLIEWOODS_SHORTS.md).
+Thin orange/translucent playheads are located by sustained columns, separately
+from coloured notes/sticking. Audited small ordinary filled heads are retained;
+cymbal names and technique flags remain withheld. The native 8 px, staff/clef,
+timing/control and band-phase gates are unchanged. Roni's 7.8–7.9 px source
+rejects. Final five-pilot yield is 2/5 videos, 193 strict / 231 scoring notes.
+The 109-row offline Shorts list and disabled fetch entry are prepared, with
+same-phrase/performance quarantine candidates. `pilot_new.py` supports native
+WebM and title-only metadata, including literal title pipes; no transcoding or
+network is required. Use `--channels ollieshorts` and a fresh read output name.
+
+## White-overlay partial staff and local motion (2026-10-02)
+
+The follow-up [WHITE_OVERLAY_SEGMENTS.md](../../truth/harvest/WHITE_OVERLAY_SEGMENTS.md)
+distinguishes absent intro/outro score from ambiguous staffs, supports native
+partial spans and confines white motion evidence to the overlapping observed
+score field. A failed global motion probe now proceeds to local segment gates
+instead of raising a whole-video exception. Static fixed-cursor intervals still
+reject for insufficient traversal. Seven regressions and six short Haake/Jojo
+reader checks retain all label/timing/phase gates; WSL timed yield is pending.
+
+## Harvest-reader fixes (2026-10-02)
+
+Current behavior and bounded Mac checks are documented in
+[`READER_FIXES.md`](../../truth/harvest/READER_FIXES.md). White overlay opening
+clefs are diagnostic evidence; independently registered stable native staff
+runs can confirm continuations. Missing/changing geometry produces segment
+rejections and new runs. Explicitly inspected native strips can establish
+continuation evidence across three supported consecutive staffs. Native size,
+line support, verified labels and every acoustic timing/phase gate still apply.
+
+Visible tied continuations stay in the strip for inspection but do not enter
+onset moments or strict/scoring exports. Reused scans reapply current export
+approval gates and fingerprint approval state. Reader program errors become
+`unreadable` and do not stop later videos.
+
+`batch.py` refuses canonical writes on a harvest tree containing `.wsl-mirror`.
+Use an explicit `--scratch-out .eval-cache/<attempt>` for local attempts; their
+truth/history, journal and report stay outside the source tree. Existing pilot
+workers with explicit `.eval-cache` outputs remain supported. On a constrained
+Mac, run unit tests and bounded single-video checks; perform bulk rereads on
+the WSL GPU writer box. Do not infer whole-video yield from the 16-second checks.
+
+## Eight new-channel offline pilots (2026-10-02)
+
+The 15 supplied sources for Tim Buell, AlexBlack, El Baquetazo, COPYDRUM,
+Gwon, Nyenty, Yeom and Nick Bukey are documented in
+[`PILOT_NEW.md`](../../truth/harvest/PILOT_NEW.md). Their eight separate legends
+verify only channel-audited filled kick/snare/tom staff positions. Cymbals,
+physical tom sizes and technique flags remain withheld. All source/stem/scan/
+timing outputs stay under `.eval-cache/pilot_new/<channel>/<video>/`.
+
+Profiles may opt into an inspected native `score_region`, a dark-paper
+`white_strip` foreground, and a channel-specific `cursor_style`: translucent
+`red_block`, dark-paper `dim_line`, light-paper `gray_box`, ordinary chromatic
+cursor or explicit `none`. Native gray lines are preserved, and gray/white
+playheads are distinguished from connected staff ink using sustained columns.
+Every staff/clef, 8 px, monotonicity, timing/control and band-phase gate still
+runs. There is no new clef omission or scrolling waiver. Bukey's static score
+uses ordered class-agnostic audio alignment with the no-cursor gates; zero
+accepted timing remains a valid outcome.
+
+`pilot_new.py` provides the detector-free offline preparation/notation/read
+path with 1–4 worker jobs. Never combine independent invocations beyond four
+active CPU workers. `pilot_new_audit.py` prepares native-pair sheets and compares
+explicit visual decisions; initial/manual rechecks remain separate. Diagnostics
+may reuse a scan only with a matching recorded scanner fingerprint.
+`pilot_new_report.py` derives the report from completed exports and audit JSON.
+
+The offline channel lists contain only the supplied pilot IDs. Configurations
+retain the provided handle/playlist URL, without inventing a UC ID. The current
+fetcher's `listing()` still consumes `id` rather than `listing_url`; routine
+fetch is blocked by an impossible title regex pending that integration outside
+this task's edit scope. Finetune folds and same-performance exclusions also
+need separate owner changes before training admission; `splits.py` was not
+edited. Both Nyenty sources are actually 720p, and Keep Up is about 20 minutes.
+
+## Offline chops reader repairs (2026-10-02)
+
+The latest local-only revalidation is documented in
+[`truth/harvest/READER_REPAIR.md`](../../truth/harvest/READER_REPAIR.md).
+DailyChops now supports audited light top scrolling notation: native grey staff
+preservation, motion limited to the observed score field, five verified filled
+positions, and a conservative paired-parenthesis reader for tom position 7.
+Only successful scrolling viewports use the documented clef omission convention.
+The subsequent [1080p pilots](../../truth/harvest/PILOT1080.md) add static inset
+Daily Chops lessons and bottom white solo continuations with a fixed red cursor.
+White continuations use source clef or stable local native staff proof;
+ambiguous motion edges leave rejected gaps. Native staffs below 8 px still
+reject, and neither timing nor phase thresholds changed. The old cohort counts
+below remain historical, separately from these scratch pilots.
+
+`woshudiue` has a separate audited bottom-strip legend, grey paired-bar clef and
+two conservative explicit-parenthesis glyphs. It is **TEST-ONLY**: the pilot
+entry point performs cached local Demucs separation, class-agnostic flux and
+notation alignment only. Do not invoke drum detectors/scorers on it. The current
+detector-based fetcher is blocked with an impossible title filter in channel
+configuration until a notation-only fetch path exists.
+
+All eight pilot songs/results live in `.eval-cache/pilot1080`, with no canonical
+song or manifest publication. `pilot1080.py read` preserves existing result
+folders; choose a new `--output` for another attempt. See the report for audits,
+resolution comparisons, accepted/visual-only fast counts and reproducibility.
+
+MoYin clips partial page visits to the observed cursor span, preserving unvisited
+heads separately and keeping the colour/timing thresholds. Golly, Ollie Woods
+and Ivannikov opt into staff-line span ranking so dense beams do not substitute
+for a true staff line. Geometry repairs do not override timing/phase failures.
+Exact duplicate page-boundary positives retain both observing system IDs while
+being exported once; nearby attacks are never merged.
+
+`revalidate.py` re-reads retained inputs into `.eval-cache/` with 1–4 worker jobs,
+without publishing canonical song truth or modifying the harvest manifest:
+
+```bash
+.venv/bin/python tools/truth_video/revalidate.py \
+  --out .eval-cache/reader-repair-repeat \
+  --only dailychops moyin golly olliewoods ivannikov --jobs 3
+```
+
+The five updated rows in `CHANNEL_RESULTS.md` describe this scratch revalidation;
+canonical truth and the manifest retain their earlier published state under the
+task's explicit edit boundary. The full reader suite passes (65 tests).
+
 ## Instrument-band phase check and audio sanity (2026-10-01, second pass)
 
 Regular grooves let a whole-beat or subdivision shift agree with class-agnostic

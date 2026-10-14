@@ -10,7 +10,7 @@
   "verified_flags": [
     "accent"
   ],
-  "open_verified": false,
+  "open_verified": true,
   "rules": {
     "filled:1": {
       "inst": "kick",
@@ -102,14 +102,14 @@
     "cross:8": {
       "inst": "ride",
       "confidence": 0.95,
-      "verified": false,
-      "evidence": "candidate only; requires channel-specific visual audit"
+      "verified": true,
+      "evidence": "Ride audit 2026-10-04: cross on the top staff line (F5, MuseScore default Ride 51), distinct from the verified hi-hat cross:9 (7 of 8 songs carry both pos 8 and pos 9 crosses); reader heads checked on native system crops of 6 songs (7XP_A3UYzeg, __eQZBul7-g, bRC0tZ1T1-Y, ep7ZljYGSLQ, jjGU1Uszg74, uFaGY6qdqpI; scratch/sx_diag/ridebell/ride/*.png on WSL); 8 songs >= songs_required 3. Export approved by the user 2026-10-04."
     },
     "diamond:8": {
       "inst": "ride_bell",
-      "confidence": 0.8,
-      "verified": false,
-      "evidence": "candidate only; requires channel-specific visual audit"
+      "confidence": 0.95,
+      "verified": true,
+      "evidence": "Ride bell audit 2026-10-04: filled diamond on the top staff line (F5), MuseScore default Ride Bell (53); reader heads checked on native system crops brsdU4hYJXU sys 23/24 and jjGU1Uszg74 sys 7/8 (scratch/sx_diag/ridebell/*.png on WSL); user listening confirmed ride bell at brsdU4hYJXU 158-163 s and jjGU1Uszg74 75-83 s. songs_required 3 waived by the user: only 2 songs carry this glyph (third, vpRwe-z0hxQ, has 1 head in a timing-rejected system); 2 songs + listening accepted. Confidence raised 0.8 -> 0.95 after audit."
     }
   },
   "small_staff_policy": "Native spacing below 8 px rejected; upscaling is inspection only",
@@ -119,5 +119,6 @@
     "songs_required": 3,
     "audit": "truth/harvest/validation/audit/manual.json",
     "scope": "partial labels; unresolved mappings are withheld"
-  }
+  },
+  "open_evidence": "Open hi-hat 'o' mark audit 2026-10-04: an 'o' above the hi-hat cross (cross:9) marks open, '+' closed; reader heads checked on native system crops of 8 songs (uFaGY6qdqpI, ep7ZljYGSLQ, jjGU1Uszg74, cASSmfeEG2c, vpRwe-z0hxQ, 7XP_A3UYzeg, bRC0tZ1T1-Y, __eQZBul7-g; scratch/sx_diag/ridebell/openhh/*.png on WSL); user listening 2026-10-04 at __eQZBul7-g 41-55 s: moderately open ('취- 취-', close to half-open). Exported open covers half-open (classifier definition {closed, open incl. half-open})."
 }

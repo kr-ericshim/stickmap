@@ -1,0 +1,216 @@
+{
+  "name": "olliewoods_shorts",
+  "harvest_profile": true,
+  "layout": "olliewoods_shorts",
+  "enabled": true,
+  "legend_confidence": "Audited native filled kick/snare/tom positions only; no full physical-kit/cymbal key",
+  "reason": "Native paired-crop position audit completed; 8 px, reading, timing, control and phase gates retained. Cymbals and technique flags withheld",
+  "min_x_fraction": 0.055,
+  "min_confidence": 0.84,
+  "verified_flags": [],
+  "open_verified": false,
+  "rules": {
+    "filled:1": {
+      "inst": "kick",
+      "confidence": 0.98,
+      "verified": true,
+      "evidence": "Shorts native-source position audit: .eval-cache/pilot_new/ollieshorts/audit/manual.json; same-channel filled position convention only, no physical tom-size claim"
+    },
+    "filled:5": {
+      "inst": "snare",
+      "confidence": 0.98,
+      "verified": true,
+      "evidence": "Shorts native-source position audit: .eval-cache/pilot_new/ollieshorts/audit/manual.json; same-channel filled position convention only, no physical tom-size claim"
+    },
+    "filled:2": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": false,
+      "evidence": "Shorts native-source audit pending; long-video audit is not reused"
+    },
+    "filled:3": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": true,
+      "evidence": "Shorts native-source position audit: .eval-cache/pilot_new/ollieshorts/audit/manual.json; same-channel filled position convention only, no physical tom-size claim"
+    },
+    "filled:4": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": false,
+      "evidence": "Shorts native-source audit pending; long-video audit is not reused"
+    },
+    "filled:6": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": true,
+      "evidence": "Shorts native-source position audit: .eval-cache/pilot_new/ollieshorts/audit/manual.json; same-channel filled position convention only, no physical tom-size claim"
+    },
+    "filled:7": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": true,
+      "evidence": "Shorts native-source position audit: .eval-cache/pilot_new/ollieshorts/audit/manual.json; same-channel filled position convention only, no physical tom-size claim"
+    },
+    "filled:8": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": true,
+      "evidence": "Shorts native-source position audit: .eval-cache/pilot_new/ollieshorts/audit/manual.json; same-channel filled position convention only, no physical tom-size claim"
+    },
+    "cross:9": {
+      "inst": "hihat",
+      "confidence": 0.95,
+      "articulation": "closed",
+      "verified": false,
+      "evidence": "Shorts native-source audit pending; long-video audit is not reused"
+    },
+    "circled:9": {
+      "inst": "hihat",
+      "confidence": 0.95,
+      "articulation": "open",
+      "verified": false,
+      "evidence": "Shorts native-source audit pending; long-video audit is not reused"
+    },
+    "cross:10": {
+      "inst": "crash",
+      "confidence": 0.95,
+      "verified": false,
+      "evidence": "Shorts native-source audit pending; long-video audit is not reused"
+    },
+    "circled:10": {
+      "inst": "crash",
+      "confidence": 0.95,
+      "verified": false,
+      "evidence": "Shorts native-source audit pending; long-video audit is not reused"
+    },
+    "cross:-2": {
+      "inst": "hihat",
+      "confidence": 0.95,
+      "articulation": "pedal",
+      "verified": false,
+      "evidence": "Shorts native-source audit pending; long-video audit is not reused"
+    },
+    "cross:5": {
+      "inst": "side_stick",
+      "confidence": 0.95,
+      "verified": false,
+      "evidence": "Shorts native-source audit pending; long-video audit is not reused"
+    },
+    "cross:8": {
+      "inst": "ride",
+      "confidence": 0.95,
+      "verified": false,
+      "evidence": "Shorts native-source audit pending; long-video audit is not reused"
+    },
+    "diamond:8": {
+      "inst": "ride_bell",
+      "confidence": 0.8,
+      "verified": false,
+      "evidence": "Shorts native-source audit pending; long-video audit is not reused"
+    },
+    "cross:-1": {
+      "inst": "hihat",
+      "articulation": "pedal",
+      "confidence": 0.95,
+      "verified": false,
+      "evidence": "Shorts pedal-position candidate; instrument identity unverified"
+    }
+  },
+  "small_staff_policy": "Native spacing below 8 px rejected; upscaling is inspection only",
+  "strict_clef_pair": true,
+  "prefer_staff_line_span": true,
+  "color_notes": true,
+  "page_color_notes": true,
+  "trim_partial_cursor": true,
+  "reject_chromatic_overlays": true,
+  "keep_small_filled": true,
+  "validation": {
+    "audit": ".eval-cache/pilot_new/ollieshorts/audit/manual.json",
+    "accuracy": {
+      "inspected": 78,
+      "correct": 78,
+      "groups": {
+        "filled:6": {
+          "inspected": 6,
+          "correct": 6
+        },
+        "MPoZ-2nOESc": {
+          "inspected": 19,
+          "correct": 19
+        },
+        "at_least8": {
+          "inspected": 67,
+          "correct": 67
+        },
+        "cross:12": {
+          "inspected": 6,
+          "correct": 6
+        },
+        "cross:9": {
+          "inspected": 8,
+          "correct": 8
+        },
+        "9akE2QqpnCs": {
+          "inspected": 11,
+          "correct": 11
+        },
+        "below8": {
+          "inspected": 11,
+          "correct": 11
+        },
+        "filled:7": {
+          "inspected": 6,
+          "correct": 6
+        },
+        "aYgtt3EhBEg": {
+          "inspected": 8,
+          "correct": 8
+        },
+        "filled:5": {
+          "inspected": 8,
+          "correct": 8
+        },
+        "filled:3": {
+          "inspected": 6,
+          "correct": 6
+        },
+        "VhdBLkFMmWs": {
+          "inspected": 30,
+          "correct": 30
+        },
+        "cross:10": {
+          "inspected": 6,
+          "correct": 6
+        },
+        "filled:8": {
+          "inspected": 6,
+          "correct": 6
+        },
+        "mwLnCnc60b4": {
+          "inspected": 10,
+          "correct": 10
+        },
+        "filled:2": {
+          "inspected": 6,
+          "correct": 6
+        },
+        "cross:8": {
+          "inspected": 6,
+          "correct": 6
+        },
+        "filled:1": {
+          "inspected": 8,
+          "correct": 8
+        },
+        "cross:-1": {
+          "inspected": 6,
+          "correct": 6
+        }
+      },
+      "errors": [],
+      "scope": "Assistant visual native-source/reader shape and position audit among detected heads; no full-score recall, independent human review, acoustic instrument key or small-staff gate approval"
+    },
+    "scope": "Final contextual recheck after clipped/adjacent target corrections; not fresh blind accuracy, recall or independent human review"
+  }
+}

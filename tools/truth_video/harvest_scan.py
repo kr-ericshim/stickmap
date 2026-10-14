@@ -4,7 +4,7 @@ from pathlib import Path
 import cv2
 import numpy as np
 from heads import heads, staffs
-from layouts import ink, cursor, detect
+from layouts import ink, cursor, detect, region_cursor, select_score_variant, validate_score_variants
 
 
 def chromatic_obstructions(frame, space):
@@ -75,27 +75,51 @@ def stable_native_staff(samples, frames):
     return None
 
 
-def write(video, out, layout=None, y_min_fraction=0, reject_overlays=False, native_fallback=False):
+def write(video, out, layout=None, y_min_fraction=0, reject_overlays=False, native_fallback=False,
+          geometry=None, start_frame=0, end_frame=None):
     cv2.setNumThreads(1)
     out=Path(out);out.mkdir(parents=True,exist_ok=True)
-    geometry=detect(video,layout,y_min_fraction)
+    geometry=detect(video,layout,y_min_fraction) if geometry is None else dict(geometry)
+    # Static inset lessons use the observed paper/staff width. Counting empty
+    # performance pixels as missing line support rejected an otherwise clear
+    # 1080p staff. This is native cropping, with all support thresholds intact.
+    if geometry.get('staff_x_bounds'):
+        geometry['left'],geometry['right']=geometry['staff_x_bounds']
+    variants=geometry.get('score_variants')
+    if variants:validate_score_variants(variants)
     cap=cv2.VideoCapture(str(video));fps=cap.get(cv2.CAP_PROP_FPS)
     if not np.isfinite(fps) or fps<=0:
         cap.release();raise ValueError('invalid video frame rate')
-    records=[];boxes=[];ref=None;samples=[];sample_frames=[];obstructions=[];start=0;n=0;previous_box=None;previous_frame=-999
+    if start_frame<0 or (end_frame is not None and end_frame<=start_frame):
+        cap.release();raise ValueError('invalid native frame interval')
+    if start_frame:cap.set(cv2.CAP_PROP_POS_FRAMES,start_frame)
+    records=[];boxes=[];ref=None;samples=[];sample_frames=[];obstructions=[];start=start_frame;n=start_frame;previous_box=None;previous_frame=-999
+    variant_index=None;variant_reason=None
+    foreground=geometry.get('foreground');style=geometry.get('cursor_style')
+    space=float(np.median(geometry['native_spacing']))
     top,bottom=geometry['top'],geometry['bottom']
+    left,right=geometry.get('left',0),geometry.get('right')
 
     def finish(end):
         if end-start < max(6,fps*.35) or not samples:
             return
         gray=np.median(np.stack(samples),axis=0).astype(np.uint8)
-        found=staffs(gray,min_space=6)
+        found=([] if variants and variant_index is None else staffs(gray,min_space=6,
+                     prefer_line_span=geometry.get('prefer_staff_line_span',False)))
         fallback=None
-        if not found and native_fallback:
+        if not found and native_fallback and not (variants and variant_index is None):
             recovered=stable_native_staff(samples,sample_frames)
             if recovered:
                 cv2.imwrite(str(out/f'median_failed_{start:06d}.png'),gray)
                 gray,found,fallback=recovered
+        if not found:
+            sid=len(records)
+            cv2.imwrite(str(out/f'system_{sid:03d}.png'),gray,[cv2.IMWRITE_PNG_COMPRESSION,6])
+            records.append(dict(system=sid,start=start,end=end,row=0,page_rows=1,
+                crop=[0,len(gray)],native_space=space,cursor_frames=[],cursor_x=[],
+                foreground=foreground,cursor_style=style,
+                reading_reasons=[variant_reason or 'no native five-line staff in inspected score region']))
+            return
         centers=[(ls[0]+ls[-1])/2 for ls,sp in found]
         for row,y0,y1 in staff_crops(gray,found):
             lines,sp=found[row]
@@ -106,7 +130,11 @@ def write(video, out, layout=None, y_min_fraction=0, reject_overlays=False, nati
             cv2.imwrite(str(out/f'system_{sid:03d}.png'),gray[y0:y1],[cv2.IMWRITE_PNG_COMPRESSION,6])
             records.append(dict(system=sid,start=start,end=end,row=row,page_rows=len(found),
                                 crop=[y0,y1],native_space=sp,
-                                cursor_frames=[j for j,b in active],cursor_x=[b[0] for j,b in active]))
+                                cursor_frames=[j for j,b in active],cursor_x=[b[0] for j,b in active],
+                                foreground=foreground,cursor_style=style))
+            if variants:
+                records[-1]['score_variant']=variant_index
+                records[-1]['variant_sample_frames']=list(sample_frames)
             if fallback:records[-1]['native_frame_fallback']=fallback
             if reject_overlays:
                 contaminated=sum(any(y+h>lines[0]-sp*2 and y<lines[-1]+sp*2
@@ -116,18 +144,32 @@ def write(video, out, layout=None, y_min_fraction=0, reject_overlays=False, nati
                     records[-1]['reading_reasons']=['large chromatic overlay obscures staff']
 
     try:
-        while True:
+        while end_frame is None or n<end_frame:
             ok,frame=cap.read()
             if not ok:break
-            crop=frame[top:bottom];gray=ink(crop)
-            box=cursor(crop,float(np.median(geometry['native_spacing'])))
+            crop=frame[top:bottom,left:right]
+            if variants and (not samples or n%6==0):
+                selected,native,reason=select_score_variant(crop,variants,
+                    geometry.get('prefer_staff_line_span',False))
+                if selected!=variant_index or reason!=variant_reason:
+                    finish(n);start=n;samples=[];sample_frames=[];obstructions=[];boxes=[];ref=None
+                    previous_box=None;previous_frame=-999
+                variant_index=selected;variant_reason=reason
+                v=variants[selected] if selected is not None else {}
+                foreground=v.get('foreground',geometry.get('foreground'))
+                style=v.get('cursor_style',geometry.get('cursor_style'))
+                if native:space=float(np.median([sp for ls,sp in native]))
+            gray=ink(crop,foreground)
+            box=(None if variants and variant_index is None else
+                 region_cursor(crop,space,style) if style is not None else cursor(crop,space))
             small=cv2.resize((gray<100).astype(np.float32),(320,max(40,len(gray)//3)),interpolation=cv2.INTER_AREA)
             diff=1 if ref is None else float(np.abs(small-ref).mean())
             reset=bool(box and previous_box and n-previous_frame<fps*.5
                        and previous_box[0]>gray.shape[1]*.55 and box[0]<gray.shape[1]*.35
                        and previous_box[0]-box[0]>gray.shape[1]*.4
                        and abs((box[1]+box[2])-(previous_box[1]+previous_box[2]))<4*np.median(geometry['native_spacing']))
-            if diff>.028 or reset:
+            missing=bool(variants and variant_index is None)
+            if (not missing and diff>.028) or reset or (missing and n-start>=fps*4):
                 finish(n);start=n;samples=[];sample_frames=[];obstructions=[];boxes=[];ref=small
             if n%6==0:
                 # Reservoir spread across the whole segment, never a video-sized stack.
@@ -142,8 +184,8 @@ def write(video, out, layout=None, y_min_fraction=0, reject_overlays=False, nati
         finish(n)
     finally:
         cap.release()
-    data=dict(version=3,video=str(Path(video).resolve()),fps=fps,frames=n,
+    data=dict(version=3,video=str(Path(video).resolve()),fps=fps,frames=n,scan_start_frame=start_frame,
               **geometry,record_cursors=True,records=records,systems=[r['start'] for r in records],cursor=[])
     (out/'scan.json').write_text(json.dumps(data))
-    print(f'{out.name}: {n/fps:.1f}s / {len(records)} systems ({geometry["layout"]})',flush=True)
+    print(f'{out.name}: {(n-start_frame)/fps:.1f}s / {len(records)} systems ({geometry["layout"]})',flush=True)
     return data

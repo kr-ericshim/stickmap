@@ -9,7 +9,7 @@ lined up, in order, with the detected ones (a monotone alignment that may
 only pair moments within --tol seconds), and what is left over counts as
 missed or extra.
 
-    uv run python tools/truth_video/fill_seq.py [--videos larnell-lewis tony-royster] [--jd]
+    .venv/bin/python tools/truth_video/fill_seq.py [--videos larnell-lewis tony-royster] [--jd]
 """
 
 from __future__ import annotations
@@ -26,6 +26,8 @@ import numpy as np
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
+sys.path.insert(0, str(HERE.parent / "harvest"))
+import vault  # noqa: E402
 from align import moment_instruments, moments  # noqa: E402
 from evaluate import family  # noqa: E402
 
@@ -45,13 +47,17 @@ def notated(folder: Path, min_after: float) -> list[tuple[float, float, list[tup
     for r in json.loads((folder / "alignment.json").read_text())["systems"]:
         if not r.get("times") or not all(q.startswith(TIMING) for q in r.get("reasons", [])):
             continue
-        if (r.get("after") or {}).get("within_40ms", 0) < min_after:
+        if not min_after <= (r.get("after") or {}).get("within_40ms", 0) <= 1:
             continue
-        s = strips[r["system"]]
+        s = strips.get(r["system"])
+        if s is None or s.get("staff", {}).get("reasons"):
+            continue
         if any(n.get("exportable") is False and family(n.get("inst", "")) in DRUMS for n in s["notes"]):
             continue  # a drum head whose reading was not confirmed
         x, groups = moments(s)
-        if len(groups) != len(r["times"]):
+        times = np.asarray(r["times"], dtype=float)
+        if (len(groups) != len(times) or not np.isfinite(times).all() or
+                times[0] < 0 or np.any(np.diff(times) <= 0)):
             continue
         seq = []
         for t, names in zip(r["times"], moment_instruments(s, groups)):
@@ -105,16 +111,24 @@ def align(ref, est, tol):
     return pairs[::-1]
 
 
+def fast_mask(ref) -> np.ndarray:
+    """Nearest-neighbour gap < 90 ms, shared by loose scorers and vault stats."""
+    times = np.array([t for t, _ in ref])
+    if not len(times):
+        return np.zeros(0, dtype=bool)
+    gaps = np.diff(times)
+    return np.minimum(np.r_[np.inf, gaps], np.r_[gaps, np.inf]) < FAST
+
+
 def tally(ref, est, tol) -> Counter:
     c: Counter = Counter()
     pairs = align(ref, est, tol)
     times = np.array([t for t, _ in ref])
-    gaps = np.diff(times)
-    local = np.minimum(np.r_[np.inf, gaps], np.r_[gaps, np.inf])
+    fast = fast_mask(ref)
     paired_ref = {i: j for i, j in pairs}
     paired_est = {j for _, j in pairs}
     for i, (t, a) in enumerate(ref):
-        speed = "fast" if local[i] < FAST else "slow"
+        speed = "fast" if fast[i] else "slow"
         b = est[paired_ref[i]][1] if i in paired_ref else frozenset()
         for key in ("all", speed):
             c[f"{key}.stroke.ref"] += 1
@@ -126,8 +140,8 @@ def tally(ref, est, tol) -> Counter:
             if a == {fam}:
                 c[f"conf.{fam}->{'+'.join(sorted(b)) or 'nothing'}"] += 1
     for j, (t, b) in enumerate(est):
-        near = np.abs(times - t).argmin()
-        speed = "fast" if local[near] < FAST else "slow"
+        near = np.abs(times - t).argmin() if len(times) else None
+        speed = "fast" if near is not None and fast[near] else "slow"
         for key in ("all", speed):
             c[f"{key}.stroke.est"] += 1
             for fam in DRUMS:
@@ -136,15 +150,17 @@ def tally(ref, est, tol) -> Counter:
 
 
 def one(args) -> tuple[str, Counter]:
-    video, detector, tol, min_after = args
-    module, name = detector.split(":")
-    detect = getattr(importlib.import_module(module), name)
+    video, detector, tol, min_after, *mode = args
     folder = TRUTH / video
     song = Path((folder / "song.txt").read_text().strip())
+    if vault.is_vault_song(song) != (mode[0] if mode else False):
+        return video, Counter()
     systems = notated(folder, min_after)
     c: Counter = Counter()
     if not systems or not (song / "activations.drums-htdemucs.npy").exists():
         return video, c
+    module, name = detector.split(":")
+    detect = getattr(importlib.import_module(module), name)
     hits = detect(song)
     for a, b, ref in systems:
         c += tally(ref, detected(hits, a - 0.05, b + 0.05), tol)
@@ -168,13 +184,23 @@ def main() -> None:
     p.add_argument("--tol", type=float, default=0.06)
     p.add_argument("--min-after", type=float, default=0.75)
     p.add_argument("--detect", default="evaluate:detect")
-    p.add_argument("--jobs", type=int, default=8)
+    p.add_argument("--jobs", type=int, choices=range(1, 5), default=4)
     p.add_argument("--json", type=Path)
+    p.add_argument("--final", action="store_true", help="open and score ONLY vault video IDs (logged)")
+    p.add_argument("--model-tag", help="model identity for the vault opening log (default: FT_TAG or detector)")
     a = p.parse_args()
+    if not np.isfinite(a.tol) or a.tol <= 0:
+        p.error("--tol must be positive and finite")
+    if not np.isfinite(a.min_after) or not 0 <= a.min_after <= 1:
+        p.error("--min-after must be in [0, 1]")
+    if a.final:
+        vault.open_final(vault.model_tag(a.detect, a.model_tag))
     videos = a.videos or [*SOLOS, *(sorted(d.name for d in TRUTH.glob("jd-*") if (d / "strip.json").exists()) if a.jd else [])]
+    seal = vault.Vault()
+    videos = [v for v in videos if seal.contains_song(Path((TRUTH / v / "song.txt").read_text().strip())) == a.final]
     total: Counter = Counter()
     with ProcessPoolExecutor(a.jobs) as pool:
-        results = list(pool.map(one, [(v, a.detect, a.tol, a.min_after) for v in videos]))
+        results = list(pool.map(one, [(v, a.detect, a.tol, a.min_after, a.final) for v in videos]))
     for video, c in results:
         if c["systems"]:
             print(f"{video:16s} {c['systems']:3d} sys {c['seconds']:5.0f}s | {line(c, 'all')}")

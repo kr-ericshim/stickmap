@@ -1,0 +1,449 @@
+{
+  "name": "xiangsong",
+  "harvest_profile": true,
+  "layout": "xiangsong",
+  "enabled": true,
+  "legend_confidence": "40/40 native filled kick/snare/tom position targets; snare p5 ghost positives24/24 in fresh audit; cymbal names and physical tom sizes withheld",
+  "reason": "Sealed VAULT: audited partial positive notation only, unchanged staff/timing/control/phase gates. Never run drum detectors/scorers or add to train_channels",
+  "min_x_fraction": 0.055,
+  "min_confidence": 0.84,
+  "verified_flags": [
+    "ghost"
+  ],
+  "open_verified": false,
+  "rules": {
+    "filled:1": {
+      "inst": "kick",
+      "confidence": 0.98,
+      "verified": true,
+      "evidence": "Xiangsong native paired-crop position audit 8/8 for this rule: .eval-cache/pilot_new/xiangsong/audit-labels/accuracy.json; tom staff positions only, no physical size"
+    },
+    "filled:5": {
+      "inst": "snare",
+      "confidence": 0.98,
+      "verified": true,
+      "evidence": "Xiangsong native paired-crop position audit 8/8 for this rule: .eval-cache/pilot_new/xiangsong/audit-labels/accuracy.json; tom staff positions only, no physical size"
+    },
+    "filled:2": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": false,
+      "evidence": "Xiangsong native-source audit pending; do not transfer other channel conventions"
+    },
+    "filled:3": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": true,
+      "evidence": "Xiangsong native paired-crop position audit 8/8 for this rule: .eval-cache/pilot_new/xiangsong/audit-labels/accuracy.json; tom staff positions only, no physical size"
+    },
+    "filled:4": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": false,
+      "evidence": "Xiangsong native-source audit pending; do not transfer other channel conventions"
+    },
+    "filled:6": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": true,
+      "evidence": "Xiangsong native paired-crop position audit 8/8 for this rule: .eval-cache/pilot_new/xiangsong/audit-labels/accuracy.json; tom staff positions only, no physical size"
+    },
+    "filled:7": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": true,
+      "evidence": "Xiangsong native paired-crop position audit 8/8 for this rule: .eval-cache/pilot_new/xiangsong/audit-labels/accuracy.json; tom staff positions only, no physical size"
+    },
+    "filled:8": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": false,
+      "evidence": "Xiangsong native-source audit pending; do not transfer other channel conventions"
+    },
+    "cross:9": {
+      "inst": "hihat",
+      "confidence": 0.95,
+      "articulation": "closed",
+      "verified": false,
+      "evidence": "Xiangsong native-source audit pending; do not transfer other channel conventions"
+    },
+    "circled:9": {
+      "inst": "hihat",
+      "confidence": 0.95,
+      "articulation": "open",
+      "verified": false,
+      "evidence": "Xiangsong native-source audit pending; do not transfer other channel conventions"
+    },
+    "cross:10": {
+      "inst": "crash",
+      "confidence": 0.95,
+      "verified": false,
+      "evidence": "Xiangsong native-source audit pending; do not transfer other channel conventions"
+    },
+    "circled:10": {
+      "inst": "crash",
+      "confidence": 0.95,
+      "verified": false,
+      "evidence": "Xiangsong native-source audit pending; do not transfer other channel conventions"
+    },
+    "cross:-2": {
+      "inst": "hihat",
+      "confidence": 0.95,
+      "articulation": "pedal",
+      "verified": false,
+      "evidence": "Xiangsong native-source audit pending; do not transfer other channel conventions"
+    },
+    "cross:5": {
+      "inst": "side_stick",
+      "confidence": 0.95,
+      "verified": false,
+      "evidence": "Xiangsong native-source audit pending; do not transfer other channel conventions"
+    },
+    "cross:8": {
+      "inst": "ride",
+      "confidence": 0.95,
+      "verified": false,
+      "evidence": "Xiangsong native-source audit pending; do not transfer other channel conventions"
+    },
+    "diamond:8": {
+      "inst": "ride_bell",
+      "confidence": 0.8,
+      "verified": false,
+      "evidence": "Xiangsong native-source audit pending; do not transfer other channel conventions"
+    },
+    "cross:-1": {
+      "inst": "hihat",
+      "articulation": "pedal",
+      "confidence": 0.95,
+      "verified": false,
+      "evidence": "Xiangsong native-source audit pending; do not transfer other channel conventions"
+    }
+  },
+  "small_staff_policy": "Native spacing below 8 px rejected; upscaling is inspection only",
+  "strict_clef_pair": true,
+  "prefer_staff_line_span": true,
+  "color_notes": true,
+  "page_color_notes": true,
+  "trim_partial_cursor": true,
+  "reject_chromatic_overlays": true,
+  "keep_small_filled": true,
+  "test_only": true,
+  "ghost_templates": [
+    {
+      "path": "harvest_templates/xiangsong/ghost-DNz6yi-QMWp.png",
+      "reference_spacing": 9.872183201638865,
+      "anchor": [
+        16.14736842105262,
+        8.968421052631577
+      ],
+      "instruments": [
+        "snare"
+      ],
+      "positions": [
+        5
+      ],
+      "threshold": 0.95,
+      "side_columns": [
+        [
+          0,
+          9
+        ],
+        [
+          23,
+          32
+        ]
+      ],
+      "side_min_score": 0.65,
+      "evidence": "Native-resolution initial audit development glyph; >=.95 complete glyph and >=.65 each parenthesis side; fresh disjoint sampled-target audit24/24 positives,10 missed ghosts among24 controls; .eval-cache/pilot_new/xiangsong/audit-ghost-fresh/accuracy.json",
+      "source": {
+        "video": "DNz6yi-QMWp",
+        "system": 15,
+        "crop": [
+          197,
+          48,
+          229,
+          66
+        ]
+      }
+    },
+    {
+      "path": "harvest_templates/xiangsong/ghost-Dd8wm3ThGTL.png",
+      "reference_spacing": 9.702684702726422,
+      "anchor": [
+        16.291666666666657,
+        9.0
+      ],
+      "instruments": [
+        "snare"
+      ],
+      "positions": [
+        5
+      ],
+      "threshold": 0.95,
+      "side_columns": [
+        [
+          0,
+          9
+        ],
+        [
+          23,
+          32
+        ]
+      ],
+      "side_min_score": 0.65,
+      "evidence": "Native-resolution initial audit development glyph; >=.95 complete glyph and >=.65 each parenthesis side; fresh disjoint sampled-target audit24/24 positives,10 missed ghosts among24 controls; .eval-cache/pilot_new/xiangsong/audit-ghost-fresh/accuracy.json",
+      "source": {
+        "video": "Dd8wm3ThGTL",
+        "system": 59,
+        "crop": [
+          170,
+          76,
+          202,
+          94
+        ]
+      }
+    },
+    {
+      "path": "harvest_templates/xiangsong/ghost-Dd_S08chzqQ.png",
+      "reference_spacing": 9.751848356142835,
+      "anchor": [
+        16.521276595744695,
+        8.319148936170215
+      ],
+      "instruments": [
+        "snare"
+      ],
+      "positions": [
+        5
+      ],
+      "threshold": 0.95,
+      "side_columns": [
+        [
+          0,
+          9
+        ],
+        [
+          24,
+          33
+        ]
+      ],
+      "side_min_score": 0.65,
+      "evidence": "Native-resolution initial audit development glyph; >=.95 complete glyph and >=.65 each parenthesis side; fresh disjoint sampled-target audit24/24 positives,10 missed ghosts among24 controls; .eval-cache/pilot_new/xiangsong/audit-ghost-fresh/accuracy.json",
+      "source": {
+        "video": "Dd_S08chzqQ",
+        "system": 52,
+        "crop": [
+          146,
+          48,
+          179,
+          65
+        ]
+      }
+    },
+    {
+      "path": "harvest_templates/xiangsong/ghost-DMPkSQZyj76.png",
+      "reference_spacing": 9.752011117639082,
+      "anchor": [
+        16.07608695652175,
+        8.98913043478261
+      ],
+      "instruments": [
+        "snare"
+      ],
+      "positions": [
+        5
+      ],
+      "threshold": 0.95,
+      "side_columns": [
+        [
+          0,
+          9
+        ],
+        [
+          23,
+          32
+        ]
+      ],
+      "side_min_score": 0.65,
+      "evidence": "Native-resolution initial audit development glyph; >=.95 complete glyph and >=.65 each parenthesis side; fresh disjoint sampled-target audit24/24 positives,10 missed ghosts among24 controls; .eval-cache/pilot_new/xiangsong/audit-ghost-fresh/accuracy.json",
+      "source": {
+        "video": "DMPkSQZyj76",
+        "system": 17,
+        "crop": [
+          1033,
+          47,
+          1065,
+          65
+        ]
+      }
+    }
+  ],
+  "validation": {
+    "audit": ".eval-cache/pilot_new/xiangsong/audit-labels/accuracy.json",
+    "ghost": ".eval-cache/pilot_new/xiangsong/audit-ghost-fresh/accuracy.json",
+    "scope": "Assistant visual target audit only; sealed VAULT, detector-free timing; no independent human review or acoustic fidelity",
+    "accuracy": {
+      "inspected": 81,
+      "correct": 80,
+      "groups": {
+        "filled:5": {
+          "inspected": 8,
+          "correct": 8
+        },
+        "Dd8wm3ThGTL": {
+          "inspected": 17,
+          "correct": 17
+        },
+        "filled:6": {
+          "inspected": 8,
+          "correct": 8
+        },
+        "DMPkSQZyj76": {
+          "inspected": 20,
+          "correct": 20
+        },
+        "filled:7": {
+          "inspected": 8,
+          "correct": 8
+        },
+        "DNz6yi-QMWp": {
+          "inspected": 26,
+          "correct": 25
+        },
+        "cross:10": {
+          "inspected": 8,
+          "correct": 8
+        },
+        "filled:1": {
+          "inspected": 8,
+          "correct": 8
+        },
+        "Dd_S08chzqQ": {
+          "inspected": 18,
+          "correct": 18
+        },
+        "cross:-1": {
+          "inspected": 8,
+          "correct": 8
+        },
+        "circled:9": {
+          "inspected": 8,
+          "correct": 8
+        },
+        "cross:9": {
+          "inspected": 8,
+          "correct": 8
+        },
+        "cross:8": {
+          "inspected": 8,
+          "correct": 8
+        },
+        "filled:3": {
+          "inspected": 8,
+          "correct": 8
+        },
+        "filled:8": {
+          "inspected": 1,
+          "correct": 0
+        }
+      },
+      "errors": [
+        {
+          "id": 49,
+          "predicted": "filled:8",
+          "actual": "slash:8"
+        }
+      ],
+      "confusion": {},
+      "scope": "Assistant native-source/reader visual target audit; detected-head sample, not full-score recall, independent human review, physical cymbal key or acoustic fidelity"
+    },
+    "ghost_accuracy": {
+      "inspected": 48,
+      "correct": 38,
+      "groups": {
+        "False": {
+          "inspected": 24,
+          "correct": 14
+        },
+        "Dd_S08chzqQ": {
+          "inspected": 12,
+          "correct": 7
+        },
+        "True": {
+          "inspected": 24,
+          "correct": 24
+        },
+        "DNz6yi-QMWp": {
+          "inspected": 12,
+          "correct": 10
+        },
+        "DMPkSQZyj76": {
+          "inspected": 12,
+          "correct": 10
+        },
+        "Dd8wm3ThGTL": {
+          "inspected": 12,
+          "correct": 11
+        }
+      },
+      "errors": [
+        {
+          "id": 1,
+          "predicted": false,
+          "actual": true
+        },
+        {
+          "id": 3,
+          "predicted": false,
+          "actual": true
+        },
+        {
+          "id": 7,
+          "predicted": false,
+          "actual": true
+        },
+        {
+          "id": 9,
+          "predicted": false,
+          "actual": true
+        },
+        {
+          "id": 14,
+          "predicted": false,
+          "actual": true
+        },
+        {
+          "id": 21,
+          "predicted": false,
+          "actual": true
+        },
+        {
+          "id": 30,
+          "predicted": false,
+          "actual": true
+        },
+        {
+          "id": 32,
+          "predicted": false,
+          "actual": true
+        },
+        {
+          "id": 33,
+          "predicted": false,
+          "actual": true
+        },
+        {
+          "id": 41,
+          "predicted": false,
+          "actual": true
+        }
+      ],
+      "confusion": {
+        "fn": 10,
+        "tp": 24,
+        "tn": 14
+      },
+      "scope": "Assistant native-source/reader visual target audit; detected-head sample, not full-score recall, independent human review, physical cymbal key or acoustic fidelity"
+    }
+  }
+}

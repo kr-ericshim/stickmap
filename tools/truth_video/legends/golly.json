@@ -148,5 +148,6 @@
     "scope": "Assistant visual audit of detected notation heads; partial positive labels; not recall, listening, or independent human review"
   },
   "staff_y_min_fraction": 0.72,
-  "strict_clef_pair": true
+  "strict_clef_pair": true,
+  "prefer_staff_line_span": true
 }

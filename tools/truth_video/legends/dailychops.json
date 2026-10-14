@@ -2,25 +2,27 @@
   "name": "dailychops",
   "harvest_profile": true,
   "layout": "dailychops",
-  "enabled": false,
-  "legend_confidence": "unverified",
-  "reason": "Disabled: staff drawn over a photo/video background at 6-7 px native spacing (below the 8 px gate) with hundreds of spurious staff candidates (143-174 systems per song, 0 passing staff checks); attack-deficit flag on fk4Uiiw2JMQ. The 8 px gate is not loosened.",
+  "enabled": true,
+  "legend_confidence": "Audited filled core positions in light scrolling/static lessons and bottom white solo overlays; unresolved cymbals and white-overlay flags withheld",
+  "reason": "Legacy Feline native audit retained. New lesson 22/22 and white 44/44 contextual native-pair rechecks; initial target-reading errors retained. White positions0 and4 unverified; new position2 confined to white overlay. All native spacing, motion, timing and phase gates fixed.",
   "min_x_fraction": 0.055,
   "min_confidence": 0.84,
-  "verified_flags": [],
+  "verified_flags": [
+    "ghost"
+  ],
   "open_verified": false,
   "rules": {
     "filled:1": {
       "inst": "kick",
       "confidence": 0.98,
-      "verified": false,
-      "evidence": "candidate only; requires channel-specific visual audit"
+      "verified": true,
+      "evidence": "Paired native/reconstructed head-position audit, 6/6 per position; .eval-cache/reader-repair/daily-native-audit/manual.json. Partial notation convention, no physical tom-size claim."
     },
     "filled:5": {
       "inst": "snare",
       "confidence": 0.98,
-      "verified": false,
-      "evidence": "candidate only; requires channel-specific visual audit"
+      "verified": true,
+      "evidence": "Paired native/reconstructed head-position audit, 6/6 per position; .eval-cache/reader-repair/daily-native-audit/manual.json. Partial notation convention, no physical tom-size claim."
     },
     "filled:2": {
       "inst": "tom",
@@ -31,8 +33,8 @@
     "filled:3": {
       "inst": "tom",
       "confidence": 0.88,
-      "verified": false,
-      "evidence": "candidate only; requires channel-specific visual audit"
+      "verified": true,
+      "evidence": "Paired native/reconstructed head-position audit, 6/6 per position; .eval-cache/reader-repair/daily-native-audit/manual.json. Partial notation convention, no physical tom-size claim."
     },
     "filled:4": {
       "inst": "tom",
@@ -43,14 +45,14 @@
     "filled:6": {
       "inst": "tom",
       "confidence": 0.88,
-      "verified": false,
-      "evidence": "candidate only; requires channel-specific visual audit"
+      "verified": true,
+      "evidence": "Paired native/reconstructed head-position audit, 6/6 per position; .eval-cache/reader-repair/daily-native-audit/manual.json. Partial notation convention, no physical tom-size claim."
     },
     "filled:7": {
       "inst": "tom",
       "confidence": 0.88,
-      "verified": false,
-      "evidence": "candidate only; requires channel-specific visual audit"
+      "verified": true,
+      "evidence": "Paired native/reconstructed head-position audit, 6/6 per position; .eval-cache/reader-repair/daily-native-audit/manual.json. Partial notation convention, no physical tom-size claim."
     },
     "filled:8": {
       "inst": "tom",
@@ -111,5 +113,95 @@
     }
   },
   "small_staff_policy": "Native spacing below 8 px rejected; upscaling is inspection only",
-  "survey_evidence": "truth/harvest/validation/survey-3.jpg"
+  "survey_evidence": "truth/harvest/validation/survey-3.jpg",
+  "scrolling_verified": true,
+  "scroll_clef_omitted_verified": "Feline opening at 10 s and paired native-frame audit confirm a continuous scrolling drum staff without a visible clef in the viewport; applies only to successfully registered light top scrolling blocks. See truth/harvest/READER_REPAIR.md.",
+  "validation": {
+    "audit": ".eval-cache/reader-repair/daily-native-audit/manual.json",
+    "accuracy": {
+      "inspected": 30,
+      "correct": 30,
+      "positions": {
+        "5": {
+          "inspected": 6,
+          "correct": 6
+        },
+        "1": {
+          "inspected": 6,
+          "correct": 6
+        },
+        "3": {
+          "inspected": 6,
+          "correct": 6
+        },
+        "6": {
+          "inspected": 6,
+          "correct": 6
+        },
+        "7": {
+          "inspected": 6,
+          "correct": 6
+        }
+      },
+      "errors": [],
+      "scope": "Fresh paired native-frame/reconstruction visual audit, 30 heads from Feline; predictions hidden; source geometry guides visible; not recall, independent human review or acoustic fidelity."
+    },
+    "initial_diagnostic_audit": ".eval-cache/reader-repair/daily-audit/accuracy.json",
+    "pilot1080": {
+      "lesson_audit": ".eval-cache/pilot1080/audit-lesson-context/accuracy.json",
+      "solo_audit": ".eval-cache/pilot1080/audit-solo-context/accuracy.json",
+      "report": "truth/harvest/PILOT1080.md"
+    }
+  },
+  "ghost_template": {
+    "reference_spacing": 8.921904581597879,
+    "anchor": [
+      15.594594594594582,
+      11.445945945945951
+    ],
+    "path": "harvest_templates/dailychops/ghost.png",
+    "instruments": [
+      "tom"
+    ],
+    "positions": [
+      7
+    ],
+    "threshold": 0.95,
+    "side_columns": [
+      [
+        0,
+        10
+      ],
+      [
+        24,
+        31
+      ]
+    ],
+    "side_min_score": 0.65,
+    "evidence": "Native Feline frame 2934 (development), source parentheses individually checked. Two other reconstructed positives and regular-note controls checked in .eval-cache/reader-repair/ghost-audit. Positive-only and within one video."
+  },
+  "white_overlay_verified": "Native Eric Moore/Larnell pairs: 30/30 existing core-position heads contextually confirmed; first decisions retained. Only lowest white drum staff and fixed red centre cursor; .eval-cache/pilot1080/audit-solo-context/",
+  "white_overlay_clef_omitted_verified": "The audited white drum staff may scroll its clef out of view. Continuations require successful local registration and stable native staff_geometry proof throughout at least five samples; legacy source opening_clef proof remains supported. Native key evidence: .eval-cache/pilot1080/white-clef-audit.json. Local geometry guard and source checks: truth/harvest/READER_FIXES.md.",
+  "split_scroll_discontinuities": true,
+  "strict_clef_pair": true,
+  "prefer_staff_line_span": true,
+  "variants": {
+    "static_light": {
+      "min_x_fraction": 0.01,
+      "verified_flags": [],
+      "ghost_template": null
+    },
+    "white_overlay": {
+      "verified_flags": [],
+      "ghost_template": null,
+      "rules": {
+        "filled:2": {
+          "inst": "tom",
+          "confidence": 0.88,
+          "verified": true,
+          "evidence": "Six native white-overlay staff-position-2 heads across Eric/Larnell; contextual target recheck in .eval-cache/pilot1080/audit-solo-context; tom position only, no size claim"
+        }
+      }
+    }
+  }
 }

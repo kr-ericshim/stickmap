@@ -8,7 +8,9 @@
   "min_x_fraction": 0.055,
   "min_confidence": 0.84,
   "verified_flags": [],
-  "open_verified": false,
+  "open_verified": true,
+  "open_evidence": "Open hi-hat is a small 'o' above the stem/beam in two glyphs (round circle, tall '0'); channel templates harvest_marks/atthedrum/open_round.png and open_oval.png built from even-index non-batch2 songs. Offline check on saved system images (odd-index unseen songs): ring-shaped upper marks caught 671/681 (98.5%); 30 random new opens 0 errors; 40 random opens without a ring label 0/40 non-'o' (beam-touching real 'o'). User listening 2026-10-04, 4 songs / 7 spots all open (93TM0PKesfs 63-69 s, 97-100 s; 0MiLvEDSN60 92.7/96.0 s, 148.7/152.3 s; s-Pk_bnLMxg 29.1/32.7 s; erh3OW01F2k 95.5-97.8 s, 164.6-167.0 s). Definition {closed, open incl. half-open}. Scratch: WSL scratch/sx_diag/ath_marks2/.",
+  "mark_template_dir": "harvest_marks/atthedrum",
   "rules": {
     "filled:1": {
       "inst": "kick",
@@ -100,8 +102,8 @@
     "cross:8": {
       "inst": "ride",
       "confidence": 0.95,
-      "verified": false,
-      "evidence": "candidate only; requires channel-specific visual audit"
+      "verified": true,
+      "evidence": "Ride audit 2026-10-04: cross on the top staff line (F5, MuseScore default Ride 51), distinct from verified hi-hat cross:9 and verified crash cross:10 (ledger-line cross) which co-occur in all 8 songs; reader heads checked on native system crops of 6 songs (YbMTrzQJTm4, p7J0T8SLumc, 7D5NY0YO4vc, Krigj_C0jug, 93TM0PKesfs, ktugrPQ4Yfg; scratch/sx_diag/ridebell/atthedrum/*.png on WSL); user listening confirmed ride at YbMTrzQJTm4 365-372 s and p7J0T8SLumc 70-83 s (2026-10-04); 8 songs >= songs_required."
     },
     "diamond:8": {
       "inst": "ride_bell",

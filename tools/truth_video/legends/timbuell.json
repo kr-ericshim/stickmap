@@ -1,0 +1,84 @@
+{
+  "name": "timbuell",
+  "harvest_profile": true,
+  "layout": "kr_strip",
+  "enabled": true,
+  "min_x_fraction": 0.02,
+  "min_confidence": 0.84,
+  "verified_flags": [],
+  "open_verified": false,
+  "rules": {
+    "filled:1": {
+      "inst": "kick",
+      "confidence": 0.98,
+      "verified": true,
+      "evidence": "Six confirmed native/reader targets at this staff position in .eval-cache/pilot_new/audit-timbuell; initial and contextual decisions retained"
+    },
+    "filled:2": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": false,
+      "evidence": "candidate; offline channel-specific crop audit pending"
+    },
+    "filled:3": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": true,
+      "evidence": "Six confirmed native/reader targets at this staff position in .eval-cache/pilot_new/audit-timbuell; initial and contextual decisions retained"
+    },
+    "filled:4": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": false,
+      "evidence": "candidate; offline channel-specific crop audit pending"
+    },
+    "filled:5": {
+      "inst": "snare",
+      "confidence": 0.98,
+      "verified": true,
+      "evidence": "Six confirmed native/reader targets at this staff position in .eval-cache/pilot_new/audit-timbuell; initial and contextual decisions retained"
+    },
+    "filled:6": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": true,
+      "evidence": "Six confirmed native/reader targets at this staff position in .eval-cache/pilot_new/audit-timbuell; initial and contextual decisions retained"
+    },
+    "filled:7": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": true,
+      "evidence": "Six confirmed native/reader targets at this staff position in .eval-cache/pilot_new/audit-timbuell; initial and contextual decisions retained"
+    },
+    "filled:8": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": false,
+      "evidence": "candidate; offline channel-specific crop audit pending"
+    }
+  },
+  "strict_clef_pair": true,
+  "prefer_staff_line_span": true,
+  "score_region": [
+    0,
+    0.74,
+    1,
+    1
+  ],
+  "foreground": "white_strip",
+  "cursor_style": "red_block",
+  "score_variants": [
+    {"foreground": "white_strip", "cursor_style": "red_block"},
+    {"foreground": "dark_strip", "cursor_style": "red_block"}
+  ],
+  "probe_scrolling": false,
+  "small_staff_policy": "Native spacing below 8 px rejected; inspection enlargement only",
+  "legend_confidence": "Audited partial filled kick/snare/tom positions; no physical kit/cymbal key",
+  "reason": "30/30 contextual native-pair label recheck; initial manual decisions retained",
+  "validation": {
+    "audit": ".eval-cache/pilot_new/audit-timbuell/accuracy.json",
+    "initial": ".eval-cache/pilot_new/audit-timbuell/accuracy-initial.json",
+    "scope": "Contextual native recheck, not a fresh blind accuracy estimate"
+  },
+  "cursor_validation": ".eval-cache/pilot_new/cursor-audit.json"
+}

@@ -1,0 +1,78 @@
+{
+  "name": "copydrum",
+  "harvest_profile": true,
+  "layout": "kr_strip",
+  "enabled": true,
+  "min_x_fraction": 0.02,
+  "min_confidence": 0.84,
+  "verified_flags": [],
+  "open_verified": false,
+  "rules": {
+    "filled:1": {
+      "inst": "kick",
+      "confidence": 0.98,
+      "verified": true,
+      "evidence": "Six source/reader heads at this position across two pilot videos: .eval-cache/pilot_new/audit-copydrum/accuracy.json"
+    },
+    "filled:2": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": false,
+      "evidence": "candidate; offline channel-specific crop audit pending"
+    },
+    "filled:3": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": true,
+      "evidence": "Six source/reader heads at this position across two pilot videos: .eval-cache/pilot_new/audit-copydrum/accuracy.json"
+    },
+    "filled:4": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": false,
+      "evidence": "candidate; offline channel-specific crop audit pending"
+    },
+    "filled:5": {
+      "inst": "snare",
+      "confidence": 0.98,
+      "verified": true,
+      "evidence": "Six source/reader heads at this position across two pilot videos: .eval-cache/pilot_new/audit-copydrum/accuracy.json"
+    },
+    "filled:6": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": true,
+      "evidence": "Six source/reader heads at this position across two pilot videos: .eval-cache/pilot_new/audit-copydrum/accuracy.json"
+    },
+    "filled:7": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": true,
+      "evidence": "Six source/reader heads at this position across two pilot videos: .eval-cache/pilot_new/audit-copydrum/accuracy.json"
+    },
+    "filled:8": {
+      "inst": "tom",
+      "confidence": 0.88,
+      "verified": false,
+      "evidence": "candidate; offline channel-specific crop audit pending"
+    }
+  },
+  "strict_clef_pair": true,
+  "prefer_staff_line_span": true,
+  "score_region": [
+    0,
+    0.73,
+    1,
+    1
+  ],
+  "foreground": null,
+  "cursor_style": "chromatic",
+  "probe_scrolling": false,
+  "small_staff_policy": "Native spacing below 8 px rejected; inspection enlargement only",
+  "legend_confidence": "Partial filled kick/snare/tom positions; native target audit 30/30",
+  "reason": "Channel-specific native/reader crop audit; no cymbal, tom-size or technique key claimed",
+  "validation": {
+    "audit": ".eval-cache/pilot_new/audit-copydrum/accuracy.json",
+    "scope": "Assistant source crop audit; includes clef-rejected clear-staff crops on COPYDRUM/Nyenty; clef gates remain mandatory"
+  }
+}
