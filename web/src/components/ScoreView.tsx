@@ -1,5 +1,5 @@
 import { OpenSheetMusicDisplay, type VexFlowGraphicalNote } from 'opensheetmusicdisplay'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import type { Timeline } from '../timeline'
 
 type Box = { x: number; y: number; width: number; height: number }
@@ -41,12 +41,34 @@ function parenthesize(head: SVGGraphicsElement) {
 }
 const STAFF_PAD = 2.5 // units above and below the staff that count as the bar
 
+const ZOOM_MIN = 0.5
+const ZOOM_MAX = 2
+const ZOOM_STEP = 0.1
+const ZOOM_KEY = 'groovemap.scoreZoom'
+
+function clampZoom(zoom: number) {
+  return Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, Math.round(zoom * 100) / 100))
+}
+
+function savedZoom() {
+  try {
+    const value = Number(window.localStorage.getItem(ZOOM_KEY))
+    return Number.isFinite(value) && value > 0 ? clampZoom(value) : 1
+  } catch {
+    return 1
+  }
+}
+
 /** Engraved score with a playhead that follows the recording. */
 export function ScoreView({ xml, timeline, clock, playing, onSeek }: Props) {
   const hostRef = useRef<HTMLDivElement>(null)
   const playheadRef = useRef<HTMLDivElement>(null)
   const engraving = useRef<Engraving | null>(null)
   const [failure, setFailure] = useState<string | null>(null)
+  const [zoom, setZoom] = useState(savedZoom)
+  const zoomRef = useRef(zoom)
+  // The live engraver, so a zoom change can re-render without reloading the score.
+  const rezoom = useRef<((zoom: number) => void) | null>(null)
 
   useEffect(() => {
     const host = hostRef.current!
@@ -68,6 +90,9 @@ export function ScoreView({ xml, timeline, clock, playing, onSeek }: Props) {
     })
     // Flat beams, as in the PDF: a beam's height should not jump with the drums under it.
     osmd.EngravingRules.FlatBeams = true
+    osmd.EngravingRules.TupletsBracketedUseXMLValue = true
+    osmd.EngravingRules.TupletNumberLimitConsecutiveRepetitions = false
+    osmd.zoom = zoomRef.current
 
     const engrave = () => {
       osmd.render()
@@ -118,7 +143,12 @@ export function ScoreView({ xml, timeline, clock, playing, onSeek }: Props) {
     osmd
       .load(xml.replaceAll(GHOST_HEAD, `${GHOST_HEAD} color="${GHOST_TAG}"`))
       .then(() => {
-        if (!cancelled) engrave()
+        if (cancelled) return
+        engrave()
+        rezoom.current = (next) => {
+          osmd.zoom = next
+          engrave()
+        }
       })
       .catch((error: unknown) => {
         if (!cancelled) setFailure(error instanceof Error ? error.message : String(error))
@@ -135,6 +165,7 @@ export function ScoreView({ xml, timeline, clock, playing, onSeek }: Props) {
 
     return () => {
       cancelled = true
+      rezoom.current = null
       observer.disconnect()
       window.clearTimeout(timer)
       engraving.current = null
@@ -142,9 +173,40 @@ export function ScoreView({ xml, timeline, clock, playing, onSeek }: Props) {
     }
   }, [xml])
 
+  // Bars move when the zoom changes; the playhead follows from the clock, so the place in the song is kept.
+  useEffect(() => {
+    if (zoomRef.current === zoom) return
+    zoomRef.current = zoom
+    try {
+      window.localStorage.setItem(ZOOM_KEY, String(zoom))
+    } catch {
+      // Storage may be unavailable; the zoom still applies for this visit.
+    }
+    rezoom.current?.(zoom)
+  }, [zoom])
+
+  const zoomBy = useCallback((steps: number) => {
+    setZoom((current) => (steps === 0 ? 1 : clampZoom(current + steps * ZOOM_STEP)))
+  }, [])
+
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      if (event.ctrlKey || event.metaKey || event.altKey) return
+      const target = event.target as HTMLElement | null
+      if (target?.closest?.('input, textarea, select, [contenteditable="true"]')) return
+      const steps = event.key === '+' || event.key === '=' ? 1 : event.key === '-' ? -1 : event.key === '0' ? 0 : null
+      if (steps === null) return
+      event.preventDefault()
+      zoomBy(steps)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [zoomBy])
+
   useEffect(() => {
     let frame = 0
     let shownLine = NaN
+    let shownZoom = zoomRef.current
 
     const follow = () => {
       frame = requestAnimationFrame(follow)
@@ -174,7 +236,9 @@ export function ScoreView({ xml, timeline, clock, playing, onSeek }: Props) {
       playhead.style.transform = `translate(${x}px, ${box.y}px)`
       playhead.style.height = `${box.height}px`
       playhead.style.opacity = '1'
-      if (box.y !== shownLine) {
+      // After a zoom the line moved even if its y did not: bring the playhead back into view.
+      if (box.y !== shownLine || shownZoom !== zoomRef.current) {
+        shownZoom = zoomRef.current
         playhead.scrollIntoView({ block: 'center', behavior: playing && !Number.isNaN(shownLine) ? 'smooth' : 'auto' })
         shownLine = box.y
       }
@@ -197,15 +261,51 @@ export function ScoreView({ xml, timeline, clock, playing, onSeek }: Props) {
   }
 
   return (
-    <div className="relative cursor-pointer" onClick={seekToClick}>
-      <div ref={hostRef} className="relative" />
-      <div
-        ref={playheadRef}
-        className="pointer-events-none absolute top-0 left-0 -ml-px w-0.5 rounded-full bg-brass opacity-0"
-      />
-      {failure && (
-        <p className="p-6 text-alarm">악보를 그리지 못했습니다: {failure}</p>
-      )}
+    <div>
+      <div className="mb-2 flex items-center justify-end gap-1 text-xs text-ink" role="group" aria-label="악보 확대">
+        <button
+          type="button"
+          onClick={() => zoomBy(-1)}
+          disabled={zoom <= ZOOM_MIN}
+          title="축소 (-)"
+          aria-label="축소"
+          className={ZOOM_BUTTON}
+        >
+          −
+        </button>
+        <button
+          type="button"
+          onClick={() => zoomBy(0)}
+          title="원래 크기 (0)"
+          aria-label={`확대 ${Math.round(zoom * 100)}%, 누르면 100%로`}
+          className="h-7 min-w-14 rounded-full px-2 font-mono tabular-nums hover:bg-ink/10"
+        >
+          {Math.round(zoom * 100)}%
+        </button>
+        <button
+          type="button"
+          onClick={() => zoomBy(1)}
+          disabled={zoom >= ZOOM_MAX}
+          title="확대 (+)"
+          aria-label="확대"
+          className={ZOOM_BUTTON}
+        >
+          +
+        </button>
+      </div>
+      <div className="relative cursor-pointer" onClick={seekToClick}>
+        <div ref={hostRef} className="relative" />
+        <div
+          ref={playheadRef}
+          className="pointer-events-none absolute top-0 left-0 -ml-px w-0.5 rounded-full bg-brass opacity-0"
+        />
+        {failure && (
+          <p className="p-6 text-alarm">악보를 그리지 못했습니다: {failure}</p>
+        )}
+      </div>
     </div>
   )
 }
+
+const ZOOM_BUTTON =
+  'flex h-7 w-7 items-center justify-center rounded-full bg-ink/6 text-sm font-medium hover:bg-ink/10 disabled:opacity-40 disabled:hover:bg-ink/6'

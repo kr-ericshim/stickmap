@@ -1,5 +1,6 @@
 import json
 import os
+import subprocess
 import threading
 import time
 import wave
@@ -8,12 +9,13 @@ from pathlib import Path
 
 import numpy as np
 import pytest
+import soundfile as sf
 from fastapi.testclient import TestClient
 
 from groovemap import fetch, fingerprint, library, pipeline, render
 from groovemap.fetch import SongMeta
 from groovemap.score import Bar, Score
-from groovemap.server import STAGES, create_app
+from groovemap.server import BUSY, STAGES, create_app, humanize_error
 
 
 def write_wav(path):
@@ -105,11 +107,11 @@ def fakes(monkeypatch):
     return calls
 
 
-def finished(client, job):
-    deadline = time.monotonic() + 5
+def finished(client, job, timeout=5):
+    deadline = time.monotonic() + timeout
     while time.monotonic() < deadline:
         current = client.get(f"/api/jobs/{job['id']}").json()
-        if current["status"] in ("done", "error"):
+        if current["status"] in ("done", "error", "cancelled"):
             return current
         time.sleep(.01)
     pytest.fail("job did not finish")
@@ -274,7 +276,8 @@ def test_job_error_preserves_running_stage(tmp_path, monkeypatch, fakes, failure
     with TestClient(create_app(tmp_path)) as client:
         job = client.post("/api/jobs", json={"source": "https://youtube.com/watch?v=video123"}).json()
         result = finished(client, job)
-        assert result["status"] == "error" and "failed" in result["error"]
+        assert result["status"] == "error" and "failed" in result["error_detail"]
+        assert result["error"] == "채보 중 오류가 났습니다"
         assert result["stages"][STAGES.index(failure)]["status"] == "running"
         assert result["stages"][-1]["status"] == "pending"
         assert not any(tmp_path.glob("*/options.json"))
@@ -314,7 +317,8 @@ def test_jobs_are_fifo_and_keep_last_20_finished(tmp_path, fakes):
         sources.append(str(source))
     with TestClient(create_app(tmp_path / "songs")) as client:
         jobs = [client.post("/api/jobs", json={"source": source}).json() for source in sources]
-        assert finished(client, jobs[-1])["status"] == "done"
+        # save_options re-fingerprints the source (~0.5 s) for every one of the 22 jobs
+        assert finished(client, jobs[-1], timeout=60)["status"] == "done"
         deadline = time.monotonic() + 5
         while len(retained := client.get("/api/jobs").json()) != 20:
             assert time.monotonic() < deadline
@@ -349,13 +353,192 @@ def test_worker_and_requantize_do_not_overlap(tmp_path, monkeypatch, fakes):
         try:
             assert entered.wait(5)
             future = pool.submit(client.post, "/api/songs/groove/score", json={"grid": 8})
-            assert not second.wait(.1)
+            busy = future.result(timeout=5)  # refused at once instead of waiting behind the job
+            assert busy.status_code == 409 and busy.json()["detail"] == BUSY
+            assert not second.is_set()
         finally:
             release.set()
-        assert future.result(timeout=5).status_code == 200
         assert finished(client, job)["status"] == "done"
+        assert client.post("/api/songs/groove/score", json={"grid": 8}).status_code == 200
         assert second.is_set()
         assert client.get("/api/songs/groove").json()["options"]["grid"] == 8
+
+
+@pytest.mark.parametrize("request_args", [
+    ("post", "/api/songs/groove/score", {"json": {"grid": 8}}),
+    ("get", "/api/songs/groove/sounds", {}),
+    ("get", "/api/songs/groove/audio?stem=nodrums", {}),
+    ("get", "/api/songs/groove/download/pdf", {}),
+    ("delete", "/api/songs/groove/cache", {}),
+])
+def test_settings_endpoints_refuse_while_a_job_runs(tmp_path, monkeypatch, fakes, request_args):
+    songs = tmp_path / "songs"
+    make_song(songs)
+    entered, release = threading.Event(), threading.Event()
+    fake_run = pipeline.run
+    monkeypatch.setattr(pipeline, "run", lambda *a, **k: (entered.set(), release.wait(5), fake_run(*a, **k))[2])
+    method, url, kwargs = request_args
+    with TestClient(create_app(songs)) as client:
+        job = client.post("/api/songs/groove/transcribe").json()
+        try:
+            assert entered.wait(5)
+            response = getattr(client, method)(url, **kwargs)
+            assert response.status_code == 409 and response.json()["detail"] == BUSY
+        finally:
+            release.set()
+        assert finished(client, job)["status"] == "done"
+
+
+def test_practice_reads_keep_working_while_a_job_runs(tmp_path, monkeypatch, fakes):
+    songs = tmp_path / "songs"
+    song_dir = make_song(songs) or songs / "groove"
+    pdf = song_dir / f"{song_dir.name}.pdf"
+    pdf.write_bytes(b"%PDF-1.4 cached")
+    xml = song_dir / f"{song_dir.name}.musicxml"
+    if xml.is_file():
+        os.utime(pdf, (xml.stat().st_mtime + 10, xml.stat().st_mtime + 10))
+    entered, release = threading.Event(), threading.Event()
+    fake_run = pipeline.run
+    monkeypatch.setattr(pipeline, "run", lambda *a, **k: (entered.set(), release.wait(5), fake_run(*a, **k))[2])
+    with TestClient(create_app(songs)) as client:
+        job = client.post("/api/songs/groove/transcribe").json()
+        try:
+            assert entered.wait(5)
+            assert client.get("/api/songs/groove/beats").status_code != 409
+            if xml.is_file():
+                response = client.get("/api/songs/groove/download/pdf")
+                assert response.status_code == 200 and response.content == b"%PDF-1.4 cached"
+        finally:
+            release.set()
+        assert finished(client, job)["status"] == "done"
+
+
+def gate(monkeypatch, target, name):
+    """Make target.name wait for release; entered is set once it is called."""
+    entered, release = threading.Event(), threading.Event()
+    original = getattr(target, name)
+
+    def gated(*args, **kwargs):
+        entered.set()
+        assert release.wait(5)
+        return original(*args, **kwargs)
+
+    monkeypatch.setattr(target, name, gated)
+    return entered, release
+
+
+def test_cancel_queued_job(tmp_path, monkeypatch, fakes):
+    songs = tmp_path / "songs"
+    make_song(songs)
+    entered, release = gate(monkeypatch, pipeline, "run")
+    with TestClient(create_app(songs)) as client:
+        first = client.post("/api/songs/groove/transcribe").json()
+        try:
+            assert entered.wait(5)
+            upload = client.post("/api/upload", files={"file": ("take.wav", b"audio")}).json()
+            cancelled = client.delete(f"/api/jobs/{upload['id']}")
+            assert cancelled.status_code == 200 and cancelled.json()["status"] == "cancelled"
+        finally:
+            release.set()
+        assert finished(client, first)["status"] == "done"
+        assert finished(client, upload)["status"] == "cancelled"
+        assert len(fakes) == 1  # the cancelled upload never ran
+        assert not Path(upload["source"]).parent.exists()
+        assert [song["slug"] for song in client.get("/api/songs").json()] == ["groove"]
+        # cancelling again is harmless; finished jobs and unknown ids are refused
+        assert client.delete(f"/api/jobs/{upload['id']}").status_code == 200
+        assert client.delete(f"/api/jobs/{first['id']}").status_code == 409
+        assert client.delete("/api/jobs/nope").status_code == 404
+
+
+def test_cancel_running_existing_song_keeps_earlier_result(tmp_path, monkeypatch, fakes):
+    songs = tmp_path / "songs"
+    path = make_song(songs)
+    score = (path / "score.json").read_text()
+    entered, release = threading.Event(), threading.Event()
+    fake_run = pipeline.run
+
+    def slow(path, meta, opts, log=print, progress=None):
+        progress("separate", "cached", None)
+        entered.set()
+        assert release.wait(5)
+        progress("beats", "running", None)  # the next stage boundary: the cancel lands here
+        pytest.fail("cancelled job must stop before the next stage")
+
+    monkeypatch.setattr(pipeline, "run", slow)
+    with TestClient(create_app(songs)) as client:
+        job = client.post("/api/songs/groove/transcribe", json={"grid": 8}).json()
+        try:
+            assert entered.wait(5)
+            response = client.delete(f"/api/jobs/{job['id']}")
+            assert response.status_code == 200 and response.json()["status"] == "running"
+        finally:
+            release.set()
+        result = finished(client, job)
+        assert result["status"] == "cancelled" and result["error"] is None
+        assert (path / "score.json").read_text() == score
+        assert client.get("/api/songs/groove").json()["options"]["grid"] == 16
+        # the lock is free again: settings and new jobs work
+        monkeypatch.setattr(pipeline, "run", fake_run)
+        assert client.post("/api/songs/groove/score", json={"grid": 8}).status_code == 200
+        assert finished(client, client.post("/api/songs/groove/transcribe").json())["status"] == "done"
+
+
+def test_cancel_running_new_song_removes_its_directory(tmp_path, monkeypatch, fakes):
+    entered, release = gate(monkeypatch, pipeline, "run")
+    with TestClient(create_app(tmp_path)) as client:
+        job = client.post("/api/jobs", json={"source": "https://youtube.com/watch?v=video123"}).json()
+        try:
+            assert entered.wait(5)
+            assert client.delete(f"/api/jobs/{job['id']}").status_code == 200
+        finally:
+            release.set()
+        assert finished(client, job)["status"] == "cancelled"
+        assert client.get("/api/songs").json() == []
+        assert not (tmp_path / "youtube-groove-video123").exists()
+
+
+@pytest.mark.parametrize(("raw", "message"), [
+    ("yt-dlp failed: ERROR: [youtube] abc: Private video. Sign in if you've been granted access", "비공개이거나 삭제된 영상입니다"),
+    ("yt-dlp failed: ERROR: [youtube] abc: Video unavailable", "비공개이거나 삭제된 영상입니다"),
+    ("ERROR: The uploader has not made this video available in your country", "이 지역에서 볼 수 없는 영상입니다"),
+    ("ERROR: Sign in to confirm your age. This video may be inappropriate for some users.",
+     "로그인이나 연령 확인이 필요한 영상이라 받을 수 없습니다"),
+    ("ERROR: Unable to download webpage: <urlopen error [Errno 8] nodename nor servname provided>",
+     "네트워크에 연결할 수 없습니다"),
+    ("ffmpeg failed: input.wav: Invalid data found when processing input", "오디오를 읽지 못했습니다"),
+    ("yt-dlp failed: something odd", "영상을 받지 못했습니다"),
+    ("CUDA error: out of memory " + "x" * 400, "채보 중 오류가 났습니다"),
+])
+def test_job_errors_are_human_readable(raw, message):
+    error = fetch.FetchError(raw) if "failed" in raw else RuntimeError(raw)
+    text, detail = humanize_error(error)
+    assert text == message and detail == " ".join(raw.split())
+
+
+def test_eta_from_finished_jobs(tmp_path, monkeypatch, fakes):
+    songs = tmp_path / "songs"
+    make_song(songs)
+    with TestClient(create_app(songs)) as client:
+        first = client.post("/api/songs/groove/transcribe").json()
+        assert first["eta_seconds"] is None  # no history yet
+        done = finished(client, first)
+        assert done["started_at"] is not None and done["finished_at"] >= done["started_at"]
+        assert done["audio_seconds"] > 0
+        entered, release = gate(monkeypatch, pipeline, "run")
+        running = client.post("/api/songs/groove/transcribe").json()
+        try:
+            assert entered.wait(5)
+            queued = client.post("/api/songs/groove/transcribe", json={"grid": 8}).json()
+            url = client.post("/api/jobs", json={"source": "https://youtube.com/watch?v=other"}).json()
+            jobs = {job["id"]: job for job in client.get("/api/jobs").json()}
+            assert jobs[queued["id"]]["queue_position"] == 1 and jobs[url["id"]]["queue_position"] == 2
+            assert jobs[queued["id"]]["eta_seconds"] is not None and jobs[queued["id"]]["eta_seconds"] >= 0
+            assert jobs[url["id"]]["eta_seconds"] is None  # duration unknown before download
+            assert jobs[done["id"]]["eta_seconds"] is None
+        finally:
+            release.set()
+        finished(client, url)
 
 
 def test_audio_range_and_newest_drum_stem(tmp_path):
@@ -375,6 +558,177 @@ def test_audio_range_and_newest_drum_stem(tmp_path):
         assert client.get("/api/songs/groove/audio?stem=drums").status_code == 404
 
 
+@pytest.mark.parametrize("stem_frames,stem_channels", [(3, 1), (8, 2)])
+def test_backing_track_keeps_mix_length_and_channels(tmp_path, stem_frames, stem_channels):
+    sf.write(tmp_path / "audio.wav", np.full((5, 2), .6), 8000, subtype="FLOAT")
+    sf.write(tmp_path / "drums.htdemucs.wav", np.full((stem_frames, stem_channels), .2), 8000, subtype="FLOAT")
+    samples, sr = library._backing_samples(tmp_path / "audio.wav", tmp_path / "drums.htdemucs.wav")
+    assert sr == 8000 and samples.shape == (5, 2)
+    assert np.allclose(samples[:min(5, stem_frames)], .4, atol=1 / 32768)
+    assert np.allclose(samples[stem_frames:], .6, atol=1 / 32768)
+
+
+@pytest.mark.parametrize("sr,stem_sr", [(8000, 16000), (16000, 8000)])
+def test_backing_track_resamples_without_shifting_time(tmp_path, sr, stem_sr):
+    times = np.arange(sr) / sr
+    backing = .2 * np.sin(2 * np.pi * 200 * times)
+    drums = .3 * np.sin(2 * np.pi * 400 * times)
+    sf.write(tmp_path / "audio.wav", backing + drums, sr, subtype="FLOAT")
+    stem = .3 * np.sin(2 * np.pi * 400 * np.arange(stem_sr) / stem_sr)
+    sf.write(tmp_path / "drums.htdemucs.wav", np.stack([stem, stem], axis=1), stem_sr, subtype="FLOAT")
+    samples, result_sr = library._backing_samples(tmp_path / "audio.wav", tmp_path / "drums.htdemucs.wav")
+    assert result_sr == sr and samples.shape == (sr, 1)
+    assert np.allclose(samples[64:-64, 0], backing[64:-64], atol=.001)
+
+
+def test_backing_track_scales_peaks_and_publishes_atomically(tmp_path, monkeypatch):
+    sf.write(tmp_path / "audio.wav", [[.9, .4], [-.9, -.4]], 8000, subtype="FLOAT")
+    sf.write(tmp_path / "drums.htdemucs.wav", [[-.9, .2], [.9, -.2]], 8000, subtype="FLOAT")
+    samples, _ = library._backing_samples(tmp_path / "audio.wav", tmp_path / "drums.htdemucs.wav")
+    assert np.allclose(samples, [[.999, .111], [-.999, -.111]], atol=1 / 32768)
+    target = library.backing_track(tmp_path)
+    original = target.read_bytes()
+    os.utime(target, ns=(1, 1))
+
+    def broken(cmd, **kwargs):
+        Path(cmd[-1]).write_bytes(b"partial audio")
+        raise subprocess.CalledProcessError(1, cmd)
+
+    monkeypatch.setattr(library.subprocess, "run", broken)
+    with pytest.raises(fetch.FetchError, match="MR compression failed"):
+        library.backing_track(tmp_path)
+    assert target.read_bytes() == original
+    assert not list(tmp_path.glob(".part.*"))
+
+
+@pytest.mark.parametrize("source,value,expected", [("audio.wav", .7, .5), ("drums.htdemucs.wav", .3, .3)])
+def test_backing_track_endpoint_range_cache_and_refresh(tmp_path, source, value, expected):
+    path = make_song(tmp_path)
+    wave = np.sin(2 * np.pi * 440 * np.arange(44100) / 44100)
+    sf.write(path / "audio.wav", np.stack([wave, wave], axis=1) * .6, 44100, subtype="FLOAT")
+    sf.write(path / "drums.htdemucs.wav", np.stack([wave, wave], axis=1) * .2, 44100, subtype="FLOAT")
+    target = path / "nodrums.htdemucs.m4a"
+
+    def decoded():
+        raw = subprocess.run(
+            ["ffmpeg", "-v", "error", "-i", str(target), "-f", "f32le", "-"],
+            capture_output=True, check=True,
+        ).stdout
+        return np.frombuffer(raw, dtype="<f4").reshape(-1, 2)[:44100, 0]
+
+    with TestClient(create_app(tmp_path)) as client:
+        assert client.get("/api/songs/groove").json()["has_mr"] is True
+        response = client.get("/api/songs/groove/audio?stem=nodrums")
+        assert response.status_code == 200 and response.headers["content-type"] == "audio/mp4"
+        assert response.content == target.read_bytes()
+        assert np.sqrt(np.mean((decoded()[2048:-2048] - wave[2048:-2048] * .4) ** 2)) < .015
+        assert target.stat().st_size < (path / "audio.wav").stat().st_size / 5
+        duration = subprocess.run(
+            ["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", str(target)],
+            capture_output=True, text=True, check=True,
+        ).stdout
+        assert float(duration) == pytest.approx(1, abs=.001)
+        cached_at = target.stat().st_mtime_ns
+        response = client.get("/api/songs/groove/audio?stem=nodrums", headers={"Range": "bytes=0-15"})
+        assert response.status_code == 206 and response.content == target.read_bytes()[:16]
+        assert response.headers["content-range"].startswith("bytes 0-15/")
+        tail = client.get("/api/songs/groove/audio?stem=nodrums", headers={"Range": "bytes=-16"})
+        assert tail.status_code == 206 and tail.content == target.read_bytes()[-16:]
+        assert client.get("/api/songs/groove/audio?stem=nodrums", headers={"Range": "bytes=9999999-"}).status_code == 416
+        assert target.stat().st_mtime_ns == cached_at
+        os.utime(target, ns=(1, 1))
+        sf.write(path / source, np.stack([wave, wave], axis=1) * value, 44100, subtype="FLOAT")
+        assert client.get("/api/songs/groove/audio?stem=nodrums").status_code == 200
+        assert np.sqrt(np.mean((decoded()[2048:-2048] - wave[2048:-2048] * expected) ** 2)) < .015
+        (path / "drums.htdemucs.wav").unlink()
+        write_wav(path / "drums.htdemucs_ft.wav")
+        assert client.get("/api/songs/groove/audio?stem=nodrums").status_code == 404
+        assert client.get("/api/songs/groove").json()["has_mr"] is False
+
+
+def test_backing_track_migrates_legacy_wav_and_falls_back_on_encoding_failure(tmp_path, monkeypatch):
+    path = make_song(tmp_path)
+    legacy = path / "nodrums.htdemucs.wav"
+    write_wav(legacy)
+    original = legacy.read_bytes()
+    real_run = subprocess.run
+
+    def broken(cmd, **kwargs):
+        Path(cmd[-1]).write_bytes(b"partial audio")
+        raise subprocess.CalledProcessError(1, cmd)
+
+    monkeypatch.setattr(library.subprocess, "run", broken)
+    with TestClient(create_app(tmp_path)) as client:
+        response = client.get("/api/songs/groove/audio?stem=nodrums", headers={"Range": "bytes=0-15"})
+        assert response.status_code == 206 and response.headers["content-type"] == "audio/wav"
+        assert response.content == original[:16]
+        assert legacy.read_bytes() == original and not list(path.glob(".part.*"))
+        monkeypatch.setattr(library.subprocess, "run", real_run)
+        assert client.get("/api/songs/groove/audio?stem=nodrums").headers["content-type"] == "audio/mp4"
+        assert not legacy.exists()
+        assert (path / "nodrums.htdemucs.m4a").is_file()
+        assert not list(path.glob(".part.*"))
+
+
+def test_backing_track_encoding_failure_without_valid_legacy_returns_503(tmp_path, monkeypatch):
+    path = make_song(tmp_path)
+    write_wav(path / "nodrums.htdemucs.wav")
+    os.utime(path / "nodrums.htdemucs.wav", ns=(1, 1))
+
+    def missing(cmd, **kwargs):
+        raise FileNotFoundError("ffmpeg")
+
+    monkeypatch.setattr(library.subprocess, "run", missing)
+    with TestClient(create_app(tmp_path)) as client:
+        response = client.get("/api/songs/groove/audio?stem=nodrums")
+        assert response.status_code == 503 and "ffmpeg" in response.json()["detail"]
+        assert not (path / "nodrums.htdemucs.m4a").exists()
+
+
+def test_compressed_backing_track_keeps_attack_times(tmp_path):
+    sr = 44100
+    mix = np.zeros(sr, dtype=np.float32)
+    attacks = [int(.237 * sr), int(.743 * sr)]
+    mix[attacks] = [.6, -.8]
+    sf.write(tmp_path / "audio.wav", mix, sr, subtype="FLOAT")
+    sf.write(tmp_path / "drums.htdemucs.wav", np.zeros(sr), sr, subtype="FLOAT")
+    target = library.backing_track(tmp_path)
+    raw = subprocess.run(
+        ["ffmpeg", "-v", "error", "-i", str(target), "-f", "f32le", "-"],
+        capture_output=True, check=True,
+    ).stdout
+    decoded = np.frombuffer(raw, dtype="<f4")
+    for attack in attacks:
+        window = np.abs(decoded[attack - 100:attack + 101])
+        assert abs(int(np.argmax(window)) - 100) <= 1  # no AAC priming offset in the media timeline
+
+
+def test_fresh_legacy_migration_reuses_pcm_and_stale_legacy_is_regenerated(tmp_path, monkeypatch):
+    path = make_song(tmp_path)
+    legacy = path / "nodrums.htdemucs.wav"
+    write_wav(legacy)
+    calculate = library._backing_samples
+
+    def forbidden(*args):
+        pytest.fail("a fresh legacy cache must not repeat subtraction")
+
+    monkeypatch.setattr(library, "_backing_samples", forbidden)
+    target = library.backing_track(path)
+    assert target.suffix == ".m4a" and not legacy.exists()
+    target.unlink()
+    write_wav(legacy)
+    os.utime(legacy, ns=(1, 1))
+    calls = []
+
+    def subtract(*args):
+        calls.append(args)
+        return calculate(*args)
+
+    monkeypatch.setattr(library, "_backing_samples", subtract)
+    assert library.backing_track(path).suffix == ".m4a"
+    assert len(calls) == 1 and not legacy.exists()
+
+
 def test_musicxml_and_attachment_downloads(tmp_path):
     path = make_song(tmp_path)
     with TestClient(create_app(tmp_path)) as client:
@@ -383,6 +737,37 @@ def test_musicxml_and_attachment_downloads(tmp_path):
             response = client.get(f"/api/songs/groove/download/{kind}")
             assert response.content == (path / f"groove.{suffix}").read_bytes()
             assert f'attachment; filename="groove.{suffix}"' == response.headers["content-disposition"]
+
+
+def test_practice_beats_reads_cache_without_models(tmp_path, monkeypatch):
+    path = make_song(tmp_path)
+
+    def forbidden(*args, **kwargs):
+        pytest.fail("reading practice beats must not run the pipeline")
+
+    monkeypatch.setattr(pipeline, "run", forbidden)
+    with TestClient(create_app(tmp_path)) as client:
+        response = client.get("/api/songs/groove/beats")
+        assert response.status_code == 200
+        assert response.json() == {"beats": [0, .5], "downbeats": [0]}
+        (path / "beats.json").write_text('{"beats": [], "downbeats": []}')
+        assert client.get("/api/songs/groove/beats").json() == {"beats": [], "downbeats": []}
+        (path / "beats.json").unlink()
+        assert client.get("/api/songs/groove/beats").status_code == 404
+        assert not (path / "beats.json").exists()
+
+
+@pytest.mark.parametrize("cached", [
+    "not JSON", '{"beats": [-1], "downbeats": []}', '{"beats": [NaN], "downbeats": []}',
+    '{"beats": [0, 0], "downbeats": []}', '{"beats": [1, 0], "downbeats": []}',
+    '{"beats": [0], "downbeats": [1, 0]}', '{"beats": [0]}',
+])
+def test_practice_beats_rejects_invalid_cache(tmp_path, cached):
+    path = make_song(tmp_path)
+    (path / "beats.json").write_text(cached)
+    with TestClient(create_app(tmp_path)) as client:
+        response = client.get("/api/songs/groove/beats")
+        assert response.status_code == 409 and "박자 캐시" in response.json()["detail"]
 
 
 def test_pdf_on_demand_refresh_and_unavailable(tmp_path, monkeypatch):
@@ -481,7 +866,8 @@ def test_pipeline_progress_real_run_and_unchanged_logs(tmp_path, monkeypatch):
         ("score", "running"), ("score", "done"),
     ]
     assert logs == ["drum separation (htdemucs, cpu): cached", "beat tracking: cached",
-                    "drum transcription (on drums): cached"]
+                    "drum transcription (on drums): cached", "ride runs: 0 of 0 cymbal hits -> ride",
+                    "cymbal veto: 0 of 0 ride runs -> cymbal"]
     events.clear()
     pipeline.run(path, meta, pipeline.Options(pdf=False, force=True), log=lambda line: None,
                  progress=lambda *event: events.append(event))
@@ -491,11 +877,14 @@ def test_pipeline_progress_real_run_and_unchanged_logs(tmp_path, monkeypatch):
 
 def test_clear_cache_keeps_audio_and_score(tmp_path, fakes):
     path = make_song(tmp_path)
+    library.backing_track(path)
     with TestClient(create_app(tmp_path)) as client:
         song = client.delete("/api/songs/groove/cache").json()
         assert song["cache_bytes"] == 0 and song["has_drums"] is False and song["transcribed"] is True
         assert (path / "audio.wav").is_file() and (path / "score.json").is_file()
         assert not list(path.glob("drums.*.wav")) and not (path / "beats.json").exists()
+        assert not (path / "nodrums.htdemucs.wav").exists() and song["has_mr"] is False
+        assert not (path / "nodrums.htdemucs.m4a").exists()
         assert client.post("/api/songs/groove/score", json={}).status_code == 409
 
 
@@ -730,3 +1119,37 @@ def test_sound_groups_are_learned_once_and_named_through_the_score(tmp_path, mon
         assert client.get("/api/songs/groove/sounds").status_code == 409
         assert client.post("/api/songs/groove/score", json={"sound_names": {"kick-1": "ignore"}}).status_code == 409
         assert client.post("/api/songs/groove/score", json={"sound_names": {}}).status_code == 200
+
+
+def test_shutdown_waits_for_jobs_unless_forced(tmp_path, fakes, monkeypatch):
+    stops = []
+    release = threading.Event()
+    real_run = pipeline.run
+    monkeypatch.setattr(pipeline, "run", lambda *a, **k: (release.wait(5), real_run(*a, **k))[1])
+    make_song(tmp_path, transcribed=False)
+    with TestClient(create_app(tmp_path, shutdown=stops.append)) as client:
+        assert client.post("/api/shutdown", content="{}").status_code == 422  # not JSON: no CORS preflight
+        job = client.post("/api/songs/groove/transcribe").json()
+        response = client.post("/api/shutdown", json={})
+        assert response.status_code == 409 and stops == []
+        assert client.post("/api/shutdown", json={"force": True}).json() == {"stopping": True, "interrupted": 1}
+        assert stops == [True]
+        release.set()
+        finished(client, job)
+        assert client.post("/api/shutdown", json={}).json() == {"stopping": True, "interrupted": 0}
+        assert stops == [True, False]
+
+
+def test_meter_changes_alone_use_the_saved_signature(tmp_path, fakes):
+    path = make_song(tmp_path)
+    library.save_options(path, library.DEFAULT_OPTIONS | {"time_signature": "7/8+6/8"})
+    change = [{"time": 1.0, "time_signature": "6/8"}]
+    with TestClient(create_app(tmp_path)) as client:
+        response = client.post("/api/songs/groove/score", json={"meter_changes": change})
+        assert response.status_code == 200
+        assert response.json()["options"]["meter_changes"] == change
+        assert response.json()["options"]["time_signature"] == "7/8+6/8"
+        library.save_options(path, library.DEFAULT_OPTIONS)
+        response = client.post("/api/songs/groove/score", json={"meter_changes": change})
+        assert response.status_code == 422
+        assert "time_signature" in response.json()["detail"]

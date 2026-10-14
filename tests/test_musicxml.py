@@ -1,6 +1,6 @@
 from collections import defaultdict
 from fractions import Fraction
-from itertools import combinations, product
+from itertools import accumulate, combinations, product
 import json
 from pathlib import Path
 import xml.etree.ElementTree as ET
@@ -25,6 +25,13 @@ def verify(score, voices=1):
     measures = root.findall("part/measure")
     assert len(measures) == len(score.bars)
     for measure, expected in zip(measures, score.bars):
+        if expected.denominator == 4:
+            group_edges = set(range(24, expected.ticks + 1, 24))
+        else:
+            from groovemap.metre import Signature
+
+            groups = expected.beat_groups or Signature(expected.beats, expected.denominator).groups
+            group_edges = set(accumulate(size * expected.unit_ticks for size in groups))
         durations = defaultdict(int)
         active_beams = set()
         active_tuplets = set()
@@ -62,8 +69,14 @@ def verify(score, voices=1):
                 cursor += duration
                 durations[voice] += duration
             if item.find("rest") is not None:
-                assert item.find("beam") is None
-                assert not any(key[0] == voice for key in active_beams)
+                # Only a short inner rest may sit under the primary beam, and nothing deeper.
+                bridged = [(b.get("number"), b.text) for b in item.findall("beam")]
+                assert bridged in ([], [("1", "continue")])
+                if bridged:
+                    assert duration <= 6 and (voice, "1") in active_beams
+                assert not any(key[0] == voice and key[1] != "1" for key in active_beams)
+                if not bridged:
+                    assert not any(key[0] == voice for key in active_beams)
             for beam in item.findall("beam"):
                 key = (voice, beam.get("number"))
                 if beam.text == "begin":
@@ -85,7 +98,7 @@ def verify(score, voices=1):
                 else:
                     assert tuplet.get("type") == "stop" and key in active_tuplets
                     active_tuplets.remove(key)
-            if cursor % 24 == 0:
+            if cursor in group_edges:
                 assert not any(key[0] == voice for key in active_beams)
                 assert not any(key[0] == voice for key in active_tuplets)
             if item.find("rest") is None:
@@ -111,6 +124,9 @@ def test_document_metadata_mapping_chords_and_escaping():
                     "P1-hihat_pedal": 45, "P1-tom_high": 51, "P1-tom": 48, "P1-tom_low": 44, "P1-ride": 52,
                     "P1-ride_bell": 54, "P1-cymbal": 50}
     assert all(node.findtext("midi-channel") == "10" for node in root.findall("part-list/score-part/midi-instrument"))
+    kit = root.findall("part-list/score-part/score-instrument")
+    assert all(node.findtext("instrument-sound") == "drum.group.set" for node in kit)
+    assert {node.get("id"): node.findtext("instrument-name") for node in kit}["P1-tom_low"] == "Floor Tom"
     assert root.findtext("part/measure/attributes/divisions") == "24"
     assert root.findtext("part/measure/attributes/clef/sign") == "percussion"
     notes = root.findall("part/measure/note")[:12]
@@ -268,8 +284,8 @@ def test_plain_sixteenths_keep_one_inner_beam():
     assert beams(notes, 2) == ["begin", "continue", "continue", "end"]
     # A 32nd beyond a rest has its own beam and does not subdivide this one.
     notes = verify(Score("Apart", [compound_bar([0, 6, 12, 18, 33])])).findall("part/measure/note")
-    assert [n.findtext("type") for n in notes[:6]] == ["16th", "16th", "16th", "eighth", "32nd", "32nd"]
-    assert beams(notes[:4], 2) == ["begin", "continue", "end", None]
+    assert [n.findtext("type") for n in notes[:7]] == ["16th"] * 5 + ["32nd", "32nd"]
+    assert beams(notes[:7], 2) == ["begin", "continue", "continue", "end", None, None, None]
 
 
 def test_no_eighth_break_that_would_leave_a_lone_hook():
@@ -337,14 +353,14 @@ def test_dotted_sixteenths_thirty_second_rests_and_hooks():
     spelled = [(n.findtext("type"), n.findtext("duration"), n.find("dot") is not None, n.find("rest") is not None) for n in notes]
     assert spelled == [
         ("16th", "9", True, False), ("32nd", "3", False, False), ("eighth", "12", False, False),
-        ("32nd", "3", False, True), ("16th", "9", True, False), ("eighth", "12", False, True),
+        ("32nd", "3", False, True), ("32nd", "3", False, False), ("16th", "6", False, True), ("eighth", "12", False, True),
         ("quarter", "24", False, True),
         ("32nd", "3", False, False), ("16th", "9", True, False), ("eighth", "12", False, True)]
     assert beams(notes[:3], 1) == ["begin", "continue", "end"]
     assert beams(notes[:3], 2) == ["begin", "end", None]
     assert beams(notes[:3], 3) == [None, "backward hook", None]
-    assert beams(notes[7:9], 1) == beams(notes[7:9], 2) == ["begin", "end"]
-    assert beams(notes[7:9], 3) == ["forward hook", None]
+    assert beams(notes[8:10], 1) == beams(notes[8:10], 2) == ["begin", "end"]
+    assert beams(notes[8:10], 3) == ["forward hook", None]
     assert [child.tag for child in notes[0]] == ["unpitched", "duration", "instrument", "voice", "type", "dot", "stem", "notehead", "beam", "beam"]
     tuplet = verify(Score("Order", [bar([Note(0, "snare", 90), Note(4, "snare", 90)], subdivisions=[6, 4, 4, 4])])).find("part/measure/note")
     assert [child.tag for child in tuplet] == ["unpitched", "duration", "instrument", "voice", "type", "time-modification", "stem", "notehead", "beam", "beam", "notations"]
@@ -388,3 +404,149 @@ def test_every_candidate_onset_subset_has_correct_written_durations(first, secon
 def test_incompatible_simultaneous_grids_are_rejected():
     with pytest.raises(ValueError, match="Unsupported simultaneous grids"):
         verify(Score("Unsupported", [bar([Note(3, "snare", 90), Note(4, "hihat", 90)])]))
+
+
+def test_displaced_sixteenths_form_complete_eighth_cells():
+    score = Score("Displaced", [bar([Note(t, "snare", 90) for t in (3, 9, 15, 21)])])
+    notes = verify(score).findall("part/measure/note")
+    played = [n for n in notes if n.find("rest") is None]
+    # A displaced run reads as one stream: r32 16 16 16 32, a single beam.
+    assert [n.findtext("duration") for n in played] == ["6", "6", "6", "3"]
+    assert [(n.findtext("duration"), n.findtext("type")) for n in notes if n.find("rest") is not None and int(n.findtext("duration")) < 6] == [("3", "32nd")]
+    assert beams(played, 1) == ["begin", "continue", "continue", "end"]
+    assert all(n.find("dot") is None for n in played)
+
+
+def test_displaced_run_stops_beaming_at_the_beat_and_tuplets_show_actual_number():
+    notes = verify(Score("Boundaries", [bar([Note(t, "snare", 90) for t in (9, 15, 21, 24, 28, 32, 36, 40, 44)])])).findall("part/measure/note")
+    played = [n for n in notes if n.find("rest") is None]
+    assert played[2].findtext("beam[@number='1']") == "end"
+    assert played[3].findtext("beam[@number='1']") == "begin"
+    tuplet = played[3].find("notations/tuplet")
+    assert tuplet.get("placement") == "above" and tuplet.get("show-number") == "actual"
+
+
+def test_offbeat_sixteenth_is_not_stretched_to_the_beat():
+    # A hit on the "e" before the next beat is a 16th plus an 8th rest, not a dotted 8th.
+    notes = verify(Score("Late", [bar([Note(0, "kick", 90), Note(30, "snare", 90), Note(48, "kick", 90)])])).findall("part/measure/note")
+    spelled = [(n.find("rest") is not None, n.findtext("type"), n.find("dot") is not None) for n in notes[:5]]
+    assert spelled[1:4] == [(True, "16th", False), (False, "16th", False), (True, "eighth", False)]
+    # 16th-8th-16th keeps its 8th.
+    notes = verify(Score("Synco", [bar([Note(t, "snare", 90) for t in (0, 6, 18)])])).findall("part/measure/note")
+    assert [n.findtext("type") for n in notes[:3]] == ["16th", "eighth", "16th"]
+
+
+def window_spelling(events, start, end):
+    names = {3: "32", 6: "16", 9: "16.", 12: "8", 18: "8.", 24: "4", 36: "4."}
+    return [("" if e.notes else "r") + names[e.duration] for e in events if start <= e.tick < end]
+
+
+@pytest.mark.parametrize("offsets, expected", [
+    ((0,), "4"), ((12,), "r8 8"), ((6,), "r16 16 r8"), ((18,), "r8 r16 16"),
+    ((0, 18), "8. 16"), ((0, 6), "16 8."), ((0, 6, 18), "16 8 16"),
+    ((6, 18), "r16 8 16"), (tuple(range(0, 24, 3)), "32 32 32 32 32 32 32 32"),
+    ((3,), "r32 32 r16 r8"), ((9,), "r16 r32 32 r8"),
+    ((15,), "r8 r32 32 r16"), ((21,), "r8 r16 r32 32"),
+    ((0, 9), "16. 32 r8"), ((3, 12), "r32 32 r16 8"),
+    ((0, 3), "32 16. r8"), ((0, 3, 9), "32 16 32 r8"),
+    ((3, 9), "r32 16 32 r8"), ((0, 18, 21), "8. 32 32"),
+    ((0, 6, 18, 21), "16 8 32 32"),
+    ((12, 21), "r8 16. 32"), ((12, 15), "r8 32 16."),
+    ((12, 15, 21), "r8 32 16 32"), ((15, 21), "r8 r32 16 32"),
+    # Attacks inside the proposed long component must prevent that cell match.
+    ((0, 6, 12, 18), "16 16 16 16"), ((0, 3, 6, 9), "32 32 32 32 r8"),
+])
+def test_quarter_house_style(offsets, expected):
+    from groovemap.musicxml import _rhythm, _straight
+
+    start, end = 24, 48
+    notes = [Note(start + t, "snare", 90) for t in offsets]
+    source = bar(notes, subdivisions=[8] * 4)
+    assert window_spelling(_straight(start, end, {n.tick: [n] for n in notes}), start, end) == expected.split()
+    assert window_spelling(_rhythm(source, notes), start, end) == expected.split()
+    verify(Score("Quarter house style", [source]))
+
+
+@pytest.mark.parametrize("offsets, expected", [
+    ((), "r4."), ((0,), "4."), ((0, 24), "4 8"), ((0, 12), "8 4"),
+    ((12,), "r8 8 r8"), ((24,), "r4 8"), ((0, 18), "8. 8."),
+    ((0, 12, 24), "8 8 8"),
+])
+@pytest.mark.parametrize("start", [0, 36])
+def test_three_eighth_house_style(offsets, expected, start):
+    from groovemap.musicxml import _straight
+
+    onsets = {start + t: [Note(start + t, "snare", 90)] for t in offsets}
+    events = _straight(start, start + 36, onsets)
+    assert window_spelling(events, start, start + 36) == expected.split()
+    assert sum(e.duration for e in events) == 36
+
+
+@pytest.mark.parametrize("beats, groups, ticks, expected", [
+    (9, [3, 3, 3], [0, 48, 72, 84], ["4.", "r8 8 r8", "8 4"]),
+    (7, [3, 2, 2], [0, 36, 60], ["4.", "4", "4"]),
+    (17, [2] * 7 + [3], list(range(0, 204, 12)), ["8 8"] * 7 + ["8 8 8"]),
+])
+def test_grouped_house_style(beats, groups, ticks, expected):
+    from groovemap.musicxml import _rhythm
+
+    source = Bar(0, beats, [i * 0.25 for i in range(beats + 1)], [4] * beats, 120,
+                 [Note(t, "snare", 90) for t in ticks], denominator=8, beat_groups=groups)
+    events = _rhythm(source, source.notes)
+    edges = [0, *accumulate(size * 12 for size in groups)]
+    assert [window_spelling(events, a, b) for a, b in zip(edges, edges[1:])] == [s.split() for s in expected]
+    verify(Score("Group house style", [source]))
+
+
+@pytest.mark.parametrize("mask", range(256))
+def test_all_32nd_masks_conserve_onsets_and_translate_between_groups(mask):
+    from groovemap.musicxml import _duration_choice, _rhythm, _straight
+
+    offsets = [t for bit, t in enumerate(range(0, 24, 3)) if mask & (1 << bit)]
+    quarter = bar([Note(t, "snare", 90) for t in [0, *(24 + t for t in offsets), 72]], subdivisions=[8] * 4)
+    shifted = Bar(0, 7, [i * 0.25 for i in range(8)], [8] * 7, 120,
+                  [Note(t, "snare", 90) for t in [0, *(36 + t for t in offsets), 60]],
+                  denominator=8, beat_groups=[3, 2, 2])
+    for spell in (_rhythm, _duration_choice):
+        patterns = []
+        for source, start in ((quarter, 24), (shifted, 36)):
+            events = spell(source, source.notes)
+            assert events == spell(source, source.notes)
+            assert sum(e.duration for e in events) == source.ticks
+            assert [n for e in events for n in e.notes] == source.notes
+            assert [e.tick for e in events] == [0, *accumulate(e.duration for e in events[:-1])]
+            local = [e for e in events if start <= e.tick < start + 24]
+            assert sum(e.duration for e in local) == 24
+            assert [e.tick - start for e in local if e.notes] == offsets
+            patterns.append([(e.tick - start, e.duration, bool(e.notes)) for e in local])
+        assert patterns[0] == patterns[1]
+    plain = []
+    for start in (24, 36):
+        onsets = {start + t: [Note(start + t, "snare", 90)] for t in offsets}
+        events = _straight(start, start + 24, onsets)
+        assert events == _straight(start, start + 24, onsets)
+        assert sum(e.duration for e in events) == 24
+        assert [e.tick - start for e in events if e.notes] == offsets
+        plain.append([(e.tick - start, e.duration, bool(e.notes)) for e in events])
+    assert plain[0] == plain[1]
+    # Also verify serialized MusicXML, including group-edge beam closure.
+    for source in (quarter, shifted):
+        score = Score("Exhaustive house style", [source])
+        root = verify(score)
+        assert to_musicxml(score) == to_musicxml(score)
+        cursor, actual = 0, []
+        for note in root.findall("part/measure/note"):
+            if note.find("rest") is None:
+                actual.append(cursor)
+            cursor += int(note.findtext("duration"))
+        assert actual == [n.tick for n in source.notes]
+        assert cursor == source.ticks
+
+
+def test_primary_beam_crosses_a_short_inner_rest():
+    # Beat 2 = r32 32 r16 8: the leading rest stays outside, the inner r16 sits under the 8th beam.
+    notes = verify(Score("Bridge", [bar([Note(27, "snare", 90), Note(36, "snare", 90)])])).findall("part/measure/note")
+    beat = [n for n in notes if n.find("chord") is None][1:5]
+    assert [(n.find("rest") is not None, n.findtext("type")) for n in beat] == [(True, "32nd"), (False, "32nd"), (True, "16th"), (False, "eighth")]
+    assert [[(b.get("number"), b.text) for b in n.findall("beam")] for n in beat] == [
+        [], [("1", "begin"), ("2", "forward hook"), ("3", "forward hook")], [("1", "continue")], [("1", "end")]]

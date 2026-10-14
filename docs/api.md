@@ -60,6 +60,7 @@ type Song = SongSummary & {
   options: Options          // the options the current score was made with
   score: Score              // contents of score.json (see src/groovemap/score.py)
   has_drums: boolean        // a separated drum stem is available
+  has_mr: boolean           // drums.htdemucs.wav exists, so the backing track can be made
   has_video: boolean        // video.mp4 was downloaded with the song
 }
 
@@ -95,16 +96,50 @@ type Job = {
 | GET | `/api/songs/{slug}/sounds` | | `SoundMap` — the song's sound groups; learned from the caches on first request (about 0.2 s per song minute) and kept in `soundmap.json` after that; 409 when a refinement cache is missing |
 | POST | `/api/songs/{slug}/sounds` | `{names: Record<string, SoundName>}` | `Song` — replaces the saved names (send `{}` to clear them) and re-quantizes with them, like `/score`; 409 before the first GET, 422 for an unknown group id or name |
 | GET | `/api/songs/{slug}/musicxml` | | MusicXML text of the current score |
-| GET | `/api/songs/{slug}/audio` | `?stem=mix\|drums` | WAV, supports HTTP Range |
+| GET | `/api/songs/{slug}/beats` | | `{beats: number[], downbeats: number[]}` from `beats.json`, in original-recording seconds; reads only, never runs beat tracking. 404 without the cache; 409 for malformed, negative, non-finite or unordered times |
+| GET | `/api/songs/{slug}/audio` | `?stem=mix\|drums\|nodrums` | WAV for mix/drums; AAC M4A (`audio/mp4`, 160 kb/s, faststart) for `nodrums`. All support HTTP Range. MR caches `audio.wav` minus `drums.htdemucs.wav` on demand (404 without that stem), remade when either input is newer |
 | GET | `/api/songs/{slug}/video` | | `video.mp4` (H.264 + AAC, same timeline as `audio.wav`), supports HTTP Range; 404 if none |
 | GET | `/api/songs/{slug}/download/{kind}` | kind = `musicxml` \| `midi` \| `pdf` | file as attachment; `pdf` is engraved on demand |
-| DELETE | `/api/songs/{slug}/cache` | | `Song` — deletes regenerable model outputs (drum stem, beats, activations, snare loudness, preview, PDF); keeps audio, video and the score |
+| DELETE | `/api/songs/{slug}/cache` | | `Song` — deletes regenerable outputs (drum stem, backing track, beats, activations, snare loudness, preview, PDF); keeps audio, video and the score |
 | DELETE | `/api/songs/{slug}` | | 204 — deletes the whole song directory |
 | GET | `/api/search` | `?q=` | `SearchResult[]` (YouTube, up to 8) |
 | POST | `/api/jobs` | `{source: string, options?: Partial<Options>}` | `Job` — source is a YouTube URL or an absolute local file path |
 | POST | `/api/upload` | multipart `file`, optional `options` (JSON string) | `Job` — transcribe an uploaded audio file |
 | GET | `/api/jobs` | | `Job[]` — queued, running, and the last few finished, newest first |
 | GET | `/api/jobs/{id}` | | `Job` |
+
+MR files are published atomically as `nodrums.htdemucs.m4a`; no new MR WAV is stored.
+A fresh legacy `nodrums.htdemucs.wav` is compressed on first request and removed only
+after the M4A is complete. If encoding fails, a fresh legacy WAV is still served with
+Range support; without a valid legacy cache the endpoint returns 503. Stale WAVs are
+regenerated from the inputs. Both formats are included in cache size and cache deletion.
+
+The web player's practice settings are local to the open song view (no score/API writes):
+
+- Speed: 0.5, 0.75, 1 and 1.25× for mix/video, drums and MR, with
+  `HTMLMediaElement.preservesPitch = true`. Source changes restore the recording position
+  after metadata loads. Score cursor/scroll and timeline read the media's `currentTime`,
+  holding the requested position while a replacement source loads.
+- A–B loop: enter 1-based start/end bar numbers, or arm `A 시작 지정` / `B 끝 지정`
+  and click a score/timeline bar. The end bar is included; reversed endpoints are adjusted
+  to a valid single-bar range. Playback outside the range returns to A, including at audio
+  EOF. `반복 해제` clears it. Score reloads/corrections clear the selected range.
+- Metronome: `GET .../beats` supplies the original tracker beats and downbeats. WebAudio
+  schedules clicks at `(beatTime - currentTime) / playbackRate`, accents downbeats, and
+  cancels pending clicks on pause, buffering, seek, source/rate changes and loop wraps.
+  Score-only `tempo_scale`, meter and beat-shift corrections do not rewrite that tracker grid.
+- Optional one-bar count-in: uses the current score bar's `beat_times` (including its
+  denominator and local tempo), at the selected playback rate. It waits for media readiness
+  before counting, holds the score position, and starts playback when the count completes.
+  Play during a count-in cancels it; seeks, source/rate/score/loop edits also cancel it.
+  Loop wraps and an already playing source swap do not repeat the count-in.
+- Mix, drums and MR each remember their own 0–100% media volume while that song is open;
+  click/count-in volume is independent, including when the source volume is zero.
+
+Loops and the media start after a count-in use browser transport/timers; they are not
+sample-accurate or gapless. WebAudio schedules the individual click sounds. If beat caches
+are missing/unreadable, the click toggle is unavailable; score playback and score-based
+count-in remain available.
 
 Outputs carry fingerprints of the code that made them (`src/groovemap/fingerprint.py`): the syntax
 tree of a function and of everything in the package it reaches, so comments and unrelated code do

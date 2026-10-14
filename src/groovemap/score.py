@@ -44,6 +44,7 @@ class Hit:
     inst: str  # one of INSTRUMENTS
     strength: float  # peak activation, 0..1; a snare's loudness (1 = the song's typical snare) when measured
     ghost: bool = False  # a ghost note: played far softer than the song's typical hit
+    confidence: float | None = None  # cached identity/dynamics evidence, not a calibrated probability
 
 
 @dataclass
@@ -54,6 +55,8 @@ class Note:
     inst: str  # one of INSTRUMENTS
     velocity: int  # MIDI velocity 1..127
     ghost: bool = False
+    raw_time: float | None = None  # source onset in seconds; playback is independent of spelling
+    ghost_status: str | None = None  # ghost / normal / unknown; uncertainty never adds parentheses
 
 
 @dataclass
@@ -88,12 +91,16 @@ class Bar:
         t0, t1 = self.beat_times[beat], self.beat_times[beat + 1]
         return t0 + (t1 - t0) * rem / self.unit_ticks
 
+    def note_time(self, note: Note) -> float:
+        """Original performance timing, with a fallback for older saved scores."""
+        return note.raw_time if note.raw_time is not None else self.tick_time(note.tick)
+
 
 @dataclass
 class Score:
     title: str
     bars: list[Bar]
-    grid: int = 16  # 8 or 16: finest straight note value used
+    grid: int = 16  # 8: reading mode; 16: base resolution with evidence-based finer grids
     tempo: float = 120.0  # median BPM, used for the metronome mark
     subtitle: str = ""
     divisions: int = DIVISIONS  # ticks per quarter the note ticks are counted in
@@ -110,6 +117,11 @@ class Score:
         if self.time_signature_suggestion is None:
             raw.pop("time_signature_suggestion")
         for bar in raw["bars"]:
+            for note in bar["notes"]:
+                if note["raw_time"] is None:
+                    note.pop("raw_time")
+                if note["ghost_status"] is None:
+                    note.pop("ghost_status")
             if bar["denominator"] == 4 and not bar["beat_groups"]:
                 bar.pop("denominator")
                 bar.pop("beat_groups")

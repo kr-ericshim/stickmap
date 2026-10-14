@@ -31,7 +31,9 @@ class SongMeta:
 
     @classmethod
     def load(cls, path: Path) -> "SongMeta":
-        return cls(**json.loads(path.read_text(encoding="utf-8")))
+        data = json.loads(path.read_text(encoding="utf-8"))
+        # meta.json may carry extra fields such as "title_override".
+        return cls(**{key: value for key, value in data.items() if key in cls.__dataclass_fields__})
 
 
 def slugify(text: str, max_len: int = 60) -> str:

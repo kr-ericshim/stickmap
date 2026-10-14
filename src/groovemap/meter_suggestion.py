@@ -26,7 +26,7 @@ def suggest_signature(score: Score, activations: np.ndarray, attacks: Sequence[f
     bar_seconds = float(np.median([bar.beat_times[-1] - bar.start for bar in score.bars]))
     ac = _autocorrelation(body)
     current = float(np.interp(bar_seconds * FPS, np.arange(len(ac)), ac))
-    hint = re.search(r"(?<!\d)((?:[1-9]|1[0-5])/(?:16|8|4))(?!\d)", score.title)
+    hint = re.search(r"(?<!\d)((?:[1-9]|[12][0-9]|3[0-2])/(?:16|8|4))(?!\d)", score.title)
     candidates = [hint[1]] if hint and hint[1] != "4/4" else ["3/4", "5/4", "6/8", "7/8", "9/8", "12/8"]
     ranked = []
     for value in candidates:

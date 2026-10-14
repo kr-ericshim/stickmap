@@ -67,7 +67,15 @@ def drum_activations(wav: Path, *, device: str, weights: Path | None = None) -> 
     model.eval().to(device)
     features = adtof.load_audio_for_model(str(wav)).to(device)
     with torch.no_grad():
-        return model(features).cpu().numpy()[0]
+        try:
+            return model(features).cpu().numpy()[0]
+        except RuntimeError as error:
+            # cuDNN's RNN kernels refuse very long inputs (e.g. a 12-minute song on an RTX 5080);
+            # PyTorch's own RNN kernels on the same GPU handle them.
+            if "CUDNN_STATUS_NOT_SUPPORTED" not in str(error):
+                raise
+            with torch.backends.cudnn.flags(enabled=False):
+                return model(features).cpu().numpy()[0]
 
 
 def stem_activations(drums_wav: Path, *, device: str) -> np.ndarray:

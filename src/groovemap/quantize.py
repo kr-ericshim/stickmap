@@ -5,7 +5,8 @@ from __future__ import annotations
 from bisect import bisect_left, bisect_right
 from collections import Counter, defaultdict
 from collections.abc import Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
+from functools import lru_cache
 from itertools import groupby, product
 from math import floor, isfinite
 from statistics import median
@@ -241,7 +242,7 @@ def _boundaries(
 _MIN_GAP = 0.035
 # Candidate subdivisions of a beat, simplest first, each with how much closer (in
 # beats) a hit must be to a slot only that grid has than to its 16th slot.
-_MARGIN = {4: 0.0, 3: 0.02, 8: 0.05, 6: 0.05}
+_MARGIN = {4: 0.0, 3: 0.02, 8: 0.05, 6: 0.02}
 # What each neighbouring beat takes off the cost of the grid it chose on its own.
 _NEIGHBOUR = 0.008
 
@@ -254,7 +255,7 @@ def _strokes(hits: Sequence[Hit]) -> list[Hit]:
         i = last.get(hit.inst)
         if i is not None and hit.time - strokes[i].time < _MIN_GAP:
             stronger = max(strokes[i], hit, key=lambda h: h.strength)
-            strokes[i] = Hit(strokes[i].time, hit.inst, stronger.strength, stronger.ghost)
+            strokes[i] = replace(stronger, time=strokes[i].time)
         else:
             last[hit.inst] = len(strokes)
             strokes.append(hit)
@@ -289,7 +290,7 @@ def _offsets(hits: Sequence[Hit], times: Sequence[float]) -> dict[str, float]:
     return {inst: clamped(residuals[inst]) if len(residuals.get(inst, ())) >= 20 else shared for inst in INSTRUMENTS}
 
 
-_SWITCH = 0.008
+_SWITCH = 0.016
 _MAX_ERROR = 3.0  # alternative slots within 1/8 quarter; otherwise nearest only
 _BITS = {inst: 1 << i for i, inst in enumerate(INSTRUMENTS)}
 
@@ -305,6 +306,56 @@ class _Choice:
     error: float
 
 
+@lru_cache(maxsize=8192)
+def _notation_cost(slots: tuple[int, ...]) -> float:
+    """Seconds of readability cost, measured on the actual one-voice spelling.
+
+    Chords vote once. A real fast run can still win on timing/retention; an
+    unused fine lattice alone does not earn a finer written resolution.
+    """
+    from .musicxml import _rhythm
+
+    bar = Bar(0, 1, [0, 1], [4], 60, [Note(t, "snare", 90) for t in slots if t < 24])
+    events = _rhythm(bar, bar.notes)
+    return sum(
+        0.004 * int(not e.notes and e.duration < 6)
+        + 0.003 * int(bool(e.notes) and e.note_type in ("eighth", "16th", "32nd") and 1 not in e.beams)
+        + 0.001 * int(e.duration in (9, 18, 36))
+        + 0.0015 * int(bool(e.notes) and e.note_type == "32nd")
+        for e in events
+    ) + 0.002 * sum(a.ratio != b.ratio or a.tuplet != b.tuplet for a, b in zip(events, events[1:]))
+
+
+def _event_cost(group: Sequence[tuple[Hit, float]], slots: tuple[int, ...], modes: tuple[int, int], duration: float) -> float:
+    """IOI and split-unison evidence, independent of the number of drums struck."""
+    events: list[list[tuple[float, int, float]]] = []
+    for (hit, fraction), slot in sorted(zip(group, slots), key=lambda pair: pair[0][0].time):
+        if events and hit.time - events[-1][0][2] <= 0.015 + 1e-9:
+            events[-1].append((fraction, slot, hit.time))
+        else:
+            events.append([(fraction, slot, hit.time)])
+    points = [(median(e[0] for e in event), median(e[1] for e in event) / 24) for event in events]
+    timing = sum(sum(
+        abs(fraction - slot / 24)
+        + (max(_MARGIN[modes[0 if slot < 12 else 1]], 0.004 / duration) if slot % 6 else 0)
+        for fraction, slot, _ in event
+    ) / len(event) for event in events)
+    gaps = np.diff([p[0] for p in points])
+    regular = len(points) >= 4 and gaps.mean() > 0 and gaps.std() < 0.35 * gaps.mean()
+    ioi = sum(abs((b[0] - a[0]) - (b[1] - a[1])) for a, b in zip(points, points[1:])) if regular else 0.0
+    split = sum(max(e[1] for e in event) != min(e[1] for e in event) for event in events)
+    return timing + 0.3 * ioi + 0.025 * split
+
+
+def _display_onsets(strokes: Sequence[Hit], times: Sequence[float]) -> list[float]:
+    """Apply instrument latency without pulling exact unisons onto different slots."""
+    offsets = _offsets(strokes, times)
+    simultaneous: dict[float, list[float]] = defaultdict(list)
+    for hit in strokes:
+        simultaneous[hit.time].append(offsets[hit.inst])
+    return [hit.time - median(simultaneous[hit.time]) for hit in strokes]
+
+
 def _instrument_options(
     items: Sequence[tuple[int, float]], ticks: Sequence[int], modes: tuple[int, int], duration: float,
 ) -> dict[tuple[bool, bool], tuple[int, float, float, tuple[tuple[int, int], ...]]]:
@@ -316,7 +367,9 @@ def _instrument_options(
         x = fraction * 24
         allowed = [
             t for t in ticks
-            if abs(t - x) <= _MAX_ERROR + 1e-9
+            # One detector frame of slack prevents a small phase correction
+            # from turning a previously retainable dense stroke into a merge.
+            if abs(t - x) <= _MAX_ERROR + min(1.0, 0.01 / duration * 24) + 1e-9
         ]
         if not allowed:
             allowed = [min(ticks, key=lambda t: (abs(t - x), t))]
@@ -418,8 +471,12 @@ def _choices(
                 )
             elif not any(t in (8, 16) for t in slots):
                 actual = (4, 4)
+            if triplets and any(t in (8, 16) for t in slots) and all(t % 8 == 0 for t in slots):
+                actual = (3, 3)  # Sparse sextuplets spell as whole-beat eighth triplets.
 
+            cost = _event_cost(group, slots, actual, duration)
             cost += _SWITCH * int(actual[0] != actual[1])
+            cost += _notation_cost(tuple(sorted(set(slots)))) / duration
             choice = _Choice(actual, slots, sm, em, lost, cost, err)
             key = (actual, sm, em)
             if key not in result or (lost, cost, err, slots) < (
@@ -525,6 +582,7 @@ def quantize(
     title: str = "", subtitle: str = "", grid: int = 16,
     triplets: str = "auto", meter: int | None = None, odd_bars: str = "none",
     beat_shift: float = 0, tempo_scale: float = 1,
+    attacks: Sequence[float] = (),
 ) -> Score:
     """Quantize hits onto a grid that follows the tracked beats.
 
@@ -567,10 +625,12 @@ def quantize(
     # A hit just ahead of the first beat is that beat played early, not an uncovered one.
     early = (times[1] - times[0]) / 8
     strokes = _strokes([h for h in hits if times[0] - early <= h.time < times[-1]])
-    offsets = _offsets(strokes, times)
+    from .pulse import refine_display_times
+
+    times = refine_display_times(times, [h.time for h in strokes], attacks, triplets=triplets == "auto")
     per_beat: list[list[tuple[Hit, float]]] = [[] for _ in times[:-1]]
-    for hit in strokes:
-        time = max(times[0], hit.time - offsets[hit.inst])
+    for hit, onset in zip(strokes, _display_onsets(strokes, times)):
+        time = max(times[0], onset)
         beat = min(bisect_right(times, time), len(per_beat)) - 1
         per_beat[beat].append((hit, (time - times[beat]) / (times[beat + 1] - times[beat])))
     bar_lengths = [end - start for start, end in zip(boundaries, boundaries[1:]) for _ in range(end - start)]
@@ -583,6 +643,9 @@ def quantize(
         inst: float(np.percentile([h.strength for h in hits if h.inst == inst], 90))
         for inst in INSTRUMENTS if any(h.inst == inst for h in hits)
     }
+    from .dynamics import ghost_states
+
+    ghosts = ghost_states(strokes)
     bars = []
     for index, (start, end) in enumerate(zip(boundaries, boundaries[1:])):
         a, b = start - first, end - first
@@ -610,7 +673,8 @@ def quantize(
         p90 = strengths[inst]
         ratio = min(1.0, hit.strength / p90) if p90 > 0 else 0.0
         velocity = max(1, min(127, round(40 + 70 * ratio)))
-        bars[bar_index].notes.append(Note(tick - starts[bar_index] * DIVISIONS, inst, velocity, bool(hit.ghost)))
+        state = ghosts.get((hit.time, inst), "normal")
+        bars[bar_index].notes.append(Note(tick - starts[bar_index] * DIVISIONS, inst, velocity, state == "ghost", hit.time, state))
     order = {inst: i for i, inst in enumerate(INSTRUMENTS)}
     for bar in bars:
         bar.notes.sort(key=lambda n: (n.tick, order[n.inst]))

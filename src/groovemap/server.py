@@ -3,24 +3,28 @@
 from __future__ import annotations
 
 import json
+import os
+import re
 import shutil
+import signal
 import tempfile
 import threading
+import statistics
 import time
 import uuid
 from _thread import LockType
-from collections.abc import AsyncIterator, Iterator
-from contextlib import asynccontextmanager, contextmanager
+from collections.abc import AsyncIterator, Callable, Iterator
+from contextlib import asynccontextmanager, contextmanager, nullcontext
 from copy import deepcopy
 from pathlib import Path
 from queue import Queue
 from typing import Annotated, Any, Literal
 
-from fastapi import FastAPI, File, Form, HTTPException, UploadFile
+from fastapi import Body, FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse, Response
-from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_validator
+from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_validator, model_validator
 from starlette.concurrency import run_in_threadpool
 
 from . import fetch, library
@@ -36,21 +40,34 @@ class OptionsPatch(BaseModel):
     triplets: Literal["auto", "off"] = "auto"
     meter: Annotated[int, Field(ge=1, le=12)] | None = None
     time_signature: str | None = None
+    meter_changes: list[dict[str, Any]] = Field(default_factory=list)
     odd_bars: Literal["none", "auto", "detected"] = "none"
     beat_shift: Annotated[float, Field(ge=-11, le=11, multiple_of=0.25)] = 0
     tempo_scale: Literal[0.5, 1, 2] = 1
     voices: Literal[1, 2] = 1
     sensitivity: Annotated[float, Field(ge=0.5, le=5)] = 1
+    ride_runs: bool = True
+    cymbal_veto: bool = True
     sound_names: dict[str, str] = Field(default_factory=dict)
 
     @field_validator("time_signature")
     @classmethod
     def validate_signature(cls, value: str | None) -> str | None:
         if value is not None:
-            from .metre import Signature
+            from .metre import parse_signatures
 
-            Signature.parse(value)
+            parse_signatures(value)
         return value
+
+    @model_validator(mode="after")
+    def validate_meter_changes(self) -> "OptionsPatch":
+        if self.meter_changes:
+            from .metre import parse_meter_changes
+
+            if self.time_signature is None:
+                raise ValueError("meter_changes need a time_signature")
+            parse_meter_changes(self.meter_changes, self.time_signature)
+        return self
 
     @field_validator("sound_names")
     @classmethod
@@ -86,6 +103,18 @@ class SoundNamesRequest(BaseModel):
         return OptionsPatch.validate_sound_names(names)
 
 
+class BeatGrid(BaseModel):
+    beats: list[Annotated[float, Field(ge=0, allow_inf_nan=False)]]
+    downbeats: list[Annotated[float, Field(ge=0, allow_inf_nan=False)]]
+
+    @field_validator("beats", "downbeats")
+    @classmethod
+    def ordered_times(cls, times: list[float]) -> list[float]:
+        if any(right <= left for left, right in zip(times, times[1:])):
+            raise ValueError("beat times must be strictly increasing")
+        return times
+
+
 # Everything the sound map is learned from and replays against; it never starts a missing model.
 REFINEMENT_CACHES = (
     "drums.htdemucs.wav", "beats.json", "activations.drums-htdemucs.npy",
@@ -107,6 +136,69 @@ class JobRequest(BaseModel):
         return source
 
 
+class ShutdownRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid", strict=True)
+
+    force: bool = False
+
+
+def stop_process(force: bool) -> None:
+    """Stop this server the way Ctrl+C does; a forced stop does not wait for a running transcription."""
+    threading.Timer(.3, os.kill, args=(os.getpid(), signal.SIGINT)).start()
+    if force:
+        watchdog = threading.Timer(8, os._exit, args=(0,))
+        watchdog.daemon = True
+        watchdog.start()
+
+
+BUSY = "지금 다른 곡을 채보하는 중입니다. 끝난 뒤 다시 시도하세요."
+
+# (substrings in lower-cased error text, message); the first match wins, so specific causes come first.
+ERROR_MESSAGES: tuple[tuple[tuple[str, ...], str], ...] = (
+    (("available in your country", "geo restrict", "geo-restrict", "geo_restrict", "blocked it in your country"),
+     "이 지역에서 볼 수 없는 영상입니다"),
+    (("confirm your age", "age-restricted", "age restricted", "inappropriate for some users", "sign in to confirm",
+      "login required", "requires authentication", "members-only", "join this channel", "use --cookies"),
+     "로그인이나 연령 확인이 필요한 영상이라 받을 수 없습니다"),
+    (("private video", "video unavailable", "this video is unavailable", "has been removed", "been terminated",
+      "video is not available", "http error 404", "is no longer available"),
+     "비공개이거나 삭제된 영상입니다"),
+    (("unable to download webpage", "name or service not known", "nodename nor servname", "name resolution",
+      "failed to resolve", "getaddrinfo", "timed out", "timeout", "connection refused", "connection reset",
+      "connection aborted", "network is unreachable", "no route to host", "urlopen error", "remote end closed",
+      "ssl:", "max retries exceeded"),
+     "네트워크에 연결할 수 없습니다"),
+    (("ffmpeg", "ffprobe", "invalid data found", "error opening input", "could not decode", "decoding",
+      "libsndfile", "format not recognised", "not a wav", "unknown format"),
+     "오디오를 읽지 못했습니다"),
+)
+
+
+def humanize_error(error: BaseException) -> tuple[str, str]:
+    """A short Korean message for the sidebar, and the raw text for a tooltip."""
+    detail = " ".join(str(error).split())[:2000] or type(error).__name__
+    lowered = detail.lower()
+    for needles, message in ERROR_MESSAGES:
+        if any(needle in lowered for needle in needles):
+            return message, detail
+    if isinstance(error, fetch.FetchError) and re.search(r"\byt-dlp\b", lowered):
+        return "영상을 받지 못했습니다", detail
+    return "채보 중 오류가 났습니다", detail
+
+
+class JobCancelled(Exception):
+    pass
+
+
+def _audio_seconds(path: Path) -> float | None:
+    try:
+        import soundfile
+
+        return float(soundfile.info(str(path)).duration) or None
+    except Exception:
+        return None
+
+
 def _validation_message(errors: list[dict[str, Any]]) -> str:
     return "; ".join(
         f"{'.'.join(map(str, error['loc'])) or 'options'}: {error['msg']}" for error in errors
@@ -121,6 +213,8 @@ class JobRunner:
         self.jobs: dict[str, dict[str, Any]] = {}
         self.queue: Queue[tuple[str, OptionsPatch, Path | None, SongMeta | None, Path | None] | None] = Queue()
         self.thread: threading.Thread | None = None
+        self.cancelled: set[str] = set()  # running jobs asked to stop at the next stage boundary
+        self.rates: list[float] = []  # processing seconds per audio second of finished jobs
 
     def start(self) -> None:
         self.thread = threading.Thread(target=self._work, name="groovemap-worker", daemon=True)
@@ -154,7 +248,13 @@ class JobRunner:
             "slug": song_dir.name if song_dir is not None else None,
             "stages": [{"key": key, "status": "pending", "seconds": None} for key in STAGES],
             "error": None,
+            "error_detail": None,
             "created_at": time.time(),
+            "started_at": None,
+            "finished_at": None,
+            "audio_seconds": _audio_seconds(song_dir / "audio.wav") if song_dir is not None else (
+                meta.duration if meta is not None and meta.duration else None
+            ),
         }
         with self.lock:
             if unless_pending and any(
@@ -163,36 +263,84 @@ class JobRunner:
                 return None
             self.jobs[job["id"]] = job
             self.queue.put((job["id"], options, temporary, meta, song_dir))
-            return deepcopy(job)
+            return self._estimated()[job["id"]]
 
     def get(self, job_id: str) -> dict[str, Any]:
         with self.lock:
             if job_id not in self.jobs:
                 raise HTTPException(404, "job not found")
-            return deepcopy(self.jobs[job_id])
+            return self._estimated()[job_id]
 
     def list(self) -> list[dict[str, Any]]:
         with self.lock:
-            return deepcopy(list(reversed(self.jobs.values())))
+            return list(reversed(self._estimated().values()))
+
+    def cancel(self, job_id: str) -> dict[str, Any]:
+        """Drop a queued job now; ask a running one to stop before its next stage."""
+        with self.lock:
+            job = self.jobs.get(job_id)
+            if job is None:
+                raise HTTPException(404, "job not found")
+            if job["status"] == "queued":
+                job.update(status="cancelled", finished_at=time.time())
+            elif job["status"] == "running":
+                self.cancelled.add(job_id)
+            elif job["status"] != "cancelled":
+                raise HTTPException(409, "이미 끝난 작업입니다")
+            return self._estimated()[job_id]
+
+    def _check(self, job_id: str) -> None:
+        with self.lock:
+            if job_id in self.cancelled:
+                raise JobCancelled
+
+    def _estimated(self) -> dict[str, dict[str, Any]]:
+        """Copies of the jobs with eta_seconds and queue_position; call with self.lock held."""
+        rate = statistics.median(self.rates) if self.rates else None
+        now = time.time()
+        jobs = {key: deepcopy(job) | {"eta_seconds": None, "queue_position": None} for key, job in self.jobs.items()}
+        ahead: float | None = 0.0  # seconds of work before the next queued job starts
+        position = 0
+        for job in jobs.values():  # insertion order is queue order
+            if job["status"] not in ("queued", "running"):
+                continue
+            own = rate * job["audio_seconds"] if rate is not None and job["audio_seconds"] else None
+            if job["status"] == "running":
+                if own is not None and job["started_at"] is not None:
+                    left = own - (now - job["started_at"])
+                    job["eta_seconds"] = round(left) if left > 0 else None
+                    own = max(left, 0)
+            else:
+                position += 1
+                job["queue_position"] = position
+                if ahead is not None and own is not None:
+                    job["eta_seconds"] = round(ahead + own)
+            ahead = ahead + own if ahead is not None and own is not None else None
+        return jobs
 
     def _work(self) -> None:
         while (item := self.queue.get()) is not None:
             job_id, patch, temporary, meta, song_dir = item
 
             def progress(key: str, status: str, seconds: float | None = None) -> None:
+                if status in ("running", "cached"):
+                    self._check(job_id)  # stop between stages, before the next one writes anything
                 with self.lock:
                     stage = self.jobs[job_id]["stages"][STAGES.index(key)]
                     stage.update(status=status, seconds=seconds)
 
+            created: Path | None = None  # a song directory this job made, removed again if it is cancelled
             try:
                 with self.execution_lock:
                     with self.lock:
-                        self.jobs[job_id]["status"] = "running"
+                        if job_id not in self.jobs or self.jobs[job_id]["status"] == "cancelled":
+                            continue  # cancelled while queued (and maybe already trimmed); finally still cleans up
+                        self.jobs[job_id].update(status="running", started_at=time.time())
                         source = self.jobs[job_id]["source"]
                     if song_dir is not None:
                         meta = SongMeta.load(song_dir / "meta.json")
                         with self.lock:
-                            self.jobs[job_id].update(title=meta.title, slug=song_dir.name)
+                            self.jobs[job_id].update(title=library.display_title(meta, song_dir / "meta.json"), slug=song_dir.name)
                         progress("fetch", "cached")
                     else:
                         progress("fetch", "running")
@@ -200,11 +348,19 @@ class JobRunner:
                         if fetch.is_url(source):
                             meta = meta or fetch.youtube_info(source)
                         with self.lock:
-                            self.jobs[job_id]["title"] = meta.title if meta else Path(source).stem
+                            self.jobs[job_id]["title"] = library.display_title(meta) if meta else Path(source).stem
+                        before = {d.name for d in self.songs_dir.iterdir()} if self.songs_dir.is_dir() else set()
                         song_dir, meta = library.prepare_song(source, self.songs_dir, meta=meta)
+                        if song_dir.name not in before:
+                            created = song_dir
                         with self.lock:
-                            self.jobs[job_id].update(title=meta.title, slug=song_dir.name)
+                            self.jobs[job_id].update(title=library.display_title(meta, song_dir / "meta.json"), slug=song_dir.name)
                         progress("fetch", "done", time.monotonic() - started)
+                    with self.lock:
+                        self.jobs[job_id]["audio_seconds"] = _audio_seconds(song_dir / "audio.wav") or (
+                            meta.duration if meta is not None and meta.duration else None
+                        )
+                    self._check(job_id)
 
                     from . import pipeline  # torch is loaded only when there is work to do.
 
@@ -213,26 +369,37 @@ class JobRunner:
                     )
                     opts = pipeline.Options(**options.model_dump(), pdf=False, preview=False, refresh_stale=True)
                     pipeline.run(song_dir, meta, opts, progress=progress)
+                    self._check(job_id)
                     library.save_options(song_dir, opts)
                     with self.lock:
-                        self.jobs[job_id]["status"] = "done"
-            except Exception as error:
+                        job = self.jobs[job_id]
+                        job.update(status="done", finished_at=time.time())
+                        if job["audio_seconds"] and job["started_at"] is not None:
+                            self.rates.append((job["finished_at"] - job["started_at"]) / job["audio_seconds"])
+            except JobCancelled:
+                if created is not None:
+                    shutil.rmtree(created, ignore_errors=True)  # only a song this job started; never older results
                 with self.lock:
-                    self.jobs[job_id].update(
-                        status="error", error=" ".join(str(error).split())[:300] or type(error).__name__
-                    )
+                    self.jobs[job_id].update(status="cancelled", finished_at=time.time())
+            except Exception as error:
+                message, detail = humanize_error(error)
+                with self.lock:
+                    self.jobs[job_id].update(status="error", error=message, error_detail=detail, finished_at=time.time())
             finally:
                 if temporary is not None:
                     shutil.rmtree(temporary.parent, ignore_errors=True)
                 with self.lock:
-                    finished = [key for key, job in self.jobs.items() if job["status"] in ("done", "error")]
+                    self.cancelled.discard(job_id)
+                    finished = [key for key, job in self.jobs.items() if job["status"] in ("done", "error", "cancelled")]
                     for key in finished[:-20]:
                         del self.jobs[key]
                 self.queue.task_done()
         self.queue.task_done()
 
 
-def create_app(songs_dir: Path, static_dir: Path | None = None) -> FastAPI:
+def create_app(
+    songs_dir: Path, static_dir: Path | None = None, shutdown: Callable[[bool], None] = stop_process
+) -> FastAPI:
     songs_dir = songs_dir.resolve()
     execution_lock = threading.Lock()
     runner = JobRunner(songs_dir, execution_lock)
@@ -273,6 +440,7 @@ def create_app(songs_dir: Path, static_dir: Path | None = None) -> FastAPI:
             "options": library.load_options(path),
             "score": json.loads(score.read_text(encoding="utf-8")) if score.is_file() else None,
             "has_drums": any(p.is_file() for p in path.glob("drums.*.wav")),
+            "has_mr": (path / "drums.htdemucs.wav").is_file(),
             "has_video": (path / "video.mp4").is_file(),
         }
 
@@ -280,7 +448,7 @@ def create_app(songs_dir: Path, static_dir: Path | None = None) -> FastAPI:
     def idle() -> Iterator[None]:
         """Hold the pipeline lock, refusing instead of waiting behind a running job."""
         if not execution_lock.acquire(blocking=False):
-            raise HTTPException(409, "채보 작업이 끝난 뒤에 다시 시도하세요")
+            raise HTTPException(409, BUSY)
         try:
             yield
         finally:
@@ -300,10 +468,15 @@ def create_app(songs_dir: Path, static_dir: Path | None = None) -> FastAPI:
         return song(directory(slug))
 
     @app.post("/api/songs/{slug}/score")
-    def update_score(slug: str, patch: OptionsPatch) -> dict[str, Any]:
+    def update_score(slug: str, patch: Annotated[dict[str, Any], Body()]) -> dict[str, Any]:
         path = directory(slug)
-        with execution_lock:
-            options = OptionsPatch.model_validate(library.load_options(path) | patch.model_dump(exclude_unset=True))
+        with idle():
+            # Validate the merged options, not the patch alone: a patch may carry
+            # only meter changes for the signature already saved with the song.
+            try:
+                options = OptionsPatch.model_validate_json(json.dumps(library.load_options(path) | patch))
+            except ValidationError as error:
+                raise RequestValidationError(error.errors()) from error
             # Signature corrections and sound names must never start a missing slow model.
             cached = REFINEMENT_CACHES if options.time_signature is not None or options.sound_names else REFINEMENT_CACHES[:3]
             require_caches(path, cached)
@@ -334,7 +507,7 @@ def create_app(songs_dir: Path, static_dir: Path | None = None) -> FastAPI:
     def sounds(slug: str) -> dict[str, Any]:
         """The song's sound groups, learned on first request and kept while its caches are unchanged."""
         path = directory(slug)
-        with execution_lock:
+        with idle():
             options = OptionsPatch.model_validate(library.load_options(path))
             require_caches(path, REFINEMENT_CACHES)
 
@@ -358,13 +531,13 @@ def create_app(songs_dir: Path, static_dir: Path | None = None) -> FastAPI:
         unknown = sorted(set(body.names) - {group.id for group in sound_map.groups})
         if unknown:
             raise HTTPException(422, f"unknown sound group: {', '.join(unknown)}")
-        return update_score(slug, OptionsPatch(sound_names=body.names))
+        return update_score(slug, {"sound_names": body.names})
 
     @app.post("/api/songs/{slug}/transcribe")
     def transcribe(slug: str, patch: OptionsPatch | None = None) -> dict[str, Any]:
         path = directory(slug)
         meta = SongMeta.load(path / "meta.json")
-        return runner.enqueue(meta.source, patch or OptionsPatch(), song_dir=path, title=meta.title)
+        return runner.enqueue(meta.source, patch or OptionsPatch(), song_dir=path, title=library.display_title(meta, path / "meta.json"))
 
     @app.post("/api/songs/retranscribe")
     def retranscribe(body: RetranscribeRequest | None = None) -> list[dict[str, Any]]:
@@ -390,17 +563,36 @@ def create_app(songs_dir: Path, static_dir: Path | None = None) -> FastAPI:
         text = require_file(path / f"{path.name}.musicxml").read_text(encoding="utf-8")
         return Response(text, media_type="application/vnd.recordare.musicxml+xml")
 
+    @app.get("/api/songs/{slug}/beats")
+    def beats(slug: str) -> dict[str, Any]:
+        """Read the tracker clock for practice clicks; never start a missing model."""
+        path = require_file(directory(slug) / "beats.json")
+        # A plain read: it must keep working while another song is being transcribed.
+        try:
+            return BeatGrid.model_validate_json(path.read_text(encoding="utf-8")).model_dump()
+        except (OSError, ValueError) as error:
+            raise HTTPException(409, "박자 캐시를 읽지 못했습니다. ‘다시 채보’를 눌러 분석을 다시 돌리세요") from error
+
     @app.get("/api/songs/{slug}/audio")
-    def audio(slug: str, stem: Literal["mix", "drums"] = "mix") -> FileResponse:
+    def audio(slug: str, stem: Literal["mix", "drums", "nodrums"] = "mix") -> FileResponse:
         path = directory(slug)
         if stem == "mix":
             wav = path / "audio.wav"
+        elif stem == "nodrums" and (cached := library.backing_track_cached(path)) is not None:
+            wav = cached
+        elif stem == "nodrums":
+            with idle():
+                require_file(path / "drums.htdemucs.wav")
+                try:
+                    wav = library.backing_track(path)
+                except fetch.FetchError as error:
+                    raise HTTPException(503, str(error)) from error
         else:
             stems = [p for p in path.glob("drums.*.wav") if p.is_file()]
             if not stems:
                 raise HTTPException(404, "drum stem not found")
             wav = max(stems, key=lambda p: p.stat().st_mtime)
-        return FileResponse(require_file(wav), media_type="audio/wav")
+        return FileResponse(require_file(wav), media_type="audio/mp4" if wav.suffix == ".m4a" else "audio/wav")
 
     @app.get("/api/songs/{slug}/video")
     def video(slug: str) -> FileResponse:
@@ -428,9 +620,10 @@ def create_app(songs_dir: Path, static_dir: Path | None = None) -> FastAPI:
         if kind == "pdf":
             from . import render
 
-            with execution_lock:
-                xml = require_file(path / f"{path.name}.musicxml")
-                if not target.is_file() or target.stat().st_mtime < xml.stat().st_mtime:
+            xml = require_file(path / f"{path.name}.musicxml")
+            fresh = target.is_file() and target.stat().st_mtime >= xml.stat().st_mtime
+            with nullcontext() if fresh else idle():
+                if not fresh:
                     try:
                         rendered = render.render_pdf(xml, target)
                     except OSError as error:
@@ -485,6 +678,19 @@ def create_app(songs_dir: Path, static_dir: Path | None = None) -> FastAPI:
     @app.get("/api/jobs/{id}")
     def get_job(id: str) -> dict[str, Any]:
         return runner.get(id)
+
+    @app.delete("/api/jobs/{id}")
+    def cancel_job(id: str) -> dict[str, Any]:
+        return runner.cancel(id)
+
+    @app.post("/api/shutdown")
+    def shutdown_server(body: ShutdownRequest) -> dict[str, Any]:
+        # The JSON body forces a CORS preflight (FastAPI ignores non-JSON bodies), so other sites cannot stop the server.
+        active = [job for job in runner.list() if job["status"] in ("queued", "running")]
+        if active and not body.force:
+            raise HTTPException(409, f"채보 작업 {len(active)}개가 진행 중입니다")
+        shutdown(body.force)
+        return {"stopping": True, "interrupted": len(active)}
 
     if static_dir is not None and static_dir.is_dir():
         static_root = static_dir.resolve()

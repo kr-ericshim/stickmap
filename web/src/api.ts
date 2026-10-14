@@ -18,7 +18,12 @@ export const FAMILY: Record<Inst, Family> = {
   ride: 'cymbal', ride_bell: 'cymbal', cymbal: 'cymbal',
 }
 
-export type Note = { tick: number; inst: Inst; velocity: number; ghost?: boolean }
+export type Note = {
+  tick: number; inst: Inst; velocity: number; ghost?: boolean
+  raw_time?: number // source onset in the recording; independent of the displayed tick
+  ghost_status?: 'ghost' | 'normal' | 'unknown'
+}
+export type BeatGrid = { beats: number[]; downbeats: number[] } // seconds in the original recording
 
 export type Bar = {
   index: number
@@ -31,7 +36,8 @@ export type Bar = {
   notes: Note[]
 }
 
-export type TimeSignature = `${number}/${4 | 8 | 16}`
+// A '+' joins bar lengths that share one beat unit; each bar picks one of them.
+export type TimeSignature = `${number}/${4 | 8 | 16}` | `${number}/${4 | 8 | 16}+${string}`
 
 export type TimeSignatureSuggestion = {
   time_signature: TimeSignature
@@ -66,16 +72,21 @@ export type Score = {
 // What the user named a sound group: an instrument to write it as, or 'ignore' to leave it out.
 export type SoundName = Inst | 'ignore'
 
+export type MeterChange = { time: number; time_signature: TimeSignature }
+
 export type Options = {
   grid: 8 | 16
   triplets: 'auto' | 'off'
   meter: number | null
   time_signature: TimeSignature | null
+  // From each audio time on, bars use that signature instead of the automatic choice.
+  meter_changes?: MeterChange[]
   odd_bars: 'none' | 'auto' | 'detected'
   beat_shift: number
   tempo_scale: 0.5 | 1 | 2
   sensitivity: number
   voices: 1 | 2
+  ride_runs: boolean // evenly spaced cymbal runs are written as ride, lone cymbals as crash
   sound_names: Record<string, SoundName> // sound group id -> name; {} means the detector's labels stand
 }
 
@@ -118,6 +129,7 @@ export type Song = SongSummary & {
   options: Options
   score: Score
   has_drums: boolean
+  has_mr: boolean
   has_video: boolean
 }
 
@@ -139,13 +151,22 @@ export type Stage = {
 
 export type Job = {
   id: string
-  status: 'queued' | 'running' | 'done' | 'error'
+  status: 'queued' | 'running' | 'done' | 'error' | 'cancelled'
   source: string
   title: string | null
   slug: string | null
   stages: Stage[]
+  /** Short Korean message; the raw tool output is in error_detail. */
   error: string | null
+  error_detail: string | null
   created_at: number
+  started_at: number | null
+  finished_at: number | null
+  audio_seconds: number | null
+  /** Seconds left, from this server's finished jobs; null when there is nothing honest to say. */
+  eta_seconds: number | null
+  /** 1 for the next queued job; null unless queued. */
+  queue_position: number | null
 }
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
@@ -175,6 +196,7 @@ export const api = {
   transcribe: (slug: string) => request<Job>(`${song(slug)}/transcribe`, { method: 'POST' }),
   retranscribe: (scope: 'outdated' | 'all') => request<Job[]>('/api/songs/retranscribe', json('POST', { scope })),
   musicxml: (slug: string) => request<string>(`${song(slug)}/musicxml`),
+  beats: (slug: string) => request<BeatGrid>(`${song(slug)}/beats`),
   sounds: (slug: string) => request<SoundMap>(`${song(slug)}/sounds`),
   nameSounds: (slug: string, names: Record<string, SoundName>) =>
     request<Song>(`${song(slug)}/sounds`, json('POST', { names })),
@@ -183,12 +205,15 @@ export const api = {
   search: (query: string) => request<SearchResult[]>(`/api/search?q=${encodeURIComponent(query)}`),
   jobs: () => request<Job[]>('/api/jobs'),
   createJob: (source: string) => request<Job>('/api/jobs', json('POST', { source })),
+  cancelJob: (id: string) => request<Job>(`/api/jobs/${encodeURIComponent(id)}`, { method: 'DELETE' }),
+  shutdown: (force: boolean) =>
+    request<{ stopping: boolean; interrupted: number }>('/api/shutdown', json('POST', { force })),
   upload: (file: File) => {
     const form = new FormData()
     form.append('file', file)
     return request<Job>('/api/upload', { method: 'POST', body: form })
   },
-  audioUrl: (slug: string, stem: 'mix' | 'drums') => `${song(slug)}/audio?stem=${stem}`,
+  audioUrl: (slug: string, stem: 'mix' | 'drums' | 'nodrums') => `${song(slug)}/audio?stem=${stem}`,
   videoUrl: (slug: string) => `${song(slug)}/video`,
   downloadUrl: (slug: string, kind: 'pdf' | 'musicxml' | 'midi') => `${song(slug)}/download/${kind}`,
 }

@@ -12,6 +12,7 @@ from pathlib import Path
 import numpy as np
 
 from . import fingerprint, kit, library, models, render
+from .cymbals import ride_runs
 from .fetch import SongMeta
 from .fills import attack_times, fill_snares, tom_runs
 from .midi import to_midi
@@ -27,6 +28,7 @@ class Options:
     triplets: str = "auto"
     meter: int | None = None
     time_signature: str | None = None
+    meter_changes: list[dict] = field(default_factory=list)  # user-placed signature changes, by audio time
     odd_bars: str = "none"  # none: regular bars; auto: odd bars when detections insist; detected
     beat_shift: float = 0  # move beat 1 later by this many beats, in steps of a quarter beat
     tempo_scale: float = 1  # 2 counts the beat twice as fast as the tracker did, 0.5 half
@@ -36,6 +38,8 @@ class Options:
     onset_input: str = "drums"  # run ADTOF on the separated "drums" stem or the full "mix"
     thresholds: list[float] | None = None
     sensitivity: float = 1  # divides the default thresholds: 2 picks up hits half as strong
+    ride_runs: bool = True
+    cymbal_veto: bool = True
     sound_names: dict[str, str] = field(default_factory=dict)  # the user's names for the song's sound groups (kit.py)
     pdf: bool = True
     preview: bool = False
@@ -44,9 +48,15 @@ class Options:
 
     def __post_init__(self) -> None:
         if self.time_signature is not None:
-            from .metre import Signature
+            from .metre import parse_signatures
 
-            Signature.parse(self.time_signature)
+            parse_signatures(self.time_signature)
+        if self.meter_changes:
+            from .metre import parse_meter_changes
+
+            if self.time_signature is None:
+                raise ValueError("meter_changes need a time_signature")
+            parse_meter_changes(self.meter_changes, self.time_signature)
         if any(name not in kit.NAMES for name in self.sound_names.values()):
             raise ValueError(f"sound names must be one of {kit.NAMES}")
 
@@ -69,6 +79,7 @@ def cache_paths(song_dir: Path, opts: Options) -> dict[str, Path]:
         "activations": song_dir / f"activations.{onset_tag}.npy",
         # On the stem, two more looks at the song refine the hits: ADTOF on the full
         # mix (toms) and the snare's loudness (ghost notes); attacks complete the fills.
+        "adtof_input": song_dir / f"adtof_input.{opts.demucs_model}.npy",
         "mix": song_dir / "activations.mix.npy",
         "snare": song_dir / f"snare.{opts.demucs_model}.npy",
         "attacks": song_dir / f"attacks.{opts.demucs_model}.npy",
@@ -188,7 +199,31 @@ def run(
             # attack they sorted into a group of its own must not come back as a snare.
             hits = fill_snares(hits, activations, np.load(snare_npy), attacks)
         hits = tom_sizes(drums, hits)
-    common = dict(title=meta.title, subtitle=meta.uploader, grid=opts.grid,
+    if opts.ride_runs:
+        cymbal_count = sum(hit.inst == "cymbal" for hit in hits)
+        original_cymbals = hits
+        hits = ride_runs(hits)
+        converted = cymbal_count - sum(hit.inst == "cymbal" for hit in hits)
+        log(f"ride runs: {converted} of {cymbal_count} cymbal hits -> ride")
+        if opts.cymbal_veto:
+            from .cymbal_veto import adtof_input, apply_veto
+
+            def veto_features():
+                # Mix-only transcription may not have made a drum stem yet.
+                if not refine and not opts.preview:
+                    stage("separate", f"drum separation ({opts.demucs_model}, {device})", (drums, separate))
+                stage("score", "cymbal veto features",
+                      (paths["adtof_input"], lambda target: np.save(target, adtof_input(drums))))
+                return np.load(paths["adtof_input"], allow_pickle=False)
+
+            hits = apply_veto(original_cymbals, hits, veto_features, log)
+
+    from .dynamics import annotate_confidence
+
+    hits = annotate_confidence(hits, activations, np.load(snare_npy) if refine and snare_npy.exists() else None)
+    from .library import display_title
+
+    common = dict(title=display_title(meta, song_dir / "meta.json"), subtitle=meta.uploader, grid=opts.grid,
                   triplets=opts.triplets, beat_shift=opts.beat_shift, tempo_scale=opts.tempo_scale)
     if opts.time_signature is not None:
         from .signature_quantize import quantize_signature
@@ -196,10 +231,10 @@ def run(
         score = quantize_signature(
             hits, grid["beats"], grid["downbeats"], activations=activations,
             attacks=np.load(attacks_npy) if attacks_npy.exists() else [],
-            time_signature=opts.time_signature, **common,
+            time_signature=opts.time_signature, meter_changes=opts.meter_changes, **common,
         )
     else:
-        score = quantize(hits, grid["beats"], grid["downbeats"], meter=opts.meter, odd_bars=opts.odd_bars, **common)
+        score = quantize(hits, grid["beats"], grid["downbeats"], attacks=attacks, meter=opts.meter, odd_bars=opts.odd_bars, **common)
         if opts.meter is None:
             from .meter_suggestion import suggest_signature
 

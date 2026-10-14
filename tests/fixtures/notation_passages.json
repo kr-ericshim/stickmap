@@ -1,0 +1,1557 @@
+{
+ "source": "tony-taylor-jr-bp-deadline-tour-tokyo-band-jam-clagz2kQWds",
+ "regions": {
+  "m74": {
+   "beats": [
+    105.8,
+    106.16,
+    106.52,
+    106.9,
+    107.28,
+    107.66,
+    108.02,
+    108.38,
+    108.82,
+    109.2,
+    109.58,
+    109.94,
+    110.3,
+    110.66,
+    111.04,
+    111.4,
+    111.8,
+    112.16,
+    112.54,
+    112.9,
+    113.3
+   ],
+   "downbeats": [
+    105.8,
+    107.28,
+    108.82,
+    110.3,
+    111.8
+   ],
+   "hits": [
+    {
+     "time": 105.78,
+     "inst": "hihat",
+     "strength": 0.23961032927036285,
+     "ghost": false
+    },
+    {
+     "time": 105.78,
+     "inst": "cymbal",
+     "strength": 0.25707730650901794,
+     "ghost": false
+    },
+    {
+     "time": 105.79,
+     "inst": "kick",
+     "strength": 0.8954212665557861,
+     "ghost": false
+    },
+    {
+     "time": 105.79,
+     "inst": "snare",
+     "strength": 1.27820885181427,
+     "ghost": false
+    },
+    {
+     "time": 105.98,
+     "inst": "tom_low",
+     "strength": 0.8935619592666626,
+     "ghost": false
+    },
+    {
+     "time": 106.07,
+     "inst": "tom_low",
+     "strength": 0.8987516164779663,
+     "ghost": false
+    },
+    {
+     "time": 106.16,
+     "inst": "tom_low",
+     "strength": 0.919118344783783,
+     "ghost": false
+    },
+    {
+     "time": 106.25,
+     "inst": "tom_low",
+     "strength": 0.9167537689208984,
+     "ghost": false
+    },
+    {
+     "time": 106.35,
+     "inst": "kick",
+     "strength": 0.9113622903823853,
+     "ghost": false
+    },
+    {
+     "time": 106.35,
+     "inst": "hihat",
+     "strength": 0.23846030235290527,
+     "ghost": false
+    },
+    {
+     "time": 106.44,
+     "inst": "kick",
+     "strength": 0.6366274356842041,
+     "ghost": false
+    },
+    {
+     "time": 106.44,
+     "inst": "hihat",
+     "strength": 0.33444178104400635,
+     "ghost": false
+    },
+    {
+     "time": 106.53,
+     "inst": "tom_high",
+     "strength": 0.8548358678817749,
+     "ghost": false
+    },
+    {
+     "time": 106.63,
+     "inst": "kick",
+     "strength": 0.9162920713424683,
+     "ghost": false
+    },
+    {
+     "time": 106.63,
+     "inst": "tom_low",
+     "strength": 0.2198200523853302,
+     "ghost": false
+    },
+    {
+     "time": 106.72,
+     "inst": "cymbal",
+     "strength": 0.24297486245632172,
+     "ghost": false
+    },
+    {
+     "time": 106.73,
+     "inst": "kick",
+     "strength": 0.8785574436187744,
+     "ghost": false
+    },
+    {
+     "time": 106.91,
+     "inst": "tom_low",
+     "strength": 0.8324323892593384,
+     "ghost": false
+    },
+    {
+     "time": 107.01,
+     "inst": "hihat",
+     "strength": 0.37279096245765686,
+     "ghost": false
+    },
+    {
+     "time": 107.02,
+     "inst": "kick",
+     "strength": 0.9548152685165405,
+     "ghost": false
+    },
+    {
+     "time": 107.11,
+     "inst": "tom_low",
+     "strength": 0.5455014109611511,
+     "ghost": false
+    },
+    {
+     "time": 107.2,
+     "inst": "kick",
+     "strength": 0.9356176853179932,
+     "ghost": false
+    },
+    {
+     "time": 107.28,
+     "inst": "hihat",
+     "strength": 0.3138585388660431,
+     "ghost": false
+    },
+    {
+     "time": 107.28,
+     "inst": "cymbal",
+     "strength": 0.45641276240348816,
+     "ghost": false
+    },
+    {
+     "time": 107.28,
+     "inst": "snare",
+     "strength": 1.7155870199203491,
+     "ghost": false
+    },
+    {
+     "time": 107.38,
+     "inst": "kick",
+     "strength": 0.9049134254455566,
+     "ghost": false
+    },
+    {
+     "time": 107.47,
+     "inst": "kick",
+     "strength": 0.9633356928825378,
+     "ghost": false
+    },
+    {
+     "time": 107.47,
+     "inst": "cymbal",
+     "strength": 0.5912325978279114,
+     "ghost": false
+    },
+    {
+     "time": 107.57,
+     "inst": "snare",
+     "strength": 0.5192950367927551,
+     "ghost": false
+    },
+    {
+     "time": 107.66,
+     "inst": "snare",
+     "strength": 0.8846578598022461,
+     "ghost": false
+    },
+    {
+     "time": 107.75,
+     "inst": "snare",
+     "strength": 0.27797839045524597,
+     "ghost": true
+    },
+    {
+     "time": 107.86,
+     "inst": "snare",
+     "strength": 1.8648977279663086,
+     "ghost": false
+    },
+    {
+     "time": 107.95,
+     "inst": "snare",
+     "strength": 0.2683391571044922,
+     "ghost": true
+    },
+    {
+     "time": 108.04,
+     "inst": "snare",
+     "strength": 0.8502945303916931,
+     "ghost": false
+    },
+    {
+     "time": 108.14,
+     "inst": "kick",
+     "strength": 0.9778313636779785,
+     "ghost": false
+    },
+    {
+     "time": 108.14,
+     "inst": "hihat",
+     "strength": 0.6165367960929871,
+     "ghost": false
+    },
+    {
+     "time": 108.23,
+     "inst": "hihat",
+     "strength": 0.6167879700660706,
+     "ghost": false
+    },
+    {
+     "time": 108.32,
+     "inst": "snare",
+     "strength": 0.4354056119918823,
+     "ghost": true
+    },
+    {
+     "time": 108.41,
+     "inst": "kick",
+     "strength": 0.7101909518241882,
+     "ghost": false
+    },
+    {
+     "time": 108.41,
+     "inst": "tom_low",
+     "strength": 0.5738056898117065,
+     "ghost": false
+    },
+    {
+     "time": 108.41,
+     "inst": "snare",
+     "strength": 0.3580676317214966,
+     "ghost": true
+    },
+    {
+     "time": 108.5,
+     "inst": "hihat",
+     "strength": 0.4872454106807709,
+     "ghost": false
+    },
+    {
+     "time": 108.6,
+     "inst": "snare",
+     "strength": 2.296318531036377,
+     "ghost": false
+    },
+    {
+     "time": 108.69,
+     "inst": "snare",
+     "strength": 0.2996923625469208,
+     "ghost": true
+    },
+    {
+     "time": 108.79,
+     "inst": "snare",
+     "strength": 0.24994982779026031,
+     "ghost": true
+    },
+    {
+     "time": 108.88,
+     "inst": "kick",
+     "strength": 0.9640837907791138,
+     "ghost": false
+    },
+    {
+     "time": 108.88,
+     "inst": "hihat",
+     "strength": 0.5553926825523376,
+     "ghost": false
+    },
+    {
+     "time": 108.97,
+     "inst": "tom",
+     "strength": 0.699677586555481,
+     "ghost": false
+    },
+    {
+     "time": 109.06,
+     "inst": "kick",
+     "strength": 0.9629437923431396,
+     "ghost": false
+    },
+    {
+     "time": 109.06,
+     "inst": "hihat",
+     "strength": 0.31762754917144775,
+     "ghost": false
+    },
+    {
+     "time": 109.16,
+     "inst": "hihat",
+     "strength": 0.22844740748405457,
+     "ghost": false
+    },
+    {
+     "time": 109.16,
+     "inst": "snare",
+     "strength": 0.966961681842804,
+     "ghost": false
+    },
+    {
+     "time": 109.25,
+     "inst": "kick",
+     "strength": 0.9734594821929932,
+     "ghost": false
+    },
+    {
+     "time": 109.34,
+     "inst": "tom_low",
+     "strength": 0.6967442035675049,
+     "ghost": false
+    },
+    {
+     "time": 109.35,
+     "inst": "kick",
+     "strength": 0.2164124995470047,
+     "ghost": false
+    },
+    {
+     "time": 109.44,
+     "inst": "snare",
+     "strength": 0.32911983132362366,
+     "ghost": true
+    },
+    {
+     "time": 109.54,
+     "inst": "snare",
+     "strength": 0.8553904294967651,
+     "ghost": false
+    },
+    {
+     "time": 109.62,
+     "inst": "kick",
+     "strength": 0.9712575674057007,
+     "ghost": false
+    },
+    {
+     "time": 109.62,
+     "inst": "snare",
+     "strength": 0.21083694696426392,
+     "ghost": true
+    },
+    {
+     "time": 109.71,
+     "inst": "tom_high",
+     "strength": 0.7052218914031982,
+     "ghost": false
+    },
+    {
+     "time": 109.71,
+     "inst": "snare",
+     "strength": 0.021954314783215523,
+     "ghost": true
+    },
+    {
+     "time": 109.81,
+     "inst": "snare",
+     "strength": 0.3529038429260254,
+     "ghost": true
+    },
+    {
+     "time": 109.91,
+     "inst": "snare",
+     "strength": 0.5714836120605469,
+     "ghost": false
+    },
+    {
+     "time": 109.99,
+     "inst": "kick",
+     "strength": 0.9565080404281616,
+     "ghost": false
+    },
+    {
+     "time": 109.99,
+     "inst": "hihat",
+     "strength": 0.4814389646053314,
+     "ghost": false
+    },
+    {
+     "time": 110.1,
+     "inst": "snare",
+     "strength": 0.674757719039917,
+     "ghost": false
+    },
+    {
+     "time": 110.2,
+     "inst": "snare",
+     "strength": 0.38025808334350586,
+     "ghost": true
+    },
+    {
+     "time": 110.29,
+     "inst": "snare",
+     "strength": 1.0456037521362305,
+     "ghost": false
+    },
+    {
+     "time": 110.39,
+     "inst": "tom_high",
+     "strength": 0.4687592089176178,
+     "ghost": false
+    },
+    {
+     "time": 110.39,
+     "inst": "snare",
+     "strength": 0.30668124556541443,
+     "ghost": true
+    },
+    {
+     "time": 110.48,
+     "inst": "tom_low",
+     "strength": 0.9021587371826172,
+     "ghost": false
+    },
+    {
+     "time": 110.57,
+     "inst": "hihat",
+     "strength": 0.5685862898826599,
+     "ghost": false
+    },
+    {
+     "time": 110.66,
+     "inst": "kick",
+     "strength": 0.9202694892883301,
+     "ghost": false
+    },
+    {
+     "time": 110.66,
+     "inst": "tom_low",
+     "strength": 0.6565383672714233,
+     "ghost": false
+    },
+    {
+     "time": 110.75,
+     "inst": "kick",
+     "strength": 0.9158437848091125,
+     "ghost": false
+    },
+    {
+     "time": 110.85,
+     "inst": "tom_low",
+     "strength": 0.7611632347106934,
+     "ghost": false
+    },
+    {
+     "time": 110.92,
+     "inst": "hihat",
+     "strength": 0.4343681037425995,
+     "ghost": false
+    },
+    {
+     "time": 110.93,
+     "inst": "kick",
+     "strength": 0.8836032748222351,
+     "ghost": false
+    },
+    {
+     "time": 111.03,
+     "inst": "tom_low",
+     "strength": 0.7508699893951416,
+     "ghost": false
+    },
+    {
+     "time": 111.12,
+     "inst": "tom_low",
+     "strength": 0.9001420140266418,
+     "ghost": false
+    },
+    {
+     "time": 111.22,
+     "inst": "snare",
+     "strength": 2.2019684314727783,
+     "ghost": false
+    },
+    {
+     "time": 111.32,
+     "inst": "kick",
+     "strength": 0.9554049372673035,
+     "ghost": false
+    },
+    {
+     "time": 111.41,
+     "inst": "tom_low",
+     "strength": 0.8201503753662109,
+     "ghost": false
+    },
+    {
+     "time": 111.42,
+     "inst": "kick",
+     "strength": 0.4822034537792206,
+     "ghost": false
+    },
+    {
+     "time": 111.51,
+     "inst": "tom_high",
+     "strength": 0.8745379447937012,
+     "ghost": false
+    },
+    {
+     "time": 111.6,
+     "inst": "tom_low",
+     "strength": 0.9004689455032349,
+     "ghost": false
+    },
+    {
+     "time": 111.69,
+     "inst": "hihat",
+     "strength": 0.3007236421108246,
+     "ghost": false
+    },
+    {
+     "time": 111.7,
+     "inst": "kick",
+     "strength": 0.9355699419975281,
+     "ghost": false
+    },
+    {
+     "time": 111.79,
+     "inst": "snare",
+     "strength": 1.5113320350646973,
+     "ghost": false
+    },
+    {
+     "time": 111.87,
+     "inst": "kick",
+     "strength": 0.8990522623062134,
+     "ghost": false
+    },
+    {
+     "time": 111.97,
+     "inst": "kick",
+     "strength": 0.9546053409576416,
+     "ghost": false
+    },
+    {
+     "time": 111.97,
+     "inst": "hihat",
+     "strength": 0.40447479486465454,
+     "ghost": false
+    },
+    {
+     "time": 112.06,
+     "inst": "hihat",
+     "strength": 0.615910530090332,
+     "ghost": false
+    },
+    {
+     "time": 112.16,
+     "inst": "kick",
+     "strength": 0.9299155473709106,
+     "ghost": false
+    },
+    {
+     "time": 112.16,
+     "inst": "snare",
+     "strength": 0.9103577733039856,
+     "ghost": false
+    },
+    {
+     "time": 112.25,
+     "inst": "snare",
+     "strength": 0.4254416525363922,
+     "ghost": true
+    },
+    {
+     "time": 112.35,
+     "inst": "kick",
+     "strength": 0.9574107527732849,
+     "ghost": false
+    },
+    {
+     "time": 112.35,
+     "inst": "hihat",
+     "strength": 0.4694686233997345,
+     "ghost": false
+    },
+    {
+     "time": 112.44,
+     "inst": "kick",
+     "strength": 0.9391588568687439,
+     "ghost": false
+    },
+    {
+     "time": 112.44,
+     "inst": "hihat",
+     "strength": 0.49581098556518555,
+     "ghost": false
+    },
+    {
+     "time": 112.54,
+     "inst": "tom_low",
+     "strength": 0.8311578035354614,
+     "ghost": false
+    },
+    {
+     "time": 112.63,
+     "inst": "kick",
+     "strength": 0.9573954343795776,
+     "ghost": false
+    },
+    {
+     "time": 112.63,
+     "inst": "tom_low",
+     "strength": 0.25168555974960327,
+     "ghost": false
+    },
+    {
+     "time": 112.73,
+     "inst": "kick",
+     "strength": 0.9013817310333252,
+     "ghost": false
+    },
+    {
+     "time": 112.82,
+     "inst": "tom_high",
+     "strength": 0.8937240839004517,
+     "ghost": false
+    },
+    {
+     "time": 112.91,
+     "inst": "tom",
+     "strength": 0.918181300163269,
+     "ghost": false
+    },
+    {
+     "time": 113.01,
+     "inst": "kick",
+     "strength": 0.9227720499038696,
+     "ghost": false
+    },
+    {
+     "time": 113.01,
+     "inst": "hihat",
+     "strength": 0.19571612775325775,
+     "ghost": false
+    },
+    {
+     "time": 113.01,
+     "inst": "tom_low",
+     "strength": 0.49347108602523804,
+     "ghost": false
+    },
+    {
+     "time": 113.1,
+     "inst": "tom_high",
+     "strength": 0.8998332619667053,
+     "ghost": false
+    },
+    {
+     "time": 113.2,
+     "inst": "kick",
+     "strength": 0.9352466464042664,
+     "ghost": false
+    },
+    {
+     "time": 113.2,
+     "inst": "tom",
+     "strength": 0.48347145318984985,
+     "ghost": false
+    },
+    {
+     "time": 113.29,
+     "inst": "kick",
+     "strength": 0.9441665410995483,
+     "ghost": false
+    },
+    {
+     "time": 113.29,
+     "inst": "tom_low",
+     "strength": 0.46687453985214233,
+     "ghost": false
+    }
+   ],
+   "attacks": [
+    105.7845804988662,
+    105.97913832199546,
+    106.07392290249433,
+    106.16371882086167,
+    106.25351473922902,
+    106.35328798185941,
+    106.44308390022675,
+    106.53786848072562,
+    106.63265306122449,
+    106.72743764172336,
+    106.82721088435373,
+    106.91201814058957,
+    107.01678004535147,
+    107.10657596371881,
+    107.20136054421768,
+    107.28616780045351,
+    107.38095238095238,
+    107.47074829931972,
+    107.57551020408162,
+    107.66031746031746,
+    107.75510204081633,
+    107.8548752834467,
+    107.88480725623582,
+    107.9596371882086,
+    108.03945578231291,
+    108.14421768707483,
+    108.32380952380952,
+    108.41360544217686,
+    108.4984126984127,
+    108.59818594104308,
+    108.69795918367346,
+    108.7877551020408,
+    108.87755102040816,
+    108.97732426303854,
+    109.06213151927437,
+    109.16190476190475,
+    109.25170068027211,
+    109.34648526077096,
+    109.43628117913832,
+    109.53106575963719,
+    109.62086167800453,
+    109.7156462585034,
+    109.81043083900227,
+    109.91519274376417,
+    109.99002267573695,
+    110.09977324263038,
+    110.19954648526077,
+    110.28934240362811,
+    110.39410430839001,
+    110.47891156462585,
+    110.57369614512471,
+    110.66349206349206,
+    110.7532879818594,
+    110.85306122448979,
+    110.92290249433105,
+    111.03265306122448,
+    111.12743764172335,
+    111.21723356009069,
+    111.3219954648526,
+    111.41179138321995,
+    111.50657596371882,
+    111.60136054421768,
+    111.70113378684806,
+    111.7859410430839,
+    111.87573696145124,
+    111.9705215419501,
+    112.06530612244897,
+    112.16009070294784,
+    112.25487528344671,
+    112.34965986394558,
+    112.43945578231292,
+    112.53922902494331,
+    112.63401360544216,
+    112.72380952380952,
+    112.81859410430839,
+    112.91337868480726,
+    113.01315192743763,
+    113.10294784580498,
+    113.19773242630384,
+    113.2875283446712
+   ],
+   "first_bar": 72
+  },
+  "straight85": {
+   "beats": [
+    125.09,
+    125.4675,
+    125.8475,
+    126.2275,
+    126.6075,
+    126.97,
+    127.3475,
+    127.7275,
+    128.105
+   ],
+   "downbeats": [
+    125.09,
+    126.6075
+   ],
+   "hits": [
+    {
+     "time": 125.1,
+     "inst": "hihat",
+     "strength": 0.3510702848434448,
+     "ghost": false
+    },
+    {
+     "time": 125.1,
+     "inst": "snare",
+     "strength": 0.14899152517318726,
+     "ghost": true
+    },
+    {
+     "time": 125.19,
+     "inst": "kick",
+     "strength": 0.9691568613052368,
+     "ghost": false
+    },
+    {
+     "time": 125.19,
+     "inst": "tom_low",
+     "strength": 0.3572298288345337,
+     "ghost": false
+    },
+    {
+     "time": 125.28,
+     "inst": "tom_high",
+     "strength": 0.5450019240379333,
+     "ghost": false
+    },
+    {
+     "time": 125.28,
+     "inst": "snare",
+     "strength": 0.24196553230285645,
+     "ghost": true
+    },
+    {
+     "time": 125.39,
+     "inst": "tom",
+     "strength": 0.4209320545196533,
+     "ghost": false
+    },
+    {
+     "time": 125.47,
+     "inst": "hihat",
+     "strength": 0.20220880210399628,
+     "ghost": false
+    },
+    {
+     "time": 125.47,
+     "inst": "cymbal",
+     "strength": 0.24132850766181946,
+     "ghost": false
+    },
+    {
+     "time": 125.48,
+     "inst": "kick",
+     "strength": 0.9771263003349304,
+     "ghost": false
+    },
+    {
+     "time": 125.48,
+     "inst": "tom_low",
+     "strength": 0.21236096322536469,
+     "ghost": false
+    },
+    {
+     "time": 125.57,
+     "inst": "tom_low",
+     "strength": 0.38799670338630676,
+     "ghost": false
+    },
+    {
+     "time": 125.66,
+     "inst": "kick",
+     "strength": 0.9626132845878601,
+     "ghost": false
+    },
+    {
+     "time": 125.66,
+     "inst": "snare",
+     "strength": 0.6993060111999512,
+     "ghost": false
+    },
+    {
+     "time": 125.85,
+     "inst": "snare",
+     "strength": 0.01507597230374813,
+     "ghost": true
+    },
+    {
+     "time": 125.94,
+     "inst": "hihat",
+     "strength": 0.36036378145217896,
+     "ghost": false
+    },
+    {
+     "time": 125.95,
+     "inst": "kick",
+     "strength": 0.9499186277389526,
+     "ghost": false
+    },
+    {
+     "time": 126.04,
+     "inst": "snare",
+     "strength": 0.8753004670143127,
+     "ghost": false
+    },
+    {
+     "time": 126.13,
+     "inst": "kick",
+     "strength": 0.9786379933357239,
+     "ghost": false
+    },
+    {
+     "time": 126.13,
+     "inst": "tom_low",
+     "strength": 0.47604018449783325,
+     "ghost": false
+    },
+    {
+     "time": 126.22,
+     "inst": "tom_high",
+     "strength": 0.8530678153038025,
+     "ghost": false
+    },
+    {
+     "time": 126.31,
+     "inst": "tom_low",
+     "strength": 0.8983747959136963,
+     "ghost": false
+    },
+    {
+     "time": 126.4,
+     "inst": "kick",
+     "strength": 0.9780197143554688,
+     "ghost": false
+    },
+    {
+     "time": 126.4,
+     "inst": "snare",
+     "strength": 0.7382708191871643,
+     "ghost": false
+    },
+    {
+     "time": 126.5,
+     "inst": "tom",
+     "strength": 0.860317587852478,
+     "ghost": false
+    },
+    {
+     "time": 126.6,
+     "inst": "tom_low",
+     "strength": 0.8680362701416016,
+     "ghost": false
+    },
+    {
+     "time": 126.69,
+     "inst": "kick",
+     "strength": 0.9427300691604614,
+     "ghost": false
+    },
+    {
+     "time": 126.69,
+     "inst": "cymbal",
+     "strength": 0.4701826572418213,
+     "ghost": false
+    },
+    {
+     "time": 126.78,
+     "inst": "snare",
+     "strength": 0.06482084840536118,
+     "ghost": true
+    },
+    {
+     "time": 126.88,
+     "inst": "kick",
+     "strength": 0.963581919670105,
+     "ghost": false
+    },
+    {
+     "time": 126.97,
+     "inst": "cymbal",
+     "strength": 0.46812787652015686,
+     "ghost": false
+    },
+    {
+     "time": 126.97,
+     "inst": "snare",
+     "strength": 2.1231164932250977,
+     "ghost": false
+    },
+    {
+     "time": 127.07,
+     "inst": "kick",
+     "strength": 0.9524701833724976,
+     "ghost": false
+    },
+    {
+     "time": 127.16,
+     "inst": "tom_low",
+     "strength": 0.475756973028183,
+     "ghost": false
+    },
+    {
+     "time": 127.17,
+     "inst": "kick",
+     "strength": 0.9104649424552917,
+     "ghost": false
+    },
+    {
+     "time": 127.35,
+     "inst": "kick",
+     "strength": 0.9769119620323181,
+     "ghost": false
+    },
+    {
+     "time": 127.35,
+     "inst": "cymbal",
+     "strength": 0.3688386082649231,
+     "ghost": false
+    },
+    {
+     "time": 127.44,
+     "inst": "tom_high",
+     "strength": 0.8130557537078857,
+     "ghost": false
+    },
+    {
+     "time": 127.54,
+     "inst": "tom_low",
+     "strength": 0.8892017602920532,
+     "ghost": false
+    },
+    {
+     "time": 127.63,
+     "inst": "kick",
+     "strength": 0.9503151774406433,
+     "ghost": false
+    },
+    {
+     "time": 127.63,
+     "inst": "cymbal",
+     "strength": 0.3549983501434326,
+     "ghost": false
+    },
+    {
+     "time": 127.73,
+     "inst": "tom_high",
+     "strength": 0.6702209115028381,
+     "ghost": false
+    },
+    {
+     "time": 127.82,
+     "inst": "snare",
+     "strength": 1.794333815574646,
+     "ghost": false
+    },
+    {
+     "time": 127.91,
+     "inst": "kick",
+     "strength": 0.9732784628868103,
+     "ghost": false
+    },
+    {
+     "time": 127.91,
+     "inst": "snare",
+     "strength": 0.7147437334060669,
+     "ghost": false
+    },
+    {
+     "time": 128.0,
+     "inst": "kick",
+     "strength": 0.9421342611312866,
+     "ghost": false
+    },
+    {
+     "time": 128.1,
+     "inst": "hihat",
+     "strength": 0.20531541109085083,
+     "ghost": false
+    },
+    {
+     "time": 128.1,
+     "inst": "snare",
+     "strength": 1.766402244567871,
+     "ghost": false
+    }
+   ],
+   "attacks": [
+    125.10068027210883,
+    125.19047619047619,
+    125.28526077097506,
+    125.39999999999999,
+    125.4798185941043,
+    125.57959183673469,
+    125.66439909297051,
+    125.75918367346938,
+    125.85396825396825,
+    125.94376417233559,
+    126.03854875283446,
+    126.13333333333333,
+    126.21814058956916,
+    126.31292517006803,
+    126.39773242630385,
+    126.50249433106575,
+    126.60226757369614,
+    126.69206349206348,
+    126.78684807256235,
+    126.88163265306122,
+    126.97142857142856,
+    127.07120181405895,
+    127.1609977324263,
+    127.26077097505669,
+    127.35056689342403,
+    127.45034013605442,
+    127.54013605442177,
+    127.62993197278911,
+    127.7297052154195,
+    127.81950113378684,
+    127.90929705215419,
+    128.00408163265305,
+    128.10385487528345
+   ],
+   "first_bar": 85
+  },
+  "sextuplet93": {
+   "beats": [
+    135.6075,
+    135.97,
+    136.3475,
+    136.7275,
+    137.105,
+    137.47724368059343,
+    137.84948736118687,
+    138.22173104178032,
+    138.59397472237376,
+    138.9662184029672,
+    139.33846208356064,
+    139.71070576415408,
+    140.08294944474753
+   ],
+   "downbeats": [
+    135.6075,
+    137.105,
+    138.59397472237376
+   ],
+   "hits": [
+    {
+     "time": 135.57,
+     "inst": "cymbal",
+     "strength": 0.4001302719116211,
+     "ghost": false
+    },
+    {
+     "time": 135.58,
+     "inst": "kick",
+     "strength": 0.9528238773345947,
+     "ghost": false
+    },
+    {
+     "time": 135.77,
+     "inst": "hihat",
+     "strength": 0.47499433159828186,
+     "ghost": false
+    },
+    {
+     "time": 135.77,
+     "inst": "cymbal",
+     "strength": 0.5477972030639648,
+     "ghost": false
+    },
+    {
+     "time": 135.78,
+     "inst": "kick",
+     "strength": 0.9709628224372864,
+     "ghost": false
+    },
+    {
+     "time": 136.16,
+     "inst": "kick",
+     "strength": 0.9071199297904968,
+     "ghost": false
+    },
+    {
+     "time": 136.16,
+     "inst": "snare",
+     "strength": 1.176291823387146,
+     "ghost": false
+    },
+    {
+     "time": 136.3,
+     "inst": "tom_low",
+     "strength": 0.673050045967102,
+     "ghost": false
+    },
+    {
+     "time": 136.36,
+     "inst": "tom_low",
+     "strength": 0.8398404717445374,
+     "ghost": false
+    },
+    {
+     "time": 136.42,
+     "inst": "tom_low",
+     "strength": 0.886874794960022,
+     "ghost": false
+    },
+    {
+     "time": 136.54,
+     "inst": "snare",
+     "strength": 1.6826353073120117,
+     "ghost": false
+    },
+    {
+     "time": 136.67,
+     "inst": "tom",
+     "strength": 0.898863673210144,
+     "ghost": false
+    },
+    {
+     "time": 136.79,
+     "inst": "snare",
+     "strength": 1.2094447612762451,
+     "ghost": false
+    },
+    {
+     "time": 136.91,
+     "inst": "kick",
+     "strength": 0.9165213108062744,
+     "ghost": false
+    },
+    {
+     "time": 136.91,
+     "inst": "tom_low",
+     "strength": 0.7632992267608643,
+     "ghost": false
+    },
+    {
+     "time": 137.03,
+     "inst": "tom_low",
+     "strength": 0.8949534893035889,
+     "ghost": false
+    },
+    {
+     "time": 137.17,
+     "inst": "kick",
+     "strength": 0.957683801651001,
+     "ghost": false
+    },
+    {
+     "time": 137.29,
+     "inst": "cymbal",
+     "strength": 0.5249873399734497,
+     "ghost": false
+    },
+    {
+     "time": 137.29,
+     "inst": "snare",
+     "strength": 1.5543386936187744,
+     "ghost": false
+    },
+    {
+     "time": 137.49,
+     "inst": "snare",
+     "strength": 0.27202239632606506,
+     "ghost": true
+    },
+    {
+     "time": 137.61,
+     "inst": "tom_high",
+     "strength": 0.4367656707763672,
+     "ghost": false
+    },
+    {
+     "time": 137.68,
+     "inst": "tom_high",
+     "strength": 0.8495547771453857,
+     "ghost": false
+    },
+    {
+     "time": 137.82,
+     "inst": "tom_high",
+     "strength": 0.8307608366012573,
+     "ghost": false
+    },
+    {
+     "time": 137.89,
+     "inst": "tom_high",
+     "strength": 0.9033870697021484,
+     "ghost": false
+    },
+    {
+     "time": 137.95,
+     "inst": "tom_high",
+     "strength": 0.5852871537208557,
+     "ghost": false
+    },
+    {
+     "time": 138.01,
+     "inst": "tom_low",
+     "strength": 0.8024654388427734,
+     "ghost": false
+    },
+    {
+     "time": 138.08,
+     "inst": "tom_low",
+     "strength": 0.8780487775802612,
+     "ghost": false
+    },
+    {
+     "time": 138.14,
+     "inst": "tom_low",
+     "strength": 0.8509600162506104,
+     "ghost": false
+    },
+    {
+     "time": 138.2,
+     "inst": "tom_low",
+     "strength": 0.3272005319595337,
+     "ghost": false
+    },
+    {
+     "time": 138.21,
+     "inst": "kick",
+     "strength": 0.8970744013786316,
+     "ghost": false
+    },
+    {
+     "time": 138.27,
+     "inst": "kick",
+     "strength": 0.5226718783378601,
+     "ghost": false
+    },
+    {
+     "time": 138.27,
+     "inst": "tom_low",
+     "strength": 0.36189478635787964,
+     "ghost": false
+    },
+    {
+     "time": 138.33,
+     "inst": "tom_low",
+     "strength": 0.896765410900116,
+     "ghost": false
+    },
+    {
+     "time": 138.39,
+     "inst": "tom_low",
+     "strength": 0.8342950940132141,
+     "ghost": false
+    },
+    {
+     "time": 138.44,
+     "inst": "tom_low",
+     "strength": 0.8547030687332153,
+     "ghost": false
+    },
+    {
+     "time": 138.51,
+     "inst": "tom_low",
+     "strength": 0.8440490961074829,
+     "ghost": false
+    },
+    {
+     "time": 138.57,
+     "inst": "tom_low",
+     "strength": 0.8684393167495728,
+     "ghost": false
+    },
+    {
+     "time": 138.64,
+     "inst": "tom_low",
+     "strength": 0.8399618268013,
+     "ghost": false
+    },
+    {
+     "time": 138.71,
+     "inst": "kick",
+     "strength": 0.9405800104141235,
+     "ghost": false
+    },
+    {
+     "time": 138.71,
+     "inst": "tom_low",
+     "strength": 0.23375630378723145,
+     "ghost": false
+    },
+    {
+     "time": 138.77,
+     "inst": "kick",
+     "strength": 0.42611807584762573,
+     "ghost": false
+    },
+    {
+     "time": 138.77,
+     "inst": "tom_low",
+     "strength": 0.5003722310066223,
+     "ghost": false
+    },
+    {
+     "time": 138.83,
+     "inst": "tom",
+     "strength": 0.8914670944213867,
+     "ghost": false
+    },
+    {
+     "time": 138.88,
+     "inst": "tom",
+     "strength": 0.8754784464836121,
+     "ghost": false
+    },
+    {
+     "time": 138.94,
+     "inst": "tom_low",
+     "strength": 0.3167598247528076,
+     "ghost": false
+    },
+    {
+     "time": 138.95,
+     "inst": "kick",
+     "strength": 0.7999853491783142,
+     "ghost": false
+    },
+    {
+     "time": 139.01,
+     "inst": "kick",
+     "strength": 0.19947150349617004,
+     "ghost": false
+    },
+    {
+     "time": 139.01,
+     "inst": "tom_low",
+     "strength": 0.8114638924598694,
+     "ghost": false
+    },
+    {
+     "time": 139.07,
+     "inst": "tom",
+     "strength": 0.6749870777130127,
+     "ghost": false
+    },
+    {
+     "time": 139.08,
+     "inst": "kick",
+     "strength": 0.855085015296936,
+     "ghost": false
+    },
+    {
+     "time": 139.21,
+     "inst": "tom_low",
+     "strength": 0.7685285806655884,
+     "ghost": false
+    },
+    {
+     "time": 139.22,
+     "inst": "kick",
+     "strength": 0.2884734272956848,
+     "ghost": false
+    },
+    {
+     "time": 139.37,
+     "inst": "tom_low",
+     "strength": 0.8045662641525269,
+     "ghost": false
+    },
+    {
+     "time": 139.55,
+     "inst": "tom_low",
+     "strength": 0.7995269298553467,
+     "ghost": false
+    },
+    {
+     "time": 139.74,
+     "inst": "tom_low",
+     "strength": 0.5468250513076782,
+     "ghost": false
+    },
+    {
+     "time": 139.75,
+     "inst": "kick",
+     "strength": 0.9770323038101196,
+     "ghost": false
+    }
+   ],
+   "attacks": [
+    135.5768707482993,
+    135.7764172335601,
+    136.15555555555554,
+    136.30521541950114,
+    136.36507936507937,
+    136.41995464852607,
+    136.53968253968253,
+    136.66938775510204,
+    136.79410430839002,
+    136.91383219954648,
+    137.03356009070293,
+    137.16825396825396,
+    137.28798185941042,
+    137.3578231292517,
+    137.40770975056688,
+    137.44263038548752,
+    137.49251700680273,
+    137.6222222222222,
+    137.68208616780043,
+    137.7419501133787,
+    137.8267573696145,
+    137.89160997732426,
+    138.01632653061225,
+    138.07619047619048,
+    138.14603174603175,
+    138.20589569160998,
+    138.27074829931973,
+    138.33061224489796,
+    138.38548752834467,
+    138.44036281179137,
+    138.5201814058957,
+    138.57006802721088,
+    138.63990929705216,
+    138.71473922902493,
+    138.76961451247166,
+    138.8344671201814,
+    138.8843537414966,
+    138.94920634920635,
+    139.00907029478458,
+    139.07891156462586,
+    139.21859410430838,
+    139.31836734693877,
+    139.378231292517,
+    139.55283446712016,
+    139.74739229024942
+   ],
+   "first_bar": 92
+  }
+ }
+}

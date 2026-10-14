@@ -74,7 +74,7 @@ def render_preview(score: Score, audio_wav: Path, out_wav: Path) -> None:
         for note in bar.notes:
             shot = voices.setdefault(note.inst, _voice(note.inst, sr, rng))
             # A padded pickup bar can start before the audio does.
-            start = max(0, int(bar.tick_time(note.tick) * sr))
+            start = max(0, int(bar.note_time(note) * sr))
             if start >= len(synth):
                 continue
             end = min(start + len(shot), len(synth))

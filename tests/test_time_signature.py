@@ -43,7 +43,7 @@ def test_options_accept_signature(value):
     assert pipeline.Options(time_signature=value).time_signature == value
 
 
-@pytest.mark.parametrize("value", ["0/8", "16/4", "7/3", "7/32", "07/8", "7 / 8", "automatic", "7/8x", 7, {"numerator": 7}])
+@pytest.mark.parametrize("value", ["0/8", "33/4", "7/3", "7/32", "07/8", "7 / 8", "automatic", "7/8x", 7, {"numerator": 7}])
 def test_options_reject_invalid_signature(value):
     with pytest.raises(ValueError):
         OptionsPatch(time_signature=value)

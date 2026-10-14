@@ -27,6 +27,7 @@ PRODUCERS = {
     "stem_onsets": ("models", "stem_activations"),
     "snare": ("dynamics", "snare_response"),
     "attacks": ("fills", "attack_times"),
+    "adtof_input": ("cymbal_veto", "adtof_input"),
 }
 # Files a producer reads besides its code: the fine-tuned weights shipped in the package.
 PRODUCER_FILES = {"stem_onsets": ("adtof-groovemap-v2.pt",)}
@@ -168,6 +169,8 @@ def cache_stamp(filename: str, fingerprints: dict[str, Any] | None) -> str | Non
     made = fingerprints["producers"]
     if match := re.fullmatch(r"drums\.(.+)\.wav", filename):
         return made["separate"]
+    if match := re.fullmatch(r"adtof_input\.(.+)\.npy", filename):
+        return _join(made["adtof_input"], cache_stamp(f"drums.{match[1]}.wav", fingerprints))
     if filename == "beats.json":
         return made["beats"]
     if filename == "activations.mix.npy":

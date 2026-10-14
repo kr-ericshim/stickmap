@@ -12,11 +12,68 @@ a small but distinct peak.
 from __future__ import annotations
 
 from pathlib import Path
+from dataclasses import replace
+from collections.abc import Sequence
 
 import numpy as np
 import soundfile as sf
 
 from .models import ADTOF_FPS, picked_frames
+from .score import Hit
+
+
+def annotate_confidence(hits: Sequence[Hit], activations: np.ndarray, response: np.ndarray | None) -> list[Hit]:
+    """Read existing snare identity/share evidence; never recompute loudness.
+
+    A near-silent response coinciding with a tom is especially unreliable.
+    Confidence expresses support for a soft-snare label, not its volume.
+    """
+    out = []
+    toms = np.asarray([h.time for h in hits if h.inst.startswith("tom")])
+    for hit in hits:
+        if hit.inst != "snare":
+            out.append(hit)
+            continue
+        f = round(hit.time * ADTOF_FPS)
+        a = max(0, f - 2)
+        b = min(len(activations), f + 3)
+        identity = float(activations[a:b, 1].max()) if b > a else 0.0
+        share = 0.0
+        if response is not None and response.ndim == 2 and response.shape[1] >= 2 and a < len(response):
+            segment = response[a:min(b, len(response))]
+            if len(segment):
+                share = float(segment[int(np.argmax(segment[:, 0])), 1])
+        confidence = max(identity, share)
+        if len(toms) and np.min(np.abs(toms - hit.time)) < 0.025 and share < 0.5:
+            confidence *= 0.4
+        out.append(replace(hit, confidence=float(np.clip(confidence, 0, 1))))
+    return out
+
+
+def ghost_states(hits: Sequence[Hit]) -> dict[tuple[float, str], str]:
+    """Only clearly separated soft hits earn parentheses; no percentile quota.
+
+    Both loudness and its mapped velocity must be far below this song's typical
+    snare. A broad continuous distribution does not itself prove two clusters:
+    marginal soft candidates remain unknown. Detector strength/velocity survive.
+    """
+    snares = [h for h in hits if h.inst == "snare"]
+    if not snares:
+        return {}
+    typical = float(np.median([h.strength for h in snares]))
+    p90 = float(np.percentile([h.strength for h in snares], 90))
+    velocities = [40 + 70 * min(1, h.strength / p90) if p90 > 0 else 40 for h in snares]
+    velocity_limit = 40 + (float(np.median(velocities)) - 40) / 3
+    states = {}
+    toms = [h.time for h in hits if h.inst.startswith("tom")]
+    for hit, velocity in zip(snares, velocities):
+        soft = hit.strength < typical / 3 and velocity <= velocity_limit
+        trusted = hit.confidence is not None and hit.confidence >= 0.65
+        # Small manually labelled examples can carry an explicit ghost flag.
+        if hit.confidence is None and len(snares) < 16:
+            trusted = hit.ghost and not any(abs(t - hit.time) < 0.025 for t in toms)
+        states[hit.time, hit.inst] = "ghost" if soft and trusted else "unknown" if soft or hit.ghost else "normal"
+    return states
 
 _PATCH = 10  # frames per drum sound: 100 ms
 _FREE = 3  # patches left free to explain what the drum sounds do not
@@ -135,4 +192,3 @@ def snare_response(drums_wav: Path, activations: np.ndarray) -> np.ndarray:
     snare = smooth[names.index("snare")]
     typical = float(np.median([snare[max(0, f - 2):f + 3].max() for f in peaks["snare"]]))
     return np.stack([snare / (typical + 1e-9), snare / (smooth.sum(axis=0) + 1e-9)], axis=1).astype(np.float32)
-

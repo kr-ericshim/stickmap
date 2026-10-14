@@ -18,8 +18,8 @@ const LANES: Partial<Record<Inst, number>> = {
   ride_bell: 1, ride: 2,
   hihat_open: 0, hihat_pedal: 2,
 }
-const ROW_HEIGHT = 11
-const RULER = 16
+const ROW_HEIGHT = 10
+const RULER = 14
 const HEIGHT = RULER + ROWS.length * ROW_HEIGHT
 const GUTTER = 52 // room for the row labels
 
@@ -28,10 +28,11 @@ type Props = {
   timeline: Timeline
   clock: () => number
   onSeek: (seconds: number) => void
+  loop?: { start: number; end: number } | null
 }
 
 /** The whole song at a glance: every hit as a mark, one row per drum. */
-export function GrooveMap({ score, timeline, clock, onSeek }: Props) {
+export function GrooveMap({ score, timeline, clock, onSeek, loop }: Props) {
   const trackRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const playheadRef = useRef<HTMLDivElement>(null)
@@ -71,7 +72,7 @@ export function GrooveMap({ score, timeline, clock, onSeek }: Props) {
         const top = RULER + rowIndex * ROW_HEIGHT + 2
         for (const bar of score.bars) {
           for (const note of bar.notes) {
-            const left = x(timeline.tickTime(bar, note.tick))
+            const left = x(timeline.noteTime(bar, note))
             if (FAMILY[note.inst] !== row.inst) continue
             const lane = LANES[note.inst]
             const height = ROW_HEIGHT - 4
@@ -117,7 +118,7 @@ export function GrooveMap({ score, timeline, clock, onSeek }: Props) {
 
   return (
     <div className="flex select-none" style={{ height: HEIGHT }}>
-      <div className="shrink-0 font-mono text-[10px] text-mute" style={{ width: GUTTER, paddingTop: RULER }}>
+      <div className="shrink-0 font-mono text-[9px] leading-none text-mute" style={{ width: GUTTER, paddingTop: RULER }}>
         {ROWS.map((row) => (
           <div key={row.inst} className="flex items-center gap-1.5" style={{ height: ROW_HEIGHT }}>
             <span className="size-1.5 rounded-full" style={{ background: row.color }} />
@@ -133,6 +134,12 @@ export function GrooveMap({ score, timeline, clock, onSeek }: Props) {
         onClick={(event) => onSeek(timeline.barStart(barUnder(event).bar))}
       >
         <canvas ref={canvasRef} className="block h-full w-full" />
+        {loop && (
+          <div
+            className="pointer-events-none absolute inset-y-0 border-x-2 border-brass bg-brass/12"
+            style={{ left: `${loop.start / (timeline.end || 1) * 100}%`, width: `${(loop.end - loop.start) / (timeline.end || 1) * 100}%` }}
+          />
+        )}
         <div
           ref={playheadRef}
           className="pointer-events-none absolute top-0 left-0 h-full w-0.5 bg-brass-deep"

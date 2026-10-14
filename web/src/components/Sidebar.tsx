@@ -1,4 +1,5 @@
-import type { Job, SongSummary, StageKey } from '../api'
+import { useState } from 'react'
+import { api, type Job, type SongSummary, type StageKey } from '../api'
 
 const STAGE_LABELS: Record<StageKey, string> = {
   fetch: '음원 받기',
@@ -14,13 +15,28 @@ type Props = {
   selected: string | null
   onSelect: (slug: string | null) => void
   onRetranscribe: (scope: 'outdated' | 'all') => void
+  onShutdown: () => void
 }
 
-export function Sidebar({ songs, jobs, selected, onSelect, onRetranscribe }: Props) {
+export function Sidebar({ songs, jobs, selected, onSelect, onRetranscribe, onShutdown }: Props) {
   const active = jobs.filter((job) => job.status === 'queued' || job.status === 'running')
   const pending = new Set(active.map((job) => job.slug))
   const outdated = songs.filter((song) => song.outdated && !pending.has(song.slug)).length
   const failed = jobs.filter((job) => job.status === 'error').slice(0, 2)
+  const [cancelling, setCancelling] = useState<Set<string>>(new Set())
+
+  const cancel = (id: string) => {
+    setCancelling((ids) => new Set(ids).add(id))
+    // The job list poll removes it once the server has stopped it.
+    api.cancelJob(id).catch((error: Error) => {
+      setCancelling((ids) => {
+        const next = new Set(ids)
+        next.delete(id)
+        return next
+      })
+      window.alert(error.message)
+    })
+  }
 
   return (
     <aside className="flex w-72 shrink-0 flex-col bg-lacquer text-paper">
@@ -33,8 +49,24 @@ export function Sidebar({ songs, jobs, selected, onSelect, onRetranscribe }: Pro
         <section className="mx-3 mb-3 space-y-3 rounded-lg bg-lacquer-soft p-3">
           {active.map((job) => (
             <div key={job.id}>
-              <p className="truncate text-sm font-medium">{job.title ?? job.source}</p>
-              {job.status === 'queued' ? (
+              <div className="flex items-start gap-2">
+                <p className="min-w-0 flex-1 truncate text-sm font-medium">{job.title ?? job.source}</p>
+                <button
+                  onClick={() => cancel(job.id)}
+                  disabled={cancelling.has(job.id)}
+                  aria-label="취소"
+                  title={job.status === 'running' ? '지금 단계가 끝나면 멈춥니다' : '대기열에서 뺍니다'}
+                  className="-mt-0.5 shrink-0 rounded px-1 text-sm leading-5 text-paper/50 hover:bg-paper/10 hover:text-paper disabled:opacity-40"
+                >
+                  ×
+                </button>
+              </div>
+              {job.eta_seconds != null && (
+                <p className="mt-0.5 text-xs text-paper/50">약 {Math.max(1, Math.round(job.eta_seconds / 60))}분 남음</p>
+              )}
+              {cancelling.has(job.id) ? (
+                <p className="mt-1 text-xs text-paper/60">취소하는 중…</p>
+              ) : job.status === 'queued' ? (
                 <p className="mt-1 text-xs text-paper/60">앞 작업이 끝나길 기다리는 중</p>
               ) : (
                 <ol className="mt-2 space-y-1">
@@ -64,7 +96,9 @@ export function Sidebar({ songs, jobs, selected, onSelect, onRetranscribe }: Pro
           {failed.map((job) => (
             <div key={job.id} className="text-xs">
               <p className="truncate text-sm font-medium">{job.title ?? job.source}</p>
-              <p className="mt-1 text-[#ffb4a3]">채보하지 못했습니다: {job.error}</p>
+              <p className="mt-1 text-[#ffb4a3]" title={job.error_detail ?? undefined}>
+                채보하지 못했습니다: {job.error}
+              </p>
             </div>
           ))}
         </section>
@@ -119,6 +153,17 @@ export function Sidebar({ songs, jobs, selected, onSelect, onRetranscribe }: Pro
           </button>
         ))}
       </nav>
+      <button
+        onClick={onShutdown}
+        title="groovemap 서버를 끕니다. 다시 쓰려면 바탕화면의 'groovemap 실행'을 여세요."
+        className="flex items-center gap-2 border-t border-paper/10 px-6 py-3 text-left text-xs text-paper/50 hover:text-paper"
+      >
+        <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round">
+          <path d="M6 1.2v4.3" />
+          <path d="M3.3 3a4.3 4.3 0 1 0 5.4 0" />
+        </svg>
+        엔진 끄기
+      </button>
     </aside>
   )
 }
