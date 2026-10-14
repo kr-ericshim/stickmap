@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import argparse
+import json
 import sys
 from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
@@ -22,7 +24,13 @@ def one(folder: Path) -> None:
 
 
 if __name__ == "__main__":
-    folders = [d for d in sorted(CACHE.iterdir()) if (d / "feat.npy").exists()]
-    with ProcessPoolExecutor(4) as pool:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--jobs", type=int, choices=range(1, 5), default=4)
+    parser.add_argument("--only", nargs="+", help="teacher inference only for these channels")
+    args = parser.parse_args()
+    folders = [d for d in sorted(CACHE.iterdir())
+               if (d / "feat.npy").exists() and (d / "truth.json").exists()
+               and (not args.only or json.loads((d / "truth.json").read_text())["channel"] in args.only)]
+    with ProcessPoolExecutor(args.jobs) as pool:
         list(pool.map(one, folders))
     print(sum((d / "teacher0.npy").exists() for d in folders), "of", len(folders))

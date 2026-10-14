@@ -10,8 +10,9 @@ systems only) this reports, besides per-drum precision and recall:
   other drum, nothing);
 - tom size against the notated staff position.
 
-    uv run python tools/harvest/fill_score.py [--gap 0.14] [--only swartz] [--jobs 8]
-    uv run python tools/harvest/fill_score.py --detect mymodule:detect   # try a variant
+    .venv/bin/python tools/harvest/fill_score.py [--gap 0.14] [--only swartz] [--jobs 4]
+    .venv/bin/python tools/harvest/fill_score.py --detect mymodule:detect   # try a variant
+    .venv/bin/python tools/harvest/fill_score.py --loose [--final --model-tag frozen-v5]
 """
 
 from __future__ import annotations
@@ -31,6 +32,8 @@ sys.path.insert(0, str(ROOT / "tools" / "truth_video"))
 sys.path.insert(0, str(Path(__file__).parent))
 
 import harvest  # noqa: E402
+import vault  # noqa: E402
+import fill_seq  # noqa: E402
 from align import match  # noqa: E402
 from evaluate import family  # noqa: E402
 from score import load, songs  # noqa: E402
@@ -122,6 +125,65 @@ def one(args: tuple[dict, str, float, str]) -> tuple[str, Counter]:
     return row["channel"], c
 
 
+def one_loose(args) -> tuple[str, Counter]:
+    """Read-only order-DP scoring; includes clean timing-only rejected systems.
+
+    Strict and timing-only systems enter this separate metric once each. No
+    rejected timestamp is exported as truth or consumed by the trainer.
+    """
+    row, detector, tol, min_after = args
+    song = harvest.SONGS / row["slug"]
+    try:
+        systems = fill_seq.notated(song / "truth", min_after)
+    except FileNotFoundError:
+        return row["channel"], Counter()
+    if not systems:
+        return row["channel"], Counter()
+    module, name = detector.split(":")
+    hits = getattr(importlib.import_module(module), name)(song)
+    c: Counter = Counter()
+    for a, b, ref in systems:
+        c += fill_seq.tally(ref, fill_seq.detected(hits, a - 0.05, b + 0.05), tol)
+        c["systems"] += 1
+        c["seconds"] += b - a
+    c["songs"] += 1
+    return row["channel"], c
+
+
+def write_totals(args, totals, excluded) -> None:
+    if args.json:
+        result = dict(totals)
+        if args.final:
+            result['excluded'] = excluded
+        args.json.write_text(json.dumps(result, indent=1))
+        if args.final:
+            lines = [f"{v}: {item['reason']}" for v, item in sorted(excluded.items())]
+            args.json.with_suffix('.md').write_text(
+                '\n'.join(['# Final vault fill scores', '', *lines, '',
+                           '```json', json.dumps(result, indent=1), '```', '']))
+
+
+def loose_scores(args, rows, excluded=None) -> None:
+    totals: dict[str, Counter] = defaultdict(Counter)
+    with ProcessPoolExecutor(args.jobs) as pool:
+        for channel, c in pool.map(one_loose, [(r, args.detect, args.tol, args.min_after) for r in rows]):
+            totals["all"] += c
+            totals[channel] += c
+    t = totals["all"]
+    print(f"LOOSE ORDER-DP (+/-{args.tol * 1000:g} ms): {t['songs']} songs, "
+          f"{t['systems']} clean systems, {t['seconds']:.0f}s")
+    print(f"all         | {fill_seq.line(t, 'all')}")
+    print(f"very fast   | {fill_seq.line(t, 'fast')}")
+    print(f"rest        | {fill_seq.line(t, 'slow')}")
+    print("Very fast: nearest notated kick/snare/tom neighbour gap < 90 ms; timing is approximate.")
+    if args.per_channel:
+        for channel in sorted(k for k in totals if k != "all"):
+            c = totals[channel]
+            if c["songs"]:
+                print(f"{channel:12s} {c['songs']:3d} songs | {fill_seq.line(c, 'all')}")
+    write_totals(args, t, excluded or {})
+
+
 def line(c: Counter, key: str) -> str:
     cells = [f"{c[f'{key}.n']:4d} fills {c[f'{key}.dur']:6.0f}s"]
     for fam in (*DRUMS, "stroke"):
@@ -136,12 +198,36 @@ def main() -> None:
     parser.add_argument("--tier", choices=["strict", "scoring"], default="strict")
     parser.add_argument("--gap", type=float, default=0.14)
     parser.add_argument("--only", nargs="*")
-    parser.add_argument("--jobs", type=int, default=8)
+    parser.add_argument("--jobs", type=int, choices=range(1, 5), default=4)
     parser.add_argument("--detect", default="evaluate:detect", help="module:function taking a song folder, returning hits")
     parser.add_argument("--per-channel", action="store_true")
     parser.add_argument("--json", type=Path, help="write the totals here")
+    parser.add_argument("--final", action="store_true", help="open and score ONLY the sealed test vault (logged)")
+    parser.add_argument("--model-tag", help="model identity for the vault opening log (default: FT_TAG or detector)")
+    parser.add_argument("--opening-id", help="final runner's existing durable vault opening ID")
+    parser.add_argument("--loose", action="store_true", help="score clean systems with fill_seq's order DP, including timing-only rejections")
+    parser.add_argument("--tol", type=float, default=0.06, help="loose order-DP tolerance in seconds (default: 0.06)")
+    parser.add_argument("--min-after", type=float, default=0.75, help="loose minimum fitted attack agreement within 40 ms")
     args = parser.parse_args()
-    rows = songs(args.only)
+    if not np.isfinite(args.tol) or args.tol <= 0:
+        parser.error("--tol must be positive and finite")
+    if not np.isfinite(args.min_after) or not 0 <= args.min_after <= 1:
+        parser.error("--min-after must be in [0, 1]")
+    if args.opening_id and not args.final:
+        parser.error("--opening-id requires --final")
+    if args.final:
+        tag = vault.model_tag(args.detect, args.model_tag)
+        if args.opening_id:
+            vault.resume_final(args.opening_id, tag)
+        else:
+            vault.open_final(tag)
+    rows = songs(args.only, final=args.final, loose=args.loose)
+    excluded = {}
+    if args.final:
+        rows, excluded = vault.filter_final(rows, log=False)
+    if args.loose:
+        loose_scores(args, rows, excluded)
+        return
     totals: dict[str, Counter] = defaultdict(Counter)
     with ProcessPoolExecutor(args.jobs) as pool:
         for channel, c in pool.map(one, [(r, args.tier, args.gap, args.detect) for r in rows]):
@@ -164,8 +250,7 @@ def main() -> None:
         for key in sorted(k for k in totals if k != "all"):
             if totals[key]["songs"]:
                 print(f"{key:12s} {totals[key]['songs']:3d} songs | {line(totals[key], 'all')}")
-    if args.json:
-        args.json.write_text(json.dumps(dict(t), indent=1))
+    write_totals(args, t, excluded)
 
 
 if __name__ == "__main__":

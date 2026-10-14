@@ -19,11 +19,17 @@ def main():
     parser.add_argument("--detect", required=True)
     parser.add_argument("--json", type=Path)
     parser.add_argument("--model-tag", help="model identity for the vault opening log")
+    parser.add_argument("--exclude", nargs="*", default=[], help="frozen external-solo harvest peer slugs")
     args, rest = parser.parse_known_args()
     command = shlex.join([sys.executable, *sys.argv])
     module, function = args.detect.split(":")
     evaluate.detect = getattr(importlib.import_module(module), function)
     ns = runpy.run_path(str(ROOT / "tools" / "harvest" / "score.py"))
+    namespace = ns['main'].__globals__
+    original_songs = namespace['songs']
+    def songs(*a, **kw):
+        return [r for r in original_songs(*a, **kw) if r['slug'] not in args.exclude]
+    namespace['songs'] = songs
     # Wrap tally to retain the exact integer counters behind the printed line.
     original = ns["main"].__globals__["tally"]
     totals = {}

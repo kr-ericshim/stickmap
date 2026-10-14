@@ -6,20 +6,27 @@ import time
 from pathlib import Path
 
 
-def read(path):
+def records(path):
+    """Yield committed rows in journal order, retaining first-seen timestamps."""
     path = Path(path)
     if not path.exists():
-        return {}
+        return
     data = path.read_bytes()
-    rows = {}
     for number, line in enumerate(data.splitlines(keepends=True), 1):
         if not line.endswith(b'\n'):
             break
         try:
             row = json.loads(line)
-            key = row['video']
+            row['video']
         except (ValueError, KeyError) as e:
             raise ValueError(f'{path}:{number}: malformed committed manifest record') from e
+        yield row
+
+
+def read(path):
+    rows = {}
+    for row in records(path):
+        key = row['video']
         rows[key] = {**rows.get(key, {}), **row}
     return rows
 

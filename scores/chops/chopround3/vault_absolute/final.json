@@ -1,0 +1,4656 @@
+{
+  "coverage": {
+    "manifest": {
+      "considered": 46,
+      "with_strict_truth": 19,
+      "with_notation": 24,
+      "with_strict_fills": 13,
+      "unusable_inputs": 0
+    },
+    "ollie": {
+      "considered": 30,
+      "with_strict_truth": 9,
+      "with_notation": 8,
+      "with_strict_fills": 7,
+      "unusable_inputs": 0
+    },
+    "combined": {
+      "considered": 76,
+      "with_strict_truth": 28,
+      "with_notation": 32,
+      "with_strict_fills": 20,
+      "unusable_inputs": 0
+    }
+  },
+  "strict": {
+    "manifest": {
+      "all": {
+        "kick": {
+          "counts": [
+            129,
+            151,
+            164
+          ],
+          "prf": [
+            0.8543046357615894,
+            0.7865853658536586,
+            0.819047619047619
+          ]
+        },
+        "snare": {
+          "counts": [
+            112,
+            139,
+            131
+          ],
+          "prf": [
+            0.8057553956834532,
+            0.8549618320610687,
+            0.8296296296296296
+          ]
+        },
+        "tom": {
+          "counts": [
+            185,
+            221,
+            237
+          ],
+          "prf": [
+            0.8371040723981901,
+            0.7805907172995781,
+            0.8078602620087336
+          ]
+        }
+      },
+      "fast": {
+        "kick": {
+          "counts": [
+            54,
+            60,
+            67
+          ],
+          "prf": [
+            0.9,
+            0.8059701492537313,
+            0.8503937007874016
+          ]
+        },
+        "snare": {
+          "counts": [
+            45,
+            59,
+            51
+          ],
+          "prf": [
+            0.7627118644067796,
+            0.8823529411764706,
+            0.8181818181818182
+          ]
+        },
+        "tom": {
+          "counts": [
+            96,
+            110,
+            116
+          ],
+          "prf": [
+            0.8727272727272727,
+            0.8275862068965517,
+            0.8495575221238938
+          ]
+        }
+      }
+    },
+    "ollie": {
+      "all": {
+        "kick": {
+          "counts": [
+            66,
+            67,
+            69
+          ],
+          "prf": [
+            0.9850746268656716,
+            0.9565217391304348,
+            0.9705882352941176
+          ]
+        },
+        "snare": {
+          "counts": [
+            59,
+            73,
+            62
+          ],
+          "prf": [
+            0.8082191780821918,
+            0.9516129032258065,
+            0.8740740740740741
+          ]
+        },
+        "tom": {
+          "counts": [
+            78,
+            91,
+            95
+          ],
+          "prf": [
+            0.8571428571428571,
+            0.8210526315789474,
+            0.8387096774193549
+          ]
+        }
+      },
+      "fast": {
+        "kick": {
+          "counts": [
+            41,
+            42,
+            43
+          ],
+          "prf": [
+            0.9761904761904762,
+            0.9534883720930233,
+            0.9647058823529412
+          ]
+        },
+        "snare": {
+          "counts": [
+            31,
+            38,
+            34
+          ],
+          "prf": [
+            0.8157894736842105,
+            0.9117647058823529,
+            0.8611111111111112
+          ]
+        },
+        "tom": {
+          "counts": [
+            60,
+            71,
+            70
+          ],
+          "prf": [
+            0.8450704225352113,
+            0.8571428571428571,
+            0.851063829787234
+          ]
+        }
+      }
+    },
+    "combined": {
+      "all": {
+        "kick": {
+          "counts": [
+            195,
+            218,
+            233
+          ],
+          "prf": [
+            0.8944954128440367,
+            0.8369098712446352,
+            0.8647450110864745
+          ]
+        },
+        "snare": {
+          "counts": [
+            171,
+            212,
+            193
+          ],
+          "prf": [
+            0.8066037735849056,
+            0.8860103626943006,
+            0.8444444444444444
+          ]
+        },
+        "tom": {
+          "counts": [
+            263,
+            312,
+            332
+          ],
+          "prf": [
+            0.842948717948718,
+            0.7921686746987951,
+            0.8167701863354038
+          ]
+        }
+      },
+      "fast": {
+        "kick": {
+          "counts": [
+            95,
+            102,
+            110
+          ],
+          "prf": [
+            0.9313725490196079,
+            0.8636363636363636,
+            0.8962264150943396
+          ]
+        },
+        "snare": {
+          "counts": [
+            76,
+            97,
+            85
+          ],
+          "prf": [
+            0.7835051546391752,
+            0.8941176470588236,
+            0.8351648351648352
+          ]
+        },
+        "tom": {
+          "counts": [
+            156,
+            181,
+            186
+          ],
+          "prf": [
+            0.861878453038674,
+            0.8387096774193549,
+            0.8501362397820164
+          ]
+        }
+      }
+    }
+  },
+  "strict_counts": {
+    "manifest": {
+      "all.n": 49,
+      "all.dur": 43.08500000000001,
+      "fast.n": 18,
+      "fast.dur": 17.05100000000002,
+      "all.kick.tp": 129,
+      "all.kick.est": 151,
+      "all.kick.ref": 164,
+      "fast.kick.tp": 54,
+      "fast.kick.est": 60,
+      "fast.kick.ref": 67,
+      "all.snare.tp": 112,
+      "all.snare.est": 139,
+      "all.snare.ref": 131,
+      "fast.snare.tp": 45,
+      "fast.snare.est": 59,
+      "fast.snare.ref": 51,
+      "all.tom.tp": 185,
+      "all.tom.est": 221,
+      "all.tom.ref": 237,
+      "fast.tom.tp": 96,
+      "fast.tom.est": 110,
+      "fast.tom.ref": 116,
+      "all.stroke.tp": 467,
+      "all.stroke.est": 485,
+      "all.stroke.ref": 516,
+      "fast.stroke.tp": 203,
+      "fast.stroke.est": 213,
+      "fast.stroke.ref": 225,
+      "conf.snare->tom": 7,
+      "conf.tom->tom": 183,
+      "size.3->tom_low": 59,
+      "size.ok": 121,
+      "size.n": 176,
+      "conf.snare->kick": 3,
+      "conf.tom->kick": 15,
+      "conf.snare->snare": 112,
+      "conf.snare->nothing": 9,
+      "conf.tom->snare": 17,
+      "size.7->tom_high": 42,
+      "size.7->tom_low": 9,
+      "songs": 13,
+      "conf.tom->nothing": 22,
+      "size.3->tom_high": 20,
+      "size.6->tom": 20,
+      "size.6->tom_high": 6,
+      "size.2->tom": 2,
+      "size.2->tom_low": 5,
+      "fill.n": 31,
+      "fill.dur": 26.03399999999999,
+      "fill.kick.tp": 75,
+      "fill.kick.est": 91,
+      "fill.kick.ref": 97,
+      "fill.snare.tp": 67,
+      "fill.snare.est": 80,
+      "fill.snare.ref": 80,
+      "fill.tom.tp": 89,
+      "fill.tom.est": 111,
+      "fill.tom.ref": 121,
+      "fill.stroke.tp": 264,
+      "fill.stroke.est": 272,
+      "fill.stroke.ref": 291,
+      "size.3->tom": 10,
+      "slow.n": 31,
+      "slow.dur": 26.03399999999999,
+      "slow.kick.tp": 75,
+      "slow.kick.est": 91,
+      "slow.kick.ref": 97,
+      "slow.snare.tp": 67,
+      "slow.snare.est": 80,
+      "slow.snare.ref": 80,
+      "slow.tom.tp": 89,
+      "slow.tom.est": 111,
+      "slow.tom.ref": 121,
+      "slow.stroke.tp": 264,
+      "slow.stroke.est": 272,
+      "slow.stroke.ref": 291,
+      "size.7->tom": 6,
+      "size.6->tom_low": 4
+    },
+    "ollie": {
+      "all.n": 23,
+      "all.dur": 18.548,
+      "fast.n": 13,
+      "fast.dur": 10.879999999999994,
+      "all.kick.tp": 66,
+      "all.kick.est": 67,
+      "all.kick.ref": 69,
+      "fast.kick.tp": 41,
+      "fast.kick.est": 42,
+      "fast.kick.ref": 43,
+      "all.snare.tp": 59,
+      "all.snare.est": 73,
+      "all.snare.ref": 62,
+      "fast.snare.tp": 31,
+      "fast.snare.est": 38,
+      "fast.snare.ref": 34,
+      "all.tom.tp": 78,
+      "all.tom.est": 91,
+      "all.tom.ref": 95,
+      "fast.tom.tp": 60,
+      "fast.tom.est": 71,
+      "fast.tom.ref": 70,
+      "all.stroke.tp": 212,
+      "all.stroke.est": 220,
+      "all.stroke.ref": 223,
+      "fast.stroke.tp": 137,
+      "fast.stroke.est": 142,
+      "fast.stroke.ref": 144,
+      "conf.snare->snare": 59,
+      "conf.tom->tom": 77,
+      "size.8->tom_high": 6,
+      "size.ok": 55,
+      "size.n": 77,
+      "size.7->tom_high": 30,
+      "size.7->tom_low": 4,
+      "size.6->tom": 4,
+      "size.6->tom_low": 3,
+      "size.3->tom_low": 15,
+      "conf.tom->nothing": 9,
+      "songs": 7,
+      "size.8->tom_low": 1,
+      "conf.tom->snare": 9,
+      "conf.snare->nothing": 2,
+      "conf.snare->tom": 1,
+      "size.3->tom_high": 5,
+      "size.6->tom_high": 7,
+      "size.3->tom": 2,
+      "fill.n": 10,
+      "fill.dur": 7.668000000000004,
+      "fill.kick.tp": 25,
+      "fill.kick.est": 25,
+      "fill.kick.ref": 26,
+      "fill.snare.tp": 28,
+      "fill.snare.est": 35,
+      "fill.snare.ref": 28,
+      "fill.tom.tp": 18,
+      "fill.tom.est": 20,
+      "fill.tom.ref": 25,
+      "fill.stroke.tp": 75,
+      "fill.stroke.est": 78,
+      "fill.stroke.ref": 79,
+      "slow.n": 10,
+      "slow.dur": 7.668000000000004,
+      "slow.kick.tp": 25,
+      "slow.kick.est": 25,
+      "slow.kick.ref": 26,
+      "slow.snare.tp": 28,
+      "slow.snare.est": 35,
+      "slow.snare.ref": 28,
+      "slow.tom.tp": 18,
+      "slow.tom.est": 20,
+      "slow.tom.ref": 25,
+      "slow.stroke.tp": 75,
+      "slow.stroke.est": 78,
+      "slow.stroke.ref": 79
+    },
+    "combined": {
+      "all.n": 72,
+      "all.dur": 61.63300000000001,
+      "fast.n": 31,
+      "fast.dur": 27.93100000000001,
+      "all.kick.tp": 195,
+      "all.kick.est": 218,
+      "all.kick.ref": 233,
+      "fast.kick.tp": 95,
+      "fast.kick.est": 102,
+      "fast.kick.ref": 110,
+      "all.snare.tp": 171,
+      "all.snare.est": 212,
+      "all.snare.ref": 193,
+      "fast.snare.tp": 76,
+      "fast.snare.est": 97,
+      "fast.snare.ref": 85,
+      "all.tom.tp": 263,
+      "all.tom.est": 312,
+      "all.tom.ref": 332,
+      "fast.tom.tp": 156,
+      "fast.tom.est": 181,
+      "fast.tom.ref": 186,
+      "all.stroke.tp": 679,
+      "all.stroke.est": 705,
+      "all.stroke.ref": 739,
+      "fast.stroke.tp": 340,
+      "fast.stroke.est": 355,
+      "fast.stroke.ref": 369,
+      "conf.snare->tom": 8,
+      "conf.tom->tom": 260,
+      "size.3->tom_low": 74,
+      "size.ok": 176,
+      "size.n": 253,
+      "conf.snare->kick": 3,
+      "conf.tom->kick": 15,
+      "conf.snare->snare": 171,
+      "conf.snare->nothing": 11,
+      "conf.tom->snare": 26,
+      "size.7->tom_high": 72,
+      "size.7->tom_low": 13,
+      "songs": 20,
+      "conf.tom->nothing": 31,
+      "size.3->tom_high": 25,
+      "size.6->tom": 24,
+      "size.6->tom_high": 13,
+      "size.2->tom": 2,
+      "size.2->tom_low": 5,
+      "fill.n": 41,
+      "fill.dur": 33.70199999999999,
+      "fill.kick.tp": 100,
+      "fill.kick.est": 116,
+      "fill.kick.ref": 123,
+      "fill.snare.tp": 95,
+      "fill.snare.est": 115,
+      "fill.snare.ref": 108,
+      "fill.tom.tp": 107,
+      "fill.tom.est": 131,
+      "fill.tom.ref": 146,
+      "fill.stroke.tp": 339,
+      "fill.stroke.est": 350,
+      "fill.stroke.ref": 370,
+      "size.3->tom": 12,
+      "slow.n": 41,
+      "slow.dur": 33.70199999999999,
+      "slow.kick.tp": 100,
+      "slow.kick.est": 116,
+      "slow.kick.ref": 123,
+      "slow.snare.tp": 95,
+      "slow.snare.est": 115,
+      "slow.snare.ref": 108,
+      "slow.tom.tp": 107,
+      "slow.tom.est": 131,
+      "slow.tom.ref": 146,
+      "slow.stroke.tp": 339,
+      "slow.stroke.est": 350,
+      "slow.stroke.ref": 370,
+      "size.7->tom": 6,
+      "size.6->tom_low": 7,
+      "size.8->tom_high": 6,
+      "size.8->tom_low": 1
+    }
+  },
+  "loose_manifest": {
+    "complete": {
+      "all": {
+        "kick": {
+          "counts": [
+            0,
+            0,
+            0
+          ],
+          "prf": [
+            null,
+            null,
+            null
+          ]
+        },
+        "snare": {
+          "counts": [
+            0,
+            0,
+            0
+          ],
+          "prf": [
+            null,
+            null,
+            null
+          ]
+        },
+        "tom": {
+          "counts": [
+            0,
+            0,
+            0
+          ],
+          "prf": [
+            null,
+            null,
+            null
+          ]
+        }
+      },
+      "fast": {
+        "kick": {
+          "counts": [
+            0,
+            0,
+            0
+          ],
+          "prf": [
+            null,
+            null,
+            null
+          ]
+        },
+        "snare": {
+          "counts": [
+            0,
+            0,
+            0
+          ],
+          "prf": [
+            null,
+            null,
+            null
+          ]
+        },
+        "tom": {
+          "counts": [
+            0,
+            0,
+            0
+          ],
+          "prf": [
+            null,
+            null,
+            null
+          ]
+        }
+      }
+    },
+    "partial": {
+      "all": {
+        "kick": {
+          "counts": [
+            1375,
+            2002,
+            1780
+          ],
+          "prf": [
+            0.6868131868131868,
+            0.7724719101123596,
+            0.7271285034373347
+          ]
+        },
+        "snare": {
+          "counts": [
+            1156,
+            2113,
+            1401
+          ],
+          "prf": [
+            0.547089446284903,
+            0.8251249107780158,
+            0.6579396698918611
+          ]
+        },
+        "tom": {
+          "counts": [
+            619,
+            1029,
+            850
+          ],
+          "prf": [
+            0.6015549076773566,
+            0.7282352941176471,
+            0.658861096327834
+          ]
+        }
+      },
+      "fast": {
+        "kick": {
+          "counts": [
+            366,
+            485,
+            488
+          ],
+          "prf": [
+            0.7546391752577319,
+            0.75,
+            0.7523124357656732
+          ]
+        },
+        "snare": {
+          "counts": [
+            356,
+            531,
+            430
+          ],
+          "prf": [
+            0.6704331450094162,
+            0.827906976744186,
+            0.740894901144641
+          ]
+        },
+        "tom": {
+          "counts": [
+            347,
+            469,
+            450
+          ],
+          "prf": [
+            0.7398720682302772,
+            0.7711111111111111,
+            0.7551686615886833
+          ]
+        }
+      }
+    },
+    "all_notation": {
+      "all": {
+        "kick": {
+          "counts": [
+            1375,
+            2002,
+            1780
+          ],
+          "prf": [
+            0.6868131868131868,
+            0.7724719101123596,
+            0.7271285034373347
+          ]
+        },
+        "snare": {
+          "counts": [
+            1156,
+            2113,
+            1401
+          ],
+          "prf": [
+            0.547089446284903,
+            0.8251249107780158,
+            0.6579396698918611
+          ]
+        },
+        "tom": {
+          "counts": [
+            619,
+            1029,
+            850
+          ],
+          "prf": [
+            0.6015549076773566,
+            0.7282352941176471,
+            0.658861096327834
+          ]
+        }
+      },
+      "fast": {
+        "kick": {
+          "counts": [
+            366,
+            485,
+            488
+          ],
+          "prf": [
+            0.7546391752577319,
+            0.75,
+            0.7523124357656732
+          ]
+        },
+        "snare": {
+          "counts": [
+            356,
+            531,
+            430
+          ],
+          "prf": [
+            0.6704331450094162,
+            0.827906976744186,
+            0.740894901144641
+          ]
+        },
+        "tom": {
+          "counts": [
+            347,
+            469,
+            450
+          ],
+          "prf": [
+            0.7398720682302772,
+            0.7711111111111111,
+            0.7551686615886833
+          ]
+        }
+      }
+    }
+  },
+  "loose_counts": {
+    "complete": {},
+    "partial": {
+      "all.stroke.ref": 3937,
+      "all.stroke.tp": 3475,
+      "all.kick.ref": 1780,
+      "all.kick.tp": 1375,
+      "all.snare.ref": 1401,
+      "all.snare.tp": 1156,
+      "all.tom.ref": 850,
+      "all.tom.tp": 619,
+      "fast.stroke.ref": 1340,
+      "fast.stroke.tp": 1179,
+      "fast.kick.ref": 488,
+      "fast.kick.tp": 366,
+      "fast.snare.ref": 430,
+      "fast.snare.tp": 356,
+      "fast.tom.ref": 450,
+      "fast.tom.tp": 347,
+      "slow.stroke.ref": 2597,
+      "slow.stroke.tp": 2296,
+      "slow.kick.ref": 1292,
+      "slow.kick.tp": 1009,
+      "slow.snare.ref": 971,
+      "slow.snare.tp": 800,
+      "slow.tom.ref": 400,
+      "slow.tom.tp": 272,
+      "all.stroke.est": 4777,
+      "all.kick.est": 2002,
+      "all.snare.est": 2113,
+      "all.tom.est": 1029,
+      "fast.stroke.est": 1377,
+      "fast.kick.est": 485,
+      "fast.snare.est": 531,
+      "fast.tom.est": 469,
+      "slow.stroke.est": 3400,
+      "slow.kick.est": 1517,
+      "slow.snare.est": 1582,
+      "slow.tom.est": 560,
+      "conf.snare->snare": 1078,
+      "conf.snare->nothing": 133,
+      "conf.snare->kick+snare": 32,
+      "conf.tom->tom": 532,
+      "conf.snare->tom": 18,
+      "conf.tom->kick": 44,
+      "conf.tom->nothing": 121,
+      "conf.snare->kick": 69,
+      "conf.tom->snare": 44,
+      "conf.tom->kick+tom": 27,
+      "conf.tom->snare+tom": 31,
+      "conf.snare->kick+tom": 5,
+      "conf.snare->snare+tom": 16
+    },
+    "all_notation": {
+      "all.stroke.ref": 3937,
+      "all.stroke.tp": 3475,
+      "all.kick.ref": 1780,
+      "all.kick.tp": 1375,
+      "all.snare.ref": 1401,
+      "all.snare.tp": 1156,
+      "all.tom.ref": 850,
+      "all.tom.tp": 619,
+      "fast.stroke.ref": 1340,
+      "fast.stroke.tp": 1179,
+      "fast.kick.ref": 488,
+      "fast.kick.tp": 366,
+      "fast.snare.ref": 430,
+      "fast.snare.tp": 356,
+      "fast.tom.ref": 450,
+      "fast.tom.tp": 347,
+      "slow.stroke.ref": 2597,
+      "slow.stroke.tp": 2296,
+      "slow.kick.ref": 1292,
+      "slow.kick.tp": 1009,
+      "slow.snare.ref": 971,
+      "slow.snare.tp": 800,
+      "slow.tom.ref": 400,
+      "slow.tom.tp": 272,
+      "all.stroke.est": 4777,
+      "all.kick.est": 2002,
+      "all.snare.est": 2113,
+      "all.tom.est": 1029,
+      "fast.stroke.est": 1377,
+      "fast.kick.est": 485,
+      "fast.snare.est": 531,
+      "fast.tom.est": 469,
+      "slow.stroke.est": 3400,
+      "slow.kick.est": 1517,
+      "slow.snare.est": 1582,
+      "slow.tom.est": 560,
+      "conf.snare->snare": 1078,
+      "conf.snare->nothing": 133,
+      "conf.snare->kick+snare": 32,
+      "conf.tom->tom": 532,
+      "conf.snare->tom": 18,
+      "conf.tom->kick": 44,
+      "conf.tom->nothing": 121,
+      "conf.snare->kick": 69,
+      "conf.tom->snare": 44,
+      "conf.tom->kick+tom": 27,
+      "conf.tom->snare+tom": 31,
+      "conf.snare->kick+tom": 5,
+      "conf.snare->snare+tom": 16
+    }
+  },
+  "per_song": [
+    {
+      "video": "8iCRbuU-JnE",
+      "slug": "gergo-borlai-drum-solo-transcription-funk-drum-solo-8iCRbuU-JnE",
+      "cohort": "manifest",
+      "incomplete_truth": [],
+      "strict_counts": {
+        "all.n": 4,
+        "all.dur": 1.7560000000000002,
+        "fast.n": 4,
+        "fast.dur": 1.7560000000000002,
+        "all.kick.tp": 8,
+        "all.kick.est": 10,
+        "all.kick.ref": 13,
+        "fast.kick.tp": 8,
+        "fast.kick.est": 10,
+        "fast.kick.ref": 13,
+        "all.snare.tp": 4,
+        "all.snare.est": 8,
+        "all.snare.ref": 8,
+        "fast.snare.tp": 4,
+        "fast.snare.est": 8,
+        "fast.snare.ref": 8,
+        "all.tom.tp": 6,
+        "all.tom.est": 10,
+        "all.tom.ref": 8,
+        "fast.tom.tp": 6,
+        "fast.tom.est": 10,
+        "fast.tom.ref": 8,
+        "all.stroke.tp": 24,
+        "all.stroke.est": 25,
+        "all.stroke.ref": 26,
+        "fast.stroke.tp": 24,
+        "fast.stroke.est": 25,
+        "fast.stroke.ref": 26,
+        "conf.snare->tom": 2,
+        "conf.tom->tom": 6,
+        "size.3->tom_low": 4,
+        "size.ok": 5,
+        "size.n": 6,
+        "conf.snare->kick": 1,
+        "conf.tom->kick": 1,
+        "conf.snare->snare": 4,
+        "conf.snare->nothing": 1,
+        "conf.tom->snare": 1,
+        "size.7->tom_high": 1,
+        "size.7->tom_low": 1,
+        "songs": 1
+      },
+      "with_strict_truth": true,
+      "notation_systems": 23,
+      "loose": {
+        "complete": {},
+        "partial": {
+          "all.stroke.ref": 409,
+          "all.stroke.tp": 362,
+          "all.kick.ref": 249,
+          "all.kick.tp": 191,
+          "all.snare.ref": 127,
+          "all.snare.tp": 99,
+          "all.tom.ref": 44,
+          "all.tom.tp": 31,
+          "fast.stroke.ref": 176,
+          "fast.stroke.tp": 161,
+          "fast.kick.ref": 91,
+          "fast.kick.tp": 72,
+          "fast.snare.ref": 53,
+          "fast.snare.tp": 42,
+          "fast.tom.ref": 35,
+          "fast.tom.tp": 24,
+          "slow.stroke.ref": 233,
+          "slow.stroke.tp": 201,
+          "slow.kick.ref": 158,
+          "slow.kick.tp": 119,
+          "slow.snare.ref": 74,
+          "slow.snare.tp": 57,
+          "slow.tom.ref": 9,
+          "slow.tom.tp": 7,
+          "all.stroke.est": 541,
+          "all.kick.est": 270,
+          "all.snare.est": 233,
+          "all.tom.est": 61,
+          "fast.stroke.est": 211,
+          "fast.kick.est": 94,
+          "fast.snare.est": 82,
+          "fast.tom.est": 41,
+          "slow.stroke.est": 330,
+          "slow.kick.est": 176,
+          "slow.snare.est": 151,
+          "slow.tom.est": 20,
+          "conf.snare->snare": 92,
+          "conf.snare->nothing": 11,
+          "conf.snare->kick+snare": 4,
+          "conf.tom->tom": 26,
+          "conf.snare->tom": 2,
+          "conf.tom->kick": 4,
+          "conf.tom->nothing": 5,
+          "conf.snare->kick": 8,
+          "conf.tom->snare": 3,
+          "conf.tom->kick+tom": 2
+        },
+        "unique_fast_moments": {
+          "complete": {
+            "kick": 0,
+            "snare": 0,
+            "tom": 0
+          },
+          "partial": {
+            "kick": 91,
+            "snare": 53,
+            "tom": 35
+          },
+          "all_notation": {
+            "kick": 91,
+            "snare": 53,
+            "tom": 35
+          }
+        },
+        "complete_systems": 0
+      }
+    },
+    {
+      "video": "D1GRAVLM54M",
+      "slug": "robert-sput-searight-transcription-actual-proof-D1GRAVLM54M",
+      "cohort": "manifest",
+      "incomplete_truth": [],
+      "strict_counts": {
+        "all.n": 1,
+        "all.dur": 3.66700000000003,
+        "fast.n": 1,
+        "fast.dur": 3.66700000000003,
+        "all.kick.tp": 11,
+        "all.kick.est": 13,
+        "all.kick.ref": 12,
+        "fast.kick.tp": 11,
+        "fast.kick.est": 13,
+        "fast.kick.ref": 12,
+        "all.snare.tp": 0,
+        "all.snare.est": 6,
+        "all.snare.ref": 0,
+        "fast.snare.tp": 0,
+        "fast.snare.est": 6,
+        "fast.snare.ref": 0,
+        "all.tom.tp": 24,
+        "all.tom.est": 26,
+        "all.tom.ref": 33,
+        "fast.tom.tp": 24,
+        "fast.tom.est": 26,
+        "fast.tom.ref": 33,
+        "all.stroke.tp": 40,
+        "all.stroke.est": 44,
+        "all.stroke.ref": 45,
+        "fast.stroke.tp": 40,
+        "fast.stroke.est": 44,
+        "fast.stroke.ref": 45,
+        "conf.tom->nothing": 4,
+        "conf.tom->tom": 22,
+        "size.3->tom_low": 13,
+        "size.ok": 18,
+        "size.n": 22,
+        "size.7->tom_high": 5,
+        "size.3->tom_high": 4,
+        "conf.tom->snare": 6,
+        "conf.tom->kick": 1,
+        "songs": 1
+      },
+      "with_strict_truth": true,
+      "notation_systems": 20,
+      "loose": {
+        "complete": {},
+        "partial": {
+          "all.stroke.ref": 246,
+          "all.stroke.tp": 213,
+          "all.kick.ref": 92,
+          "all.kick.tp": 73,
+          "all.snare.ref": 77,
+          "all.snare.tp": 62,
+          "all.tom.ref": 77,
+          "all.tom.tp": 54,
+          "slow.stroke.ref": 179,
+          "slow.stroke.tp": 149,
+          "slow.kick.ref": 72,
+          "slow.kick.tp": 57,
+          "slow.snare.ref": 72,
+          "slow.snare.tp": 58,
+          "slow.tom.ref": 35,
+          "slow.tom.tp": 24,
+          "conf.snare->snare": 61,
+          "all.stroke.est": 308,
+          "all.kick.est": 91,
+          "all.snare.est": 161,
+          "all.tom.est": 62,
+          "slow.stroke.est": 239,
+          "slow.kick.est": 70,
+          "slow.snare.est": 144,
+          "slow.tom.est": 29,
+          "conf.snare->nothing": 11,
+          "conf.snare->kick": 3,
+          "fast.stroke.ref": 67,
+          "fast.stroke.tp": 64,
+          "fast.kick.ref": 20,
+          "fast.kick.tp": 16,
+          "fast.snare.ref": 5,
+          "fast.snare.tp": 4,
+          "fast.tom.ref": 42,
+          "fast.tom.tp": 30,
+          "fast.stroke.est": 69,
+          "fast.kick.est": 21,
+          "fast.snare.est": 17,
+          "fast.tom.est": 33,
+          "conf.tom->nothing": 12,
+          "conf.tom->tom": 50,
+          "conf.tom->snare+tom": 3,
+          "conf.tom->snare": 9,
+          "conf.tom->kick": 2,
+          "conf.snare->kick+snare": 1,
+          "conf.tom->kick+tom": 1,
+          "conf.snare->tom": 1
+        },
+        "unique_fast_moments": {
+          "complete": {
+            "kick": 0,
+            "snare": 0,
+            "tom": 0
+          },
+          "partial": {
+            "kick": 20,
+            "snare": 5,
+            "tom": 42
+          },
+          "all_notation": {
+            "kick": 20,
+            "snare": 5,
+            "tom": 42
+          }
+        },
+        "complete_systems": 0
+      }
+    },
+    {
+      "video": "PGdpHkC5Mx0",
+      "slug": "virgil-donati-drum-transcription-just-jammin-on-a-riff-PGdpHkC5Mx0",
+      "cohort": "manifest",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": true,
+      "notation_systems": 12,
+      "loose": {
+        "complete": {},
+        "partial": {
+          "all.stroke.ref": 115,
+          "all.stroke.tp": 87,
+          "all.kick.ref": 53,
+          "all.kick.tp": 35,
+          "all.snare.ref": 60,
+          "all.snare.tp": 45,
+          "all.tom.ref": 2,
+          "all.tom.tp": 2,
+          "slow.stroke.ref": 106,
+          "slow.stroke.tp": 84,
+          "slow.kick.ref": 50,
+          "slow.kick.tp": 34,
+          "slow.snare.ref": 54,
+          "slow.snare.tp": 43,
+          "slow.tom.ref": 2,
+          "slow.tom.tp": 2,
+          "conf.snare->nothing": 13,
+          "conf.snare->snare": 45,
+          "all.stroke.est": 147,
+          "all.kick.est": 58,
+          "all.snare.est": 87,
+          "all.tom.est": 2,
+          "slow.stroke.est": 135,
+          "slow.kick.est": 53,
+          "slow.snare.est": 80,
+          "slow.tom.est": 2,
+          "conf.snare->kick": 2,
+          "fast.stroke.ref": 9,
+          "fast.stroke.tp": 3,
+          "fast.kick.ref": 3,
+          "fast.kick.tp": 1,
+          "fast.snare.ref": 6,
+          "fast.snare.tp": 2,
+          "fast.tom.ref": 0,
+          "fast.tom.tp": 0,
+          "fast.stroke.est": 12,
+          "fast.kick.est": 5,
+          "fast.snare.est": 7,
+          "fast.tom.est": 0,
+          "conf.tom->tom": 2
+        },
+        "unique_fast_moments": {
+          "complete": {
+            "kick": 0,
+            "snare": 0,
+            "tom": 0
+          },
+          "partial": {
+            "kick": 3,
+            "snare": 6,
+            "tom": 0
+          },
+          "all_notation": {
+            "kick": 3,
+            "snare": 6,
+            "tom": 0
+          }
+        },
+        "complete_systems": 0
+      }
+    },
+    {
+      "video": "9oWUjm6OY14",
+      "slug": "mark-guiliana-drum-solo-transcription-7-ways-feat-jason-lind-9oWUjm6OY14",
+      "cohort": "manifest",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 0
+    },
+    {
+      "video": "GXyMskwBEsc",
+      "slug": "drum-solo-transcription-vinnie-colaiuta-w-jeff-beck-live-at-GXyMskwBEsc",
+      "cohort": "manifest",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 1,
+      "loose": {
+        "complete": {},
+        "partial": {
+          "all.stroke.ref": 9,
+          "all.stroke.tp": 6,
+          "all.kick.ref": 4,
+          "all.kick.tp": 1,
+          "all.snare.ref": 5,
+          "all.snare.tp": 5,
+          "all.tom.ref": 0,
+          "all.tom.tp": 0,
+          "slow.stroke.ref": 9,
+          "slow.stroke.tp": 6,
+          "slow.kick.ref": 4,
+          "slow.kick.tp": 1,
+          "slow.snare.ref": 5,
+          "slow.snare.tp": 5,
+          "slow.tom.ref": 0,
+          "slow.tom.tp": 0,
+          "conf.snare->snare": 5,
+          "all.stroke.est": 11,
+          "all.kick.est": 4,
+          "all.snare.est": 7,
+          "all.tom.est": 0,
+          "slow.stroke.est": 11,
+          "slow.kick.est": 4,
+          "slow.snare.est": 7,
+          "slow.tom.est": 0
+        },
+        "unique_fast_moments": {
+          "complete": {
+            "kick": 0,
+            "snare": 0,
+            "tom": 0
+          },
+          "partial": {
+            "kick": 0,
+            "snare": 0,
+            "tom": 0
+          },
+          "all_notation": {
+            "kick": 0,
+            "snare": 0,
+            "tom": 0
+          }
+        },
+        "complete_systems": 0
+      }
+    },
+    {
+      "video": "-MZJJARIGmA",
+      "slug": "chris-coleman-drum-transcription-birch-infinite-performance--MZJJARIGmA",
+      "cohort": "manifest",
+      "incomplete_truth": [],
+      "strict_counts": {
+        "all.n": 6,
+        "all.dur": 4.524999999999977,
+        "fast.n": 2,
+        "fast.dur": 1.4710000000000036,
+        "all.kick.tp": 8,
+        "all.kick.est": 10,
+        "all.kick.ref": 13,
+        "fast.kick.tp": 1,
+        "fast.kick.est": 1,
+        "fast.kick.ref": 2,
+        "all.snare.tp": 10,
+        "all.snare.est": 12,
+        "all.snare.ref": 10,
+        "fast.snare.tp": 8,
+        "fast.snare.est": 8,
+        "fast.snare.ref": 8,
+        "all.tom.tp": 32,
+        "all.tom.est": 36,
+        "all.tom.ref": 36,
+        "fast.tom.tp": 13,
+        "fast.tom.est": 14,
+        "fast.tom.ref": 14,
+        "all.stroke.tp": 57,
+        "all.stroke.est": 57,
+        "all.stroke.ref": 58,
+        "fast.stroke.tp": 22,
+        "fast.stroke.est": 22,
+        "fast.stroke.ref": 23,
+        "conf.tom->tom": 33,
+        "size.7->tom_low": 2,
+        "size.ok": 21,
+        "size.n": 26,
+        "size.7->tom_high": 5,
+        "size.6->tom": 9,
+        "size.6->tom_high": 2,
+        "size.3->tom_low": 7,
+        "size.2->tom": 2,
+        "size.2->tom_low": 5,
+        "fill.n": 4,
+        "fill.dur": 3.0539999999999736,
+        "fill.kick.tp": 7,
+        "fill.kick.est": 9,
+        "fill.kick.ref": 11,
+        "fill.snare.tp": 2,
+        "fill.snare.est": 4,
+        "fill.snare.ref": 2,
+        "fill.tom.tp": 19,
+        "fill.tom.est": 22,
+        "fill.tom.ref": 22,
+        "fill.stroke.tp": 35,
+        "fill.stroke.est": 35,
+        "fill.stroke.ref": 35,
+        "conf.tom->kick": 2,
+        "conf.snare->snare": 10,
+        "conf.tom->snare": 1,
+        "size.3->tom": 1,
+        "songs": 1,
+        "slow.n": 4,
+        "slow.dur": 3.0539999999999736,
+        "slow.kick.tp": 7,
+        "slow.kick.est": 9,
+        "slow.kick.ref": 11,
+        "slow.snare.tp": 2,
+        "slow.snare.est": 4,
+        "slow.snare.ref": 2,
+        "slow.tom.tp": 19,
+        "slow.tom.est": 22,
+        "slow.tom.ref": 22,
+        "slow.stroke.tp": 35,
+        "slow.stroke.est": 35,
+        "slow.stroke.ref": 35
+      },
+      "with_strict_truth": true,
+      "notation_systems": 15,
+      "loose": {
+        "complete": {},
+        "partial": {
+          "all.stroke.ref": 317,
+          "all.stroke.tp": 294,
+          "all.kick.ref": 158,
+          "all.kick.tp": 118,
+          "all.snare.ref": 117,
+          "all.snare.tp": 94,
+          "all.tom.ref": 48,
+          "all.tom.tp": 41,
+          "slow.stroke.ref": 205,
+          "slow.stroke.tp": 188,
+          "slow.kick.ref": 119,
+          "slow.kick.tp": 89,
+          "slow.snare.ref": 64,
+          "slow.snare.tp": 51,
+          "slow.tom.ref": 25,
+          "slow.tom.tp": 21,
+          "conf.snare->snare": 91,
+          "fast.stroke.ref": 112,
+          "fast.stroke.tp": 106,
+          "fast.kick.ref": 39,
+          "fast.kick.tp": 29,
+          "fast.snare.ref": 53,
+          "fast.snare.tp": 43,
+          "fast.tom.ref": 23,
+          "fast.tom.tp": 20,
+          "conf.snare->nothing": 10,
+          "all.stroke.est": 404,
+          "all.kick.est": 163,
+          "all.snare.est": 195,
+          "all.tom.est": 53,
+          "slow.stroke.est": 273,
+          "slow.kick.est": 121,
+          "slow.snare.est": 127,
+          "slow.tom.est": 31,
+          "fast.stroke.est": 131,
+          "fast.kick.est": 42,
+          "fast.snare.est": 68,
+          "fast.tom.est": 22,
+          "conf.tom->tom": 40,
+          "conf.tom->nothing": 2,
+          "conf.snare->kick": 11,
+          "conf.tom->kick": 4,
+          "conf.tom->snare": 1
+        },
+        "unique_fast_moments": {
+          "complete": {
+            "kick": 0,
+            "snare": 0,
+            "tom": 0
+          },
+          "partial": {
+            "kick": 39,
+            "snare": 53,
+            "tom": 23
+          },
+          "all_notation": {
+            "kick": 39,
+            "snare": 53,
+            "tom": 23
+          }
+        },
+        "complete_systems": 0
+      }
+    },
+    {
+      "video": "TzngsvZ-L20",
+      "slug": "2-insane-crossover-drum-fills-TzngsvZ-L20",
+      "cohort": "manifest",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 0
+    },
+    {
+      "video": "b-Vl2q-MKCM",
+      "slug": "blazing-drum-solo-stanton-moore-maple-plank-notation-video-b-Vl2q-MKCM",
+      "cohort": "manifest",
+      "incomplete_truth": [],
+      "strict_counts": {
+        "all.n": 2,
+        "all.dur": 2.050999999999995,
+        "fill.n": 1,
+        "fill.dur": 0.5289999999999964,
+        "all.kick.tp": 4,
+        "all.kick.est": 5,
+        "all.kick.ref": 6,
+        "fill.kick.tp": 1,
+        "fill.kick.est": 1,
+        "fill.kick.ref": 1,
+        "all.snare.tp": 0,
+        "all.snare.est": 0,
+        "all.snare.ref": 0,
+        "fill.snare.tp": 0,
+        "fill.snare.est": 0,
+        "fill.snare.ref": 0,
+        "all.tom.tp": 22,
+        "all.tom.est": 22,
+        "all.tom.ref": 24,
+        "fill.tom.tp": 7,
+        "fill.tom.est": 7,
+        "fill.tom.ref": 7,
+        "all.stroke.tp": 22,
+        "all.stroke.est": 24,
+        "all.stroke.ref": 25,
+        "fill.stroke.tp": 7,
+        "fill.stroke.est": 7,
+        "fill.stroke.ref": 7,
+        "conf.tom->tom": 21,
+        "size.7->tom_high": 10,
+        "size.ok": 13,
+        "size.n": 21,
+        "size.7->tom": 1,
+        "size.7->tom_low": 1,
+        "fast.n": 1,
+        "fast.dur": 1.5219999999999985,
+        "fast.kick.tp": 3,
+        "fast.kick.est": 4,
+        "fast.kick.ref": 5,
+        "fast.snare.tp": 0,
+        "fast.snare.est": 0,
+        "fast.snare.ref": 0,
+        "fast.tom.tp": 15,
+        "fast.tom.est": 15,
+        "fast.tom.ref": 17,
+        "fast.stroke.tp": 15,
+        "fast.stroke.est": 17,
+        "fast.stroke.ref": 18,
+        "conf.tom->nothing": 3,
+        "size.3->tom_low": 3,
+        "size.3->tom": 5,
+        "size.3->tom_high": 1,
+        "songs": 1,
+        "slow.n": 1,
+        "slow.dur": 0.5289999999999964,
+        "slow.kick.tp": 1,
+        "slow.kick.est": 1,
+        "slow.kick.ref": 1,
+        "slow.snare.tp": 0,
+        "slow.snare.est": 0,
+        "slow.snare.ref": 0,
+        "slow.tom.tp": 7,
+        "slow.tom.est": 7,
+        "slow.tom.ref": 7,
+        "slow.stroke.tp": 7,
+        "slow.stroke.est": 7,
+        "slow.stroke.ref": 7
+      },
+      "with_strict_truth": true,
+      "notation_systems": 12,
+      "loose": {
+        "complete": {},
+        "partial": {
+          "all.stroke.ref": 268,
+          "all.stroke.tp": 233,
+          "all.kick.ref": 95,
+          "all.kick.tp": 66,
+          "all.snare.ref": 82,
+          "all.snare.tp": 72,
+          "all.tom.ref": 113,
+          "all.tom.tp": 97,
+          "slow.stroke.ref": 184,
+          "slow.stroke.tp": 166,
+          "slow.kick.ref": 71,
+          "slow.kick.tp": 54,
+          "slow.snare.ref": 65,
+          "slow.snare.tp": 59,
+          "slow.tom.ref": 64,
+          "slow.tom.tp": 56,
+          "conf.snare->snare": 67,
+          "fast.stroke.ref": 84,
+          "fast.stroke.tp": 67,
+          "fast.kick.ref": 24,
+          "fast.kick.tp": 12,
+          "fast.snare.ref": 17,
+          "fast.snare.tp": 13,
+          "fast.tom.ref": 49,
+          "fast.tom.tp": 41,
+          "all.stroke.est": 299,
+          "all.kick.est": 116,
+          "all.snare.est": 115,
+          "all.tom.est": 130,
+          "slow.stroke.est": 223,
+          "slow.kick.est": 95,
+          "slow.snare.est": 99,
+          "slow.tom.est": 81,
+          "fast.stroke.est": 76,
+          "fast.kick.est": 21,
+          "fast.snare.est": 16,
+          "fast.tom.est": 49,
+          "conf.snare->nothing": 8,
+          "conf.snare->kick": 1,
+          "conf.tom->nothing": 8,
+          "conf.tom->tom": 67,
+          "conf.tom->kick": 2,
+          "conf.tom->snare+tom": 9,
+          "conf.tom->kick+tom": 5,
+          "conf.snare->kick+tom": 1,
+          "conf.tom->snare": 5
+        },
+        "unique_fast_moments": {
+          "complete": {
+            "kick": 0,
+            "snare": 0,
+            "tom": 0
+          },
+          "partial": {
+            "kick": 24,
+            "snare": 17,
+            "tom": 49
+          },
+          "all_notation": {
+            "kick": 24,
+            "snare": 17,
+            "tom": 49
+          }
+        },
+        "complete_systems": 0
+      }
+    },
+    {
+      "video": "jtbhIahu35Q",
+      "slug": "chris-coleman-go-solo-transcription-jtbhIahu35Q",
+      "cohort": "manifest",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 1,
+      "loose": {
+        "complete": {},
+        "partial": {
+          "all.stroke.ref": 48,
+          "all.stroke.tp": 45,
+          "all.kick.ref": 9,
+          "all.kick.tp": 6,
+          "all.snare.ref": 17,
+          "all.snare.tp": 16,
+          "all.tom.ref": 22,
+          "all.tom.tp": 20,
+          "fast.stroke.ref": 48,
+          "fast.stroke.tp": 45,
+          "fast.kick.ref": 9,
+          "fast.kick.tp": 6,
+          "fast.snare.ref": 17,
+          "fast.snare.tp": 16,
+          "fast.tom.ref": 22,
+          "fast.tom.tp": 20,
+          "conf.tom->kick": 1,
+          "conf.tom->snare+tom": 1,
+          "conf.snare->snare": 15,
+          "conf.tom->tom": 18,
+          "conf.tom->nothing": 1,
+          "conf.tom->kick+tom": 1,
+          "conf.snare->snare+tom": 1,
+          "conf.snare->kick": 1,
+          "all.stroke.est": 49,
+          "all.kick.est": 9,
+          "all.snare.est": 21,
+          "all.tom.est": 23,
+          "fast.stroke.est": 49,
+          "fast.kick.est": 9,
+          "fast.snare.est": 21,
+          "fast.tom.est": 23
+        },
+        "unique_fast_moments": {
+          "complete": {
+            "kick": 0,
+            "snare": 0,
+            "tom": 0
+          },
+          "partial": {
+            "kick": 9,
+            "snare": 17,
+            "tom": 22
+          },
+          "all_notation": {
+            "kick": 9,
+            "snare": 17,
+            "tom": 22
+          }
+        },
+        "complete_systems": 0
+      }
+    },
+    {
+      "video": "EGmd5rCmFlQ",
+      "slug": "great-angles-horrible-sound-don-t-judge-me-i-m-working-on-it-EGmd5rCmFlQ",
+      "cohort": "manifest",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 0
+    },
+    {
+      "video": "-YJ97E8GcWY",
+      "slug": "tony-royster-jr-transcription-katy-perry-soundcheck--YJ97E8GcWY",
+      "cohort": "manifest",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 0
+    },
+    {
+      "video": "JG2xMCBwL1Y",
+      "slug": "eric-moore-transcription-pasic-drum-solo-JG2xMCBwL1Y",
+      "cohort": "manifest",
+      "incomplete_truth": [],
+      "strict_counts": {
+        "all.n": 6,
+        "all.dur": 2.9179999999999993,
+        "fill.n": 6,
+        "fill.dur": 2.9179999999999993,
+        "all.kick.tp": 10,
+        "all.kick.est": 18,
+        "all.kick.ref": 10,
+        "fill.kick.tp": 10,
+        "fill.kick.est": 18,
+        "fill.kick.ref": 10,
+        "all.snare.tp": 2,
+        "all.snare.est": 2,
+        "all.snare.ref": 3,
+        "fill.snare.tp": 2,
+        "fill.snare.est": 2,
+        "fill.snare.ref": 3,
+        "all.tom.tp": 8,
+        "all.tom.est": 10,
+        "all.tom.ref": 19,
+        "fill.tom.tp": 8,
+        "fill.tom.est": 10,
+        "fill.tom.ref": 19,
+        "all.stroke.tp": 28,
+        "all.stroke.est": 28,
+        "all.stroke.ref": 32,
+        "fill.stroke.tp": 28,
+        "fill.stroke.est": 28,
+        "fill.stroke.ref": 32,
+        "conf.tom->tom": 8,
+        "size.7->tom_high": 2,
+        "size.ok": 6,
+        "size.n": 8,
+        "size.6->tom": 2,
+        "conf.snare->snare": 2,
+        "size.3->tom_low": 2,
+        "conf.tom->nothing": 4,
+        "conf.tom->kick": 7,
+        "conf.snare->tom": 1,
+        "size.7->tom": 1,
+        "size.6->tom_low": 1,
+        "songs": 1,
+        "slow.n": 6,
+        "slow.dur": 2.9179999999999993,
+        "slow.kick.tp": 10,
+        "slow.kick.est": 18,
+        "slow.kick.ref": 10,
+        "slow.snare.tp": 2,
+        "slow.snare.est": 2,
+        "slow.snare.ref": 3,
+        "slow.tom.tp": 8,
+        "slow.tom.est": 10,
+        "slow.tom.ref": 19,
+        "slow.stroke.tp": 28,
+        "slow.stroke.est": 28,
+        "slow.stroke.ref": 32
+      },
+      "with_strict_truth": true,
+      "notation_systems": 8,
+      "loose": {
+        "complete": {},
+        "partial": {
+          "all.stroke.ref": 145,
+          "all.stroke.tp": 115,
+          "all.kick.ref": 76,
+          "all.kick.tp": 57,
+          "all.snare.ref": 12,
+          "all.snare.tp": 10,
+          "all.tom.ref": 59,
+          "all.tom.tp": 27,
+          "slow.stroke.ref": 99,
+          "slow.stroke.tp": 80,
+          "slow.kick.ref": 54,
+          "slow.kick.tp": 46,
+          "slow.snare.ref": 12,
+          "slow.snare.tp": 10,
+          "slow.tom.ref": 34,
+          "slow.tom.tp": 10,
+          "conf.snare->snare": 9,
+          "conf.tom->tom": 24,
+          "all.stroke.est": 148,
+          "all.kick.est": 91,
+          "all.snare.est": 13,
+          "all.tom.est": 69,
+          "slow.stroke.est": 97,
+          "slow.kick.est": 69,
+          "slow.snare.est": 13,
+          "slow.tom.est": 22,
+          "conf.tom->nothing": 17,
+          "conf.tom->kick": 13,
+          "conf.snare->tom": 1,
+          "conf.snare->kick+snare": 1,
+          "conf.snare->nothing": 1,
+          "fast.stroke.ref": 46,
+          "fast.stroke.tp": 35,
+          "fast.kick.ref": 22,
+          "fast.kick.tp": 11,
+          "fast.snare.ref": 0,
+          "fast.snare.tp": 0,
+          "fast.tom.ref": 25,
+          "fast.tom.tp": 17,
+          "fast.stroke.est": 51,
+          "fast.kick.est": 22,
+          "fast.snare.est": 0,
+          "fast.tom.est": 47,
+          "conf.tom->kick+tom": 3
+        },
+        "unique_fast_moments": {
+          "complete": {
+            "kick": 0,
+            "snare": 0,
+            "tom": 0
+          },
+          "partial": {
+            "kick": 22,
+            "snare": 0,
+            "tom": 25
+          },
+          "all_notation": {
+            "kick": 22,
+            "snare": 0,
+            "tom": 25
+          }
+        },
+        "complete_systems": 0
+      }
+    },
+    {
+      "video": "bh-AFB6dkz4",
+      "slug": "aaron-sterling-drum-solo-transcription-bh-AFB6dkz4",
+      "cohort": "manifest",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 0
+    },
+    {
+      "video": "Oo0SReYA4po",
+      "slug": "nate-smith-solo-transcription-Oo0SReYA4po",
+      "cohort": "manifest",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 1,
+      "loose": {
+        "complete": {},
+        "partial": {
+          "all.stroke.ref": 15,
+          "all.stroke.tp": 13,
+          "all.kick.ref": 11,
+          "all.kick.tp": 9,
+          "all.snare.ref": 4,
+          "all.snare.tp": 3,
+          "all.tom.ref": 0,
+          "all.tom.tp": 0,
+          "slow.stroke.ref": 15,
+          "slow.stroke.tp": 13,
+          "slow.kick.ref": 11,
+          "slow.kick.tp": 9,
+          "slow.snare.ref": 4,
+          "slow.snare.tp": 3,
+          "slow.tom.ref": 0,
+          "slow.tom.tp": 0,
+          "conf.snare->nothing": 1,
+          "conf.snare->snare": 3,
+          "all.stroke.est": 21,
+          "all.kick.est": 11,
+          "all.snare.est": 10,
+          "all.tom.est": 0,
+          "slow.stroke.est": 21,
+          "slow.kick.est": 11,
+          "slow.snare.est": 10,
+          "slow.tom.est": 0
+        },
+        "unique_fast_moments": {
+          "complete": {
+            "kick": 0,
+            "snare": 0,
+            "tom": 0
+          },
+          "partial": {
+            "kick": 0,
+            "snare": 0,
+            "tom": 0
+          },
+          "all_notation": {
+            "kick": 0,
+            "snare": 0,
+            "tom": 0
+          }
+        },
+        "complete_systems": 0
+      }
+    },
+    {
+      "video": "drtDkmbTWO0",
+      "slug": "calvin-rodgers-drum-solo-transcription-goose-as-a-loose-drtDkmbTWO0",
+      "cohort": "manifest",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": true,
+      "notation_systems": 7,
+      "loose": {
+        "complete": {},
+        "partial": {
+          "all.stroke.ref": 92,
+          "all.stroke.tp": 89,
+          "all.kick.ref": 49,
+          "all.kick.tp": 45,
+          "all.snare.ref": 36,
+          "all.snare.tp": 34,
+          "all.tom.ref": 7,
+          "all.tom.tp": 6,
+          "slow.stroke.ref": 75,
+          "slow.stroke.tp": 72,
+          "slow.kick.ref": 42,
+          "slow.kick.tp": 38,
+          "slow.snare.ref": 29,
+          "slow.snare.tp": 27,
+          "slow.tom.ref": 4,
+          "slow.tom.tp": 3,
+          "conf.snare->nothing": 1,
+          "conf.snare->kick": 1,
+          "conf.snare->snare": 33,
+          "fast.stroke.ref": 17,
+          "fast.stroke.tp": 17,
+          "fast.kick.ref": 7,
+          "fast.kick.tp": 7,
+          "fast.snare.ref": 7,
+          "fast.snare.tp": 7,
+          "fast.tom.ref": 3,
+          "fast.tom.tp": 3,
+          "all.stroke.est": 160,
+          "all.kick.est": 53,
+          "all.snare.est": 102,
+          "all.tom.est": 13,
+          "slow.stroke.est": 138,
+          "slow.kick.est": 46,
+          "slow.snare.est": 90,
+          "slow.tom.est": 6,
+          "fast.stroke.est": 22,
+          "fast.kick.est": 7,
+          "fast.snare.est": 12,
+          "fast.tom.est": 7,
+          "conf.tom->tom": 6,
+          "conf.tom->nothing": 1,
+          "conf.snare->snare+tom": 1
+        },
+        "unique_fast_moments": {
+          "complete": {
+            "kick": 0,
+            "snare": 0,
+            "tom": 0
+          },
+          "partial": {
+            "kick": 7,
+            "snare": 7,
+            "tom": 3
+          },
+          "all_notation": {
+            "kick": 7,
+            "snare": 7,
+            "tom": 3
+          }
+        },
+        "complete_systems": 0
+      }
+    },
+    {
+      "video": "y5IRZ3p_m_E",
+      "slug": "zackgrooves-drum-transcription-zack-graybeal-y5IRZ3p_m_E",
+      "cohort": "manifest",
+      "incomplete_truth": [
+        "notation"
+      ],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 0
+    },
+    {
+      "video": "WSB7bJ5Zc_4",
+      "slug": "vinnie-colaiuta-transcription-solo-on-attack-of-the-20-lb-pi-WSB7bJ5Zc_4",
+      "cohort": "manifest",
+      "incomplete_truth": [],
+      "strict_counts": {
+        "all.n": 5,
+        "all.dur": 3.047000000000004,
+        "fast.n": 2,
+        "fast.dur": 0.46399999999999864,
+        "all.kick.tp": 16,
+        "all.kick.est": 17,
+        "all.kick.ref": 17,
+        "fast.kick.tp": 4,
+        "fast.kick.est": 4,
+        "fast.kick.ref": 4,
+        "all.snare.tp": 4,
+        "all.snare.est": 4,
+        "all.snare.ref": 5,
+        "fast.snare.tp": 1,
+        "fast.snare.est": 1,
+        "fast.snare.ref": 1,
+        "all.tom.tp": 14,
+        "all.tom.est": 20,
+        "all.tom.ref": 15,
+        "fast.tom.tp": 4,
+        "fast.tom.est": 4,
+        "fast.tom.ref": 4,
+        "all.stroke.tp": 36,
+        "all.stroke.est": 38,
+        "all.stroke.ref": 37,
+        "fast.stroke.tp": 9,
+        "fast.stroke.est": 9,
+        "fast.stroke.ref": 9,
+        "conf.tom->tom": 14,
+        "size.3->tom_low": 5,
+        "size.ok": 10,
+        "size.n": 14,
+        "size.7->tom_low": 1,
+        "conf.snare->snare": 4,
+        "size.7->tom_high": 2,
+        "fill.n": 3,
+        "fill.dur": 2.5830000000000055,
+        "fill.kick.tp": 12,
+        "fill.kick.est": 13,
+        "fill.kick.ref": 13,
+        "fill.snare.tp": 3,
+        "fill.snare.est": 3,
+        "fill.snare.ref": 4,
+        "fill.tom.tp": 10,
+        "fill.tom.est": 16,
+        "fill.tom.ref": 11,
+        "fill.stroke.tp": 27,
+        "fill.stroke.est": 29,
+        "fill.stroke.ref": 28,
+        "size.6->tom": 3,
+        "size.3->tom": 1,
+        "conf.tom->kick": 1,
+        "size.7->tom": 2,
+        "conf.snare->nothing": 1,
+        "songs": 1,
+        "slow.n": 3,
+        "slow.dur": 2.5830000000000055,
+        "slow.kick.tp": 12,
+        "slow.kick.est": 13,
+        "slow.kick.ref": 13,
+        "slow.snare.tp": 3,
+        "slow.snare.est": 3,
+        "slow.snare.ref": 4,
+        "slow.tom.tp": 10,
+        "slow.tom.est": 16,
+        "slow.tom.ref": 11,
+        "slow.stroke.tp": 27,
+        "slow.stroke.est": 29,
+        "slow.stroke.ref": 28
+      },
+      "with_strict_truth": true,
+      "notation_systems": 13,
+      "loose": {
+        "complete": {},
+        "partial": {
+          "all.stroke.ref": 202,
+          "all.stroke.tp": 196,
+          "all.kick.ref": 93,
+          "all.kick.tp": 90,
+          "all.snare.ref": 68,
+          "all.snare.tp": 65,
+          "all.tom.ref": 45,
+          "all.tom.tp": 36,
+          "fast.stroke.ref": 57,
+          "fast.stroke.tp": 54,
+          "fast.kick.ref": 26,
+          "fast.kick.tp": 24,
+          "fast.snare.ref": 13,
+          "fast.snare.tp": 11,
+          "fast.tom.ref": 18,
+          "fast.tom.tp": 16,
+          "conf.tom->tom": 36,
+          "conf.snare->snare": 51,
+          "slow.stroke.ref": 145,
+          "slow.stroke.tp": 142,
+          "slow.kick.ref": 67,
+          "slow.kick.tp": 66,
+          "slow.snare.ref": 55,
+          "slow.snare.tp": 54,
+          "slow.tom.ref": 27,
+          "slow.tom.tp": 20,
+          "all.stroke.est": 296,
+          "all.kick.est": 116,
+          "all.snare.est": 138,
+          "all.tom.est": 61,
+          "fast.stroke.est": 71,
+          "fast.kick.est": 26,
+          "fast.snare.est": 27,
+          "fast.tom.est": 21,
+          "slow.stroke.est": 225,
+          "slow.kick.est": 90,
+          "slow.snare.est": 111,
+          "slow.tom.est": 40,
+          "conf.tom->snare": 1,
+          "conf.tom->nothing": 3,
+          "conf.snare->kick+snare": 2,
+          "conf.snare->snare+tom": 12,
+          "conf.snare->kick": 2,
+          "conf.tom->kick": 1,
+          "conf.snare->nothing": 1
+        },
+        "unique_fast_moments": {
+          "complete": {
+            "kick": 0,
+            "snare": 0,
+            "tom": 0
+          },
+          "partial": {
+            "kick": 26,
+            "snare": 13,
+            "tom": 18
+          },
+          "all_notation": {
+            "kick": 26,
+            "snare": 13,
+            "tom": 18
+          }
+        },
+        "complete_systems": 0
+      }
+    },
+    {
+      "video": "W5J8TG4j5IE",
+      "slug": "steve-smith-drum-solo-transcription-vic-firth-performance-sp-W5J8TG4j5IE",
+      "cohort": "manifest",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": true,
+      "notation_systems": 4,
+      "loose": {
+        "complete": {},
+        "partial": {
+          "all.stroke.ref": 108,
+          "all.stroke.tp": 105,
+          "all.kick.ref": 37,
+          "all.kick.tp": 35,
+          "all.snare.ref": 57,
+          "all.snare.tp": 52,
+          "all.tom.ref": 18,
+          "all.tom.tp": 15,
+          "slow.stroke.ref": 56,
+          "slow.stroke.tp": 55,
+          "slow.kick.ref": 27,
+          "slow.kick.tp": 25,
+          "slow.snare.ref": 29,
+          "slow.snare.tp": 24,
+          "slow.tom.ref": 2,
+          "slow.tom.tp": 2,
+          "fast.stroke.ref": 52,
+          "fast.stroke.tp": 50,
+          "fast.kick.ref": 10,
+          "fast.kick.tp": 10,
+          "fast.snare.ref": 28,
+          "fast.snare.tp": 28,
+          "fast.tom.ref": 16,
+          "fast.tom.tp": 13,
+          "conf.snare->snare": 49,
+          "conf.snare->kick+snare": 2,
+          "all.stroke.est": 130,
+          "all.kick.est": 48,
+          "all.snare.est": 70,
+          "all.tom.est": 34,
+          "slow.stroke.est": 75,
+          "slow.kick.est": 36,
+          "slow.snare.est": 39,
+          "slow.tom.est": 19,
+          "fast.stroke.est": 55,
+          "fast.kick.est": 12,
+          "fast.snare.est": 31,
+          "fast.tom.est": 15,
+          "conf.snare->kick+tom": 2,
+          "conf.tom->tom": 13,
+          "conf.tom->nothing": 2,
+          "conf.tom->kick+tom": 1,
+          "conf.snare->nothing": 1,
+          "conf.snare->snare+tom": 1
+        },
+        "unique_fast_moments": {
+          "complete": {
+            "kick": 0,
+            "snare": 0,
+            "tom": 0
+          },
+          "partial": {
+            "kick": 10,
+            "snare": 28,
+            "tom": 16
+          },
+          "all_notation": {
+            "kick": 10,
+            "snare": 28,
+            "tom": 16
+          }
+        },
+        "complete_systems": 0
+      }
+    },
+    {
+      "video": "57cD4c5_xT8",
+      "slug": "insane-thomas-pridgen-drum-fills-zildjian-live-thomas-pridge-57cD4c5_xT8",
+      "cohort": "manifest",
+      "incomplete_truth": [],
+      "strict_counts": {
+        "all.n": 1,
+        "all.dur": 1.590999999999994,
+        "fill.n": 1,
+        "fill.dur": 1.590999999999994,
+        "all.kick.tp": 5,
+        "all.kick.est": 6,
+        "all.kick.ref": 9,
+        "fill.kick.tp": 5,
+        "fill.kick.est": 6,
+        "fill.kick.ref": 9,
+        "all.snare.tp": 4,
+        "all.snare.est": 5,
+        "all.snare.ref": 6,
+        "fill.snare.tp": 4,
+        "fill.snare.est": 5,
+        "fill.snare.ref": 6,
+        "all.tom.tp": 2,
+        "all.tom.est": 6,
+        "all.tom.ref": 2,
+        "fill.tom.tp": 2,
+        "fill.tom.est": 6,
+        "fill.tom.ref": 2,
+        "all.stroke.tp": 16,
+        "all.stroke.est": 17,
+        "all.stroke.ref": 16,
+        "fill.stroke.tp": 16,
+        "fill.stroke.est": 17,
+        "fill.stroke.ref": 16,
+        "conf.snare->tom": 1,
+        "conf.tom->tom": 2,
+        "size.3->tom_low": 1,
+        "size.ok": 1,
+        "size.n": 2,
+        "size.6->tom_low": 1,
+        "conf.snare->snare": 4,
+        "conf.snare->kick": 1,
+        "songs": 1,
+        "slow.n": 1,
+        "slow.dur": 1.590999999999994,
+        "slow.kick.tp": 5,
+        "slow.kick.est": 6,
+        "slow.kick.ref": 9,
+        "slow.snare.tp": 4,
+        "slow.snare.est": 5,
+        "slow.snare.ref": 6,
+        "slow.tom.tp": 2,
+        "slow.tom.est": 6,
+        "slow.tom.ref": 2,
+        "slow.stroke.tp": 16,
+        "slow.stroke.est": 17,
+        "slow.stroke.ref": 16
+      },
+      "with_strict_truth": true,
+      "notation_systems": 19,
+      "loose": {
+        "complete": {},
+        "partial": {
+          "all.stroke.ref": 437,
+          "all.stroke.tp": 380,
+          "all.kick.ref": 238,
+          "all.kick.tp": 139,
+          "all.snare.ref": 165,
+          "all.snare.tp": 125,
+          "all.tom.ref": 34,
+          "all.tom.tp": 12,
+          "slow.stroke.ref": 345,
+          "slow.stroke.tp": 305,
+          "slow.kick.ref": 191,
+          "slow.kick.tp": 110,
+          "slow.snare.ref": 124,
+          "slow.snare.tp": 90,
+          "slow.tom.ref": 30,
+          "slow.tom.tp": 11,
+          "conf.snare->snare": 122,
+          "conf.snare->kick": 18,
+          "all.stroke.est": 585,
+          "all.kick.est": 237,
+          "all.snare.est": 321,
+          "all.tom.est": 52,
+          "slow.stroke.est": 503,
+          "slow.kick.est": 204,
+          "slow.snare.est": 272,
+          "slow.tom.est": 46,
+          "conf.snare->kick+snare": 3,
+          "fast.stroke.ref": 92,
+          "fast.stroke.tp": 75,
+          "fast.kick.ref": 47,
+          "fast.kick.tp": 29,
+          "fast.snare.ref": 41,
+          "fast.snare.tp": 35,
+          "fast.tom.ref": 4,
+          "fast.tom.tp": 1,
+          "fast.stroke.est": 82,
+          "fast.kick.est": 33,
+          "fast.snare.est": 49,
+          "fast.tom.est": 6,
+          "conf.tom->tom": 10,
+          "conf.tom->kick": 6,
+          "conf.snare->nothing": 15,
+          "conf.tom->nothing": 12,
+          "conf.tom->snare+tom": 1,
+          "conf.snare->tom": 5,
+          "conf.snare->kick+tom": 2,
+          "conf.tom->snare": 4,
+          "conf.tom->kick+tom": 1
+        },
+        "unique_fast_moments": {
+          "complete": {
+            "kick": 0,
+            "snare": 0,
+            "tom": 0
+          },
+          "partial": {
+            "kick": 47,
+            "snare": 41,
+            "tom": 4
+          },
+          "all_notation": {
+            "kick": 47,
+            "snare": 41,
+            "tom": 4
+          }
+        },
+        "complete_systems": 0
+      }
+    },
+    {
+      "video": "9DAQnR7rxHc",
+      "slug": "anika-nilles-wild-boy-fill-breakdown-9DAQnR7rxHc",
+      "cohort": "manifest",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 0
+    },
+    {
+      "video": "cXYwSjW0oQY",
+      "slug": "benny-greb-drum-fill-breakdown-extreme-hand-and-foot-singles-cXYwSjW0oQY",
+      "cohort": "manifest",
+      "incomplete_truth": [],
+      "strict_counts": {
+        "all.n": 3,
+        "all.dur": 3.3519999999999897,
+        "fast.n": 2,
+        "fast.dur": 3.0579999999999927,
+        "all.kick.tp": 9,
+        "all.kick.est": 10,
+        "all.kick.ref": 12,
+        "fast.kick.tp": 8,
+        "fast.kick.est": 9,
+        "fast.kick.ref": 10,
+        "all.snare.tp": 15,
+        "all.snare.est": 16,
+        "all.snare.ref": 17,
+        "fast.snare.tp": 15,
+        "fast.snare.est": 16,
+        "fast.snare.ref": 17,
+        "all.tom.tp": 11,
+        "all.tom.est": 18,
+        "all.tom.ref": 14,
+        "fast.tom.tp": 10,
+        "fast.tom.est": 16,
+        "fast.tom.ref": 12,
+        "all.stroke.tp": 33,
+        "all.stroke.est": 37,
+        "all.stroke.ref": 42,
+        "fast.stroke.tp": 32,
+        "fast.stroke.est": 35,
+        "fast.stroke.ref": 38,
+        "conf.snare->nothing": 1,
+        "conf.snare->tom": 1,
+        "conf.snare->snare": 15,
+        "conf.tom->tom": 10,
+        "size.7->tom_high": 4,
+        "size.ok": 7,
+        "size.n": 10,
+        "size.7->tom_low": 2,
+        "conf.tom->nothing": 4,
+        "size.3->tom_low": 3,
+        "size.3->tom": 1,
+        "fill.n": 1,
+        "fill.dur": 0.29399999999999693,
+        "fill.kick.tp": 1,
+        "fill.kick.est": 1,
+        "fill.kick.ref": 2,
+        "fill.snare.tp": 0,
+        "fill.snare.est": 0,
+        "fill.snare.ref": 0,
+        "fill.tom.tp": 1,
+        "fill.tom.est": 2,
+        "fill.tom.ref": 2,
+        "fill.stroke.tp": 1,
+        "fill.stroke.est": 2,
+        "fill.stroke.ref": 4,
+        "songs": 1,
+        "slow.n": 1,
+        "slow.dur": 0.29399999999999693,
+        "slow.kick.tp": 1,
+        "slow.kick.est": 1,
+        "slow.kick.ref": 2,
+        "slow.snare.tp": 0,
+        "slow.snare.est": 0,
+        "slow.snare.ref": 0,
+        "slow.tom.tp": 1,
+        "slow.tom.est": 2,
+        "slow.tom.ref": 2,
+        "slow.stroke.tp": 1,
+        "slow.stroke.est": 2,
+        "slow.stroke.ref": 4
+      },
+      "with_strict_truth": true,
+      "notation_systems": 6,
+      "loose": {
+        "complete": {},
+        "partial": {
+          "all.stroke.ref": 193,
+          "all.stroke.tp": 145,
+          "all.kick.ref": 54,
+          "all.kick.tp": 33,
+          "all.snare.ref": 74,
+          "all.snare.tp": 58,
+          "all.tom.ref": 68,
+          "all.tom.tp": 45,
+          "fast.stroke.ref": 57,
+          "fast.stroke.tp": 50,
+          "fast.kick.ref": 24,
+          "fast.kick.tp": 17,
+          "fast.snare.ref": 14,
+          "fast.snare.tp": 13,
+          "fast.tom.ref": 20,
+          "fast.tom.tp": 18,
+          "conf.tom->kick+tom": 5,
+          "slow.stroke.ref": 136,
+          "slow.stroke.tp": 95,
+          "slow.kick.ref": 30,
+          "slow.kick.tp": 16,
+          "slow.snare.ref": 60,
+          "slow.snare.tp": 45,
+          "slow.tom.ref": 48,
+          "slow.tom.tp": 27,
+          "conf.snare->nothing": 12,
+          "conf.snare->snare": 58,
+          "conf.tom->snare+tom": 1,
+          "conf.tom->tom": 39,
+          "conf.tom->nothing": 21,
+          "all.stroke.est": 191,
+          "all.kick.est": 42,
+          "all.snare.est": 89,
+          "all.tom.est": 91,
+          "fast.stroke.est": 53,
+          "fast.kick.est": 21,
+          "fast.snare.est": 15,
+          "fast.tom.est": 32,
+          "slow.stroke.est": 138,
+          "slow.kick.est": 21,
+          "slow.snare.est": 74,
+          "slow.tom.est": 59,
+          "conf.tom->snare": 2,
+          "conf.snare->tom": 1
+        },
+        "unique_fast_moments": {
+          "complete": {
+            "kick": 0,
+            "snare": 0,
+            "tom": 0
+          },
+          "partial": {
+            "kick": 24,
+            "snare": 14,
+            "tom": 20
+          },
+          "all_notation": {
+            "kick": 24,
+            "snare": 14,
+            "tom": 20
+          }
+        },
+        "complete_systems": 0
+      }
+    },
+    {
+      "video": "DjNPar4HSyg",
+      "slug": "mark-guiliana-transcription-drum-solo-notation-DjNPar4HSyg",
+      "cohort": "manifest",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 0
+    },
+    {
+      "video": "tfHonSNFf54",
+      "slug": "vinnie-colaiuta-transcription-actual-proof-solo-tfHonSNFf54",
+      "cohort": "manifest",
+      "incomplete_truth": [
+        "notation"
+      ],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 0
+    },
+    {
+      "video": "qLhHwfg9N1w",
+      "slug": "nate-smith-rambo-riff-transcription-from-npr-tiny-desk-conce-qLhHwfg9N1w",
+      "cohort": "manifest",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 0
+    },
+    {
+      "video": "tGuWxslLpa0",
+      "slug": "how-to-transcribe-drums-figure-out-what-your-favorite-drumme-tGuWxslLpa0",
+      "cohort": "manifest",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 0
+    },
+    {
+      "video": "k8R49UlSqu0",
+      "slug": "transcription-larnell-lewis-what-about-me-solo-k8R49UlSqu0",
+      "cohort": "manifest",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 0
+    },
+    {
+      "video": "eik7Wk03o-8",
+      "slug": "larnell-lewis-drum-solo-transcription-from-zildjian-live-eik7Wk03o-8",
+      "cohort": "manifest",
+      "incomplete_truth": [],
+      "strict_counts": {
+        "all.n": 2,
+        "all.dur": 2.869000000000007,
+        "fill.n": 2,
+        "fill.dur": 2.869000000000007,
+        "all.kick.tp": 13,
+        "all.kick.est": 13,
+        "all.kick.ref": 13,
+        "fill.kick.tp": 13,
+        "fill.kick.est": 13,
+        "fill.kick.ref": 13,
+        "all.snare.tp": 13,
+        "all.snare.est": 14,
+        "all.snare.ref": 15,
+        "fill.snare.tp": 13,
+        "fill.snare.est": 14,
+        "fill.snare.ref": 15,
+        "all.tom.tp": 0,
+        "all.tom.est": 0,
+        "all.tom.ref": 3,
+        "fill.tom.tp": 0,
+        "fill.tom.est": 0,
+        "fill.tom.ref": 3,
+        "all.stroke.tp": 27,
+        "all.stroke.est": 27,
+        "all.stroke.ref": 30,
+        "fill.stroke.tp": 27,
+        "fill.stroke.est": 27,
+        "fill.stroke.ref": 30,
+        "conf.snare->snare": 13,
+        "conf.tom->snare": 1,
+        "conf.tom->nothing": 1,
+        "conf.snare->nothing": 2,
+        "conf.tom->kick": 1,
+        "songs": 1,
+        "slow.n": 2,
+        "slow.dur": 2.869000000000007,
+        "slow.kick.tp": 13,
+        "slow.kick.est": 13,
+        "slow.kick.ref": 13,
+        "slow.snare.tp": 13,
+        "slow.snare.est": 14,
+        "slow.snare.ref": 15,
+        "slow.tom.tp": 0,
+        "slow.tom.est": 0,
+        "slow.tom.ref": 3,
+        "slow.stroke.tp": 27,
+        "slow.stroke.est": 27,
+        "slow.stroke.ref": 30
+      },
+      "with_strict_truth": true,
+      "notation_systems": 10,
+      "loose": {
+        "complete": {},
+        "partial": {
+          "all.stroke.ref": 150,
+          "all.stroke.tp": 132,
+          "all.kick.ref": 75,
+          "all.kick.tp": 66,
+          "all.snare.ref": 70,
+          "all.snare.tp": 61,
+          "all.tom.ref": 12,
+          "all.tom.tp": 4,
+          "slow.stroke.ref": 81,
+          "slow.stroke.tp": 76,
+          "slow.kick.ref": 47,
+          "slow.kick.tp": 44,
+          "slow.snare.ref": 28,
+          "slow.snare.tp": 27,
+          "slow.tom.ref": 7,
+          "slow.tom.tp": 4,
+          "fast.stroke.ref": 69,
+          "fast.stroke.tp": 56,
+          "fast.kick.ref": 28,
+          "fast.kick.tp": 22,
+          "fast.snare.ref": 42,
+          "fast.snare.tp": 34,
+          "fast.tom.ref": 5,
+          "fast.tom.tp": 0,
+          "conf.snare->kick": 2,
+          "conf.snare->nothing": 6,
+          "conf.snare->snare": 58,
+          "all.stroke.est": 139,
+          "all.kick.est": 72,
+          "all.snare.est": 66,
+          "all.tom.est": 5,
+          "fast.stroke.est": 57,
+          "fast.kick.est": 25,
+          "fast.snare.est": 36,
+          "fast.tom.est": 0,
+          "slow.stroke.est": 82,
+          "slow.kick.est": 47,
+          "slow.snare.est": 30,
+          "slow.tom.est": 5,
+          "conf.tom->nothing": 3,
+          "conf.tom->tom": 4,
+          "conf.tom->snare": 2
+        },
+        "unique_fast_moments": {
+          "complete": {
+            "kick": 0,
+            "snare": 0,
+            "tom": 0
+          },
+          "partial": {
+            "kick": 28,
+            "snare": 42,
+            "tom": 5
+          },
+          "all_notation": {
+            "kick": 28,
+            "snare": 42,
+            "tom": 5
+          }
+        },
+        "complete_systems": 0
+      }
+    },
+    {
+      "video": "8PVjQjLNaTc",
+      "slug": "todd-sucherman-transcription-solo-excerpts-8PVjQjLNaTc",
+      "cohort": "manifest",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 0
+    },
+    {
+      "video": "dTK0atUjfX0",
+      "slug": "mark-guiliana-drum-transcription-from-instagram-exploration-dTK0atUjfX0",
+      "cohort": "manifest",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 1,
+      "loose": {
+        "complete": {},
+        "partial": {
+          "all.stroke.ref": 52,
+          "all.stroke.tp": 43,
+          "all.kick.ref": 7,
+          "all.kick.tp": 3,
+          "all.snare.ref": 6,
+          "all.snare.tp": 2,
+          "all.tom.ref": 39,
+          "all.tom.tp": 25,
+          "fast.stroke.ref": 50,
+          "fast.stroke.tp": 41,
+          "fast.kick.ref": 6,
+          "fast.kick.tp": 3,
+          "fast.snare.ref": 6,
+          "fast.snare.tp": 2,
+          "fast.tom.ref": 38,
+          "fast.tom.tp": 25,
+          "conf.tom->tom": 17,
+          "conf.snare->nothing": 2,
+          "conf.tom->snare": 6,
+          "conf.snare->tom": 2,
+          "conf.tom->snare+tom": 8,
+          "slow.stroke.ref": 2,
+          "slow.stroke.tp": 2,
+          "slow.kick.ref": 1,
+          "slow.kick.tp": 0,
+          "slow.snare.ref": 0,
+          "slow.snare.tp": 0,
+          "slow.tom.ref": 1,
+          "slow.tom.tp": 0,
+          "conf.tom->kick": 3,
+          "conf.tom->nothing": 5,
+          "conf.snare->snare": 2,
+          "all.stroke.est": 45,
+          "all.kick.est": 6,
+          "all.snare.est": 18,
+          "all.tom.est": 29,
+          "fast.stroke.est": 43,
+          "fast.kick.est": 5,
+          "fast.snare.est": 17,
+          "fast.tom.est": 29,
+          "slow.stroke.est": 2,
+          "slow.kick.est": 1,
+          "slow.snare.est": 1,
+          "slow.tom.est": 0
+        },
+        "unique_fast_moments": {
+          "complete": {
+            "kick": 0,
+            "snare": 0,
+            "tom": 0
+          },
+          "partial": {
+            "kick": 6,
+            "snare": 6,
+            "tom": 38
+          },
+          "all_notation": {
+            "kick": 6,
+            "snare": 6,
+            "tom": 38
+          }
+        },
+        "complete_systems": 0
+      }
+    },
+    {
+      "video": "tIdzPYMUEys",
+      "slug": "nate-smith-solo-transcription-the-fearless-flyers-tIdzPYMUEys",
+      "cohort": "manifest",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": true,
+      "notation_systems": 4,
+      "loose": {
+        "complete": {},
+        "partial": {
+          "all.stroke.ref": 110,
+          "all.stroke.tp": 109,
+          "all.kick.ref": 46,
+          "all.kick.tp": 44,
+          "all.snare.ref": 71,
+          "all.snare.tp": 64,
+          "all.tom.ref": 0,
+          "all.tom.tp": 0,
+          "slow.stroke.ref": 92,
+          "slow.stroke.tp": 92,
+          "slow.kick.ref": 42,
+          "slow.kick.tp": 42,
+          "slow.snare.ref": 57,
+          "slow.snare.tp": 51,
+          "slow.tom.ref": 0,
+          "slow.tom.tp": 0,
+          "conf.snare->snare": 48,
+          "conf.snare->kick+snare": 11,
+          "all.stroke.est": 116,
+          "all.kick.est": 61,
+          "all.snare.est": 75,
+          "all.tom.est": 0,
+          "slow.stroke.est": 97,
+          "slow.kick.est": 57,
+          "slow.snare.est": 60,
+          "slow.tom.est": 0,
+          "conf.snare->kick": 5,
+          "fast.stroke.ref": 18,
+          "fast.stroke.tp": 17,
+          "fast.kick.ref": 4,
+          "fast.kick.tp": 2,
+          "fast.snare.ref": 14,
+          "fast.snare.tp": 13,
+          "fast.tom.ref": 0,
+          "fast.tom.tp": 0,
+          "fast.stroke.est": 19,
+          "fast.kick.est": 4,
+          "fast.snare.est": 15,
+          "fast.tom.est": 0
+        },
+        "unique_fast_moments": {
+          "complete": {
+            "kick": 0,
+            "snare": 0,
+            "tom": 0
+          },
+          "partial": {
+            "kick": 4,
+            "snare": 14,
+            "tom": 0
+          },
+          "all_notation": {
+            "kick": 4,
+            "snare": 14,
+            "tom": 0
+          }
+        },
+        "complete_systems": 0
+      }
+    },
+    {
+      "video": "-G0PB-HWh-w",
+      "slug": "benny-greb-transcription-crazy-subdivision-switches-full-not--G0PB-HWh-w",
+      "cohort": "manifest",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 0
+    },
+    {
+      "video": "EEJEkbpBnjY",
+      "slug": "tony-royster-jr-rushin-drum-transcription-EEJEkbpBnjY",
+      "cohort": "manifest",
+      "incomplete_truth": [],
+      "strict_counts": {
+        "all.n": 9,
+        "all.dur": 10.60600000000002,
+        "fast.n": 3,
+        "fast.dur": 3.053000000000008,
+        "all.kick.tp": 34,
+        "all.kick.est": 37,
+        "all.kick.ref": 37,
+        "fast.kick.tp": 13,
+        "fast.kick.est": 13,
+        "fast.kick.ref": 14,
+        "all.snare.tp": 39,
+        "all.snare.est": 44,
+        "all.snare.ref": 43,
+        "fast.snare.tp": 9,
+        "fast.snare.est": 10,
+        "fast.snare.ref": 9,
+        "all.tom.tp": 40,
+        "all.tom.est": 42,
+        "all.tom.ref": 50,
+        "fast.tom.tp": 15,
+        "fast.tom.est": 15,
+        "fast.tom.ref": 16,
+        "all.stroke.tp": 115,
+        "all.stroke.est": 119,
+        "all.stroke.ref": 126,
+        "fast.stroke.tp": 37,
+        "fast.stroke.est": 37,
+        "fast.stroke.ref": 39,
+        "conf.snare->snare": 39,
+        "conf.tom->tom": 41,
+        "size.3->tom_low": 13,
+        "size.ok": 23,
+        "size.n": 41,
+        "size.3->tom_high": 14,
+        "size.7->tom_high": 10,
+        "fill.n": 6,
+        "fill.dur": 7.5530000000000115,
+        "fill.kick.tp": 21,
+        "fill.kick.est": 24,
+        "fill.kick.ref": 23,
+        "fill.snare.tp": 30,
+        "fill.snare.est": 34,
+        "fill.snare.ref": 34,
+        "fill.tom.tp": 25,
+        "fill.tom.est": 27,
+        "fill.tom.ref": 34,
+        "fill.stroke.tp": 78,
+        "fill.stroke.est": 82,
+        "fill.stroke.ref": 87,
+        "conf.tom->snare": 4,
+        "conf.tom->nothing": 3,
+        "conf.snare->nothing": 4,
+        "size.6->tom_high": 4,
+        "conf.tom->kick": 2,
+        "songs": 1,
+        "slow.n": 6,
+        "slow.dur": 7.5530000000000115,
+        "slow.kick.tp": 21,
+        "slow.kick.est": 24,
+        "slow.kick.ref": 23,
+        "slow.snare.tp": 30,
+        "slow.snare.est": 34,
+        "slow.snare.ref": 34,
+        "slow.tom.tp": 25,
+        "slow.tom.est": 27,
+        "slow.tom.ref": 34,
+        "slow.stroke.tp": 78,
+        "slow.stroke.est": 82,
+        "slow.stroke.ref": 87
+      },
+      "with_strict_truth": true,
+      "notation_systems": 18,
+      "loose": {
+        "complete": {},
+        "partial": {
+          "all.stroke.ref": 388,
+          "all.stroke.tp": 341,
+          "all.kick.ref": 141,
+          "all.kick.tp": 117,
+          "all.snare.ref": 107,
+          "all.snare.tp": 90,
+          "all.tom.ref": 148,
+          "all.tom.tp": 118,
+          "slow.stroke.ref": 135,
+          "slow.stroke.tp": 118,
+          "slow.kick.ref": 60,
+          "slow.kick.tp": 52,
+          "slow.snare.ref": 43,
+          "slow.snare.tp": 37,
+          "slow.tom.ref": 35,
+          "slow.tom.tp": 26,
+          "conf.tom->tom": 107,
+          "fast.stroke.ref": 253,
+          "fast.stroke.tp": 223,
+          "fast.kick.ref": 81,
+          "fast.kick.tp": 65,
+          "fast.snare.ref": 64,
+          "fast.snare.tp": 53,
+          "fast.tom.ref": 113,
+          "fast.tom.tp": 92,
+          "conf.snare->snare": 85,
+          "conf.tom->nothing": 18,
+          "conf.tom->snare+tom": 4,
+          "all.stroke.est": 357,
+          "all.kick.est": 137,
+          "all.snare.est": 108,
+          "all.tom.est": 135,
+          "slow.stroke.est": 126,
+          "slow.kick.est": 61,
+          "slow.snare.est": 43,
+          "slow.tom.est": 31,
+          "fast.stroke.est": 231,
+          "fast.kick.est": 76,
+          "fast.snare.est": 65,
+          "fast.tom.est": 104,
+          "conf.tom->kick+tom": 6,
+          "conf.tom->kick": 4,
+          "conf.snare->snare+tom": 1,
+          "conf.snare->kick": 4,
+          "conf.tom->snare": 3,
+          "conf.snare->nothing": 13
+        },
+        "unique_fast_moments": {
+          "complete": {
+            "kick": 0,
+            "snare": 0,
+            "tom": 0
+          },
+          "partial": {
+            "kick": 81,
+            "snare": 64,
+            "tom": 113
+          },
+          "all_notation": {
+            "kick": 81,
+            "snare": 64,
+            "tom": 113
+          }
+        },
+        "complete_systems": 0
+      }
+    },
+    {
+      "video": "S8-zxLpHDxc",
+      "slug": "sonny-emory-drum-solo-transcription-S8-zxLpHDxc",
+      "cohort": "manifest",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": true,
+      "notation_systems": 6,
+      "loose": {
+        "complete": {},
+        "partial": {
+          "all.stroke.ref": 141,
+          "all.stroke.tp": 124,
+          "all.kick.ref": 81,
+          "all.kick.tp": 70,
+          "all.snare.ref": 53,
+          "all.snare.tp": 35,
+          "all.tom.ref": 19,
+          "all.tom.tp": 10,
+          "slow.stroke.ref": 112,
+          "slow.stroke.tp": 101,
+          "slow.kick.ref": 58,
+          "slow.kick.tp": 52,
+          "slow.snare.ref": 48,
+          "slow.snare.tp": 32,
+          "slow.tom.ref": 18,
+          "slow.tom.tp": 10,
+          "conf.snare->nothing": 9,
+          "conf.snare->snare": 24,
+          "fast.stroke.ref": 29,
+          "fast.stroke.tp": 23,
+          "fast.kick.ref": 23,
+          "fast.kick.tp": 18,
+          "fast.snare.ref": 5,
+          "fast.snare.tp": 3,
+          "fast.tom.ref": 1,
+          "fast.tom.tp": 0,
+          "all.stroke.est": 150,
+          "all.kick.est": 108,
+          "all.snare.est": 49,
+          "all.tom.est": 14,
+          "slow.stroke.est": 121,
+          "slow.kick.est": 81,
+          "slow.snare.est": 43,
+          "slow.tom.est": 14,
+          "fast.stroke.est": 29,
+          "fast.kick.est": 27,
+          "fast.snare.est": 6,
+          "fast.tom.est": 0,
+          "conf.snare->kick": 7,
+          "conf.tom->tom": 3,
+          "conf.tom->nothing": 4,
+          "conf.tom->snare": 1,
+          "conf.snare->kick+snare": 8,
+          "conf.tom->snare+tom": 1,
+          "conf.tom->kick": 1,
+          "conf.tom->kick+tom": 2
+        },
+        "unique_fast_moments": {
+          "complete": {
+            "kick": 0,
+            "snare": 0,
+            "tom": 0
+          },
+          "partial": {
+            "kick": 23,
+            "snare": 5,
+            "tom": 1
+          },
+          "all_notation": {
+            "kick": 23,
+            "snare": 5,
+            "tom": 1
+          }
+        },
+        "complete_systems": 0
+      }
+    },
+    {
+      "video": "Ikg4P3F_Wj8",
+      "slug": "eric-mooreii-drum-solo-transcription-Ikg4P3F_Wj8",
+      "cohort": "manifest",
+      "incomplete_truth": [],
+      "strict_counts": {
+        "all.n": 5,
+        "all.dur": 3.5319999999999894,
+        "fill.n": 3,
+        "fill.dur": 2.1850000000000023,
+        "all.kick.tp": 6,
+        "all.kick.est": 7,
+        "all.kick.ref": 10,
+        "fill.kick.tp": 1,
+        "fill.kick.est": 2,
+        "fill.kick.ref": 5,
+        "all.snare.tp": 11,
+        "all.snare.est": 18,
+        "all.snare.ref": 14,
+        "fill.snare.tp": 9,
+        "fill.snare.est": 14,
+        "fill.snare.ref": 12,
+        "all.tom.tp": 12,
+        "all.tom.est": 15,
+        "all.tom.ref": 19,
+        "fill.tom.tp": 5,
+        "fill.tom.est": 8,
+        "fill.tom.ref": 9,
+        "all.stroke.tp": 39,
+        "all.stroke.est": 39,
+        "all.stroke.ref": 43,
+        "fill.stroke.tp": 24,
+        "fill.stroke.est": 24,
+        "fill.stroke.ref": 26,
+        "conf.snare->tom": 2,
+        "conf.snare->snare": 11,
+        "conf.tom->snare": 4,
+        "fast.n": 2,
+        "fast.dur": 1.346999999999987,
+        "fast.kick.tp": 5,
+        "fast.kick.est": 5,
+        "fast.kick.ref": 5,
+        "fast.snare.tp": 2,
+        "fast.snare.est": 4,
+        "fast.snare.ref": 2,
+        "fast.tom.tp": 7,
+        "fast.tom.est": 7,
+        "fast.tom.ref": 10,
+        "fast.stroke.tp": 15,
+        "fast.stroke.est": 15,
+        "fast.stroke.ref": 17,
+        "conf.tom->tom": 12,
+        "size.7->tom_low": 1,
+        "size.ok": 6,
+        "size.n": 12,
+        "size.3->tom_low": 4,
+        "size.3->tom_high": 1,
+        "size.7->tom_high": 1,
+        "size.7->tom": 2,
+        "conf.tom->nothing": 3,
+        "conf.snare->kick": 1,
+        "size.6->tom": 1,
+        "size.6->tom_low": 1,
+        "size.3->tom": 1,
+        "songs": 1,
+        "slow.n": 3,
+        "slow.dur": 2.1850000000000023,
+        "slow.kick.tp": 1,
+        "slow.kick.est": 2,
+        "slow.kick.ref": 5,
+        "slow.snare.tp": 9,
+        "slow.snare.est": 14,
+        "slow.snare.ref": 12,
+        "slow.tom.tp": 5,
+        "slow.tom.est": 8,
+        "slow.tom.ref": 9,
+        "slow.stroke.tp": 24,
+        "slow.stroke.est": 24,
+        "slow.stroke.ref": 26
+      },
+      "with_strict_truth": true,
+      "notation_systems": 12,
+      "loose": {
+        "complete": {},
+        "partial": {
+          "all.stroke.ref": 196,
+          "all.stroke.tp": 189,
+          "all.kick.ref": 70,
+          "all.kick.tp": 62,
+          "all.snare.ref": 67,
+          "all.snare.tp": 59,
+          "all.tom.ref": 62,
+          "all.tom.tp": 46,
+          "slow.stroke.ref": 134,
+          "slow.stroke.tp": 130,
+          "slow.kick.ref": 54,
+          "slow.kick.tp": 47,
+          "slow.snare.ref": 48,
+          "slow.snare.tp": 41,
+          "slow.tom.ref": 34,
+          "slow.tom.tp": 25,
+          "conf.snare->snare": 57,
+          "conf.tom->snare": 6,
+          "fast.stroke.ref": 62,
+          "fast.stroke.tp": 59,
+          "fast.kick.ref": 16,
+          "fast.kick.tp": 15,
+          "fast.snare.ref": 19,
+          "fast.snare.tp": 18,
+          "fast.tom.ref": 28,
+          "fast.tom.tp": 21,
+          "conf.tom->tom": 43,
+          "conf.tom->snare+tom": 2,
+          "all.stroke.est": 389,
+          "all.kick.est": 175,
+          "all.snare.est": 112,
+          "all.tom.est": 151,
+          "slow.stroke.est": 311,
+          "slow.kick.est": 150,
+          "slow.snare.est": 85,
+          "slow.tom.est": 123,
+          "fast.stroke.est": 78,
+          "fast.kick.est": 25,
+          "fast.snare.est": 27,
+          "fast.tom.est": 28,
+          "conf.snare->kick": 3,
+          "conf.tom->nothing": 5,
+          "conf.tom->kick": 3,
+          "conf.snare->tom": 5
+        },
+        "unique_fast_moments": {
+          "complete": {
+            "kick": 0,
+            "snare": 0,
+            "tom": 0
+          },
+          "partial": {
+            "kick": 16,
+            "snare": 19,
+            "tom": 28
+          },
+          "all_notation": {
+            "kick": 16,
+            "snare": 19,
+            "tom": 28
+          }
+        },
+        "complete_systems": 0
+      }
+    },
+    {
+      "video": "7SSDvY9jGhk",
+      "slug": "jay-kalo-drum-solo-transcription-7SSDvY9jGhk",
+      "cohort": "manifest",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 0
+    },
+    {
+      "video": "k8Provk4f5Y",
+      "slug": "raul-pineda-drum-solo-transcription-k8Provk4f5Y",
+      "cohort": "manifest",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 0
+    },
+    {
+      "video": "28s7JkTb2z0",
+      "slug": "vinnie-colaiuta-lick-by-mike-dawson-transcription-28s7JkTb2z0",
+      "cohort": "manifest",
+      "incomplete_truth": [],
+      "strict_counts": {
+        "all.n": 1,
+        "all.dur": 0.713000000000001,
+        "fast.n": 1,
+        "fast.dur": 0.713000000000001,
+        "all.kick.tp": 1,
+        "all.kick.est": 1,
+        "all.kick.ref": 2,
+        "fast.kick.tp": 1,
+        "fast.kick.est": 1,
+        "fast.kick.ref": 2,
+        "all.snare.tp": 6,
+        "all.snare.est": 6,
+        "all.snare.ref": 6,
+        "fast.snare.tp": 6,
+        "fast.snare.est": 6,
+        "fast.snare.ref": 6,
+        "all.tom.tp": 2,
+        "all.tom.est": 3,
+        "all.tom.ref": 2,
+        "fast.tom.tp": 2,
+        "fast.tom.est": 3,
+        "fast.tom.ref": 2,
+        "all.stroke.tp": 9,
+        "all.stroke.est": 9,
+        "all.stroke.ref": 10,
+        "fast.stroke.tp": 9,
+        "fast.stroke.est": 9,
+        "fast.stroke.ref": 10,
+        "conf.snare->snare": 6,
+        "conf.tom->tom": 2,
+        "size.3->tom": 1,
+        "size.ok": 1,
+        "size.n": 2,
+        "size.6->tom": 1,
+        "songs": 1
+      },
+      "with_strict_truth": true,
+      "notation_systems": 6,
+      "loose": {
+        "complete": {},
+        "partial": {
+          "all.stroke.ref": 99,
+          "all.stroke.tp": 84,
+          "all.kick.ref": 38,
+          "all.kick.tp": 34,
+          "all.snare.ref": 54,
+          "all.snare.tp": 40,
+          "all.tom.ref": 7,
+          "all.tom.tp": 6,
+          "slow.stroke.ref": 78,
+          "slow.stroke.tp": 67,
+          "slow.kick.ref": 33,
+          "slow.kick.tp": 30,
+          "slow.snare.ref": 41,
+          "slow.snare.tp": 31,
+          "slow.tom.ref": 4,
+          "slow.tom.tp": 3,
+          "conf.snare->nothing": 13,
+          "conf.snare->snare": 40,
+          "all.stroke.est": 106,
+          "all.kick.est": 41,
+          "all.snare.est": 54,
+          "all.tom.est": 16,
+          "slow.stroke.est": 84,
+          "slow.kick.est": 34,
+          "slow.snare.est": 44,
+          "slow.tom.est": 7,
+          "fast.stroke.ref": 21,
+          "fast.stroke.tp": 17,
+          "fast.kick.ref": 5,
+          "fast.kick.tp": 4,
+          "fast.snare.ref": 13,
+          "fast.snare.tp": 9,
+          "fast.tom.ref": 3,
+          "fast.tom.tp": 3,
+          "fast.stroke.est": 22,
+          "fast.kick.est": 7,
+          "fast.snare.est": 10,
+          "fast.tom.est": 9,
+          "conf.snare->tom": 1,
+          "conf.tom->tom": 6,
+          "conf.tom->snare": 1
+        },
+        "unique_fast_moments": {
+          "complete": {
+            "kick": 0,
+            "snare": 0,
+            "tom": 0
+          },
+          "partial": {
+            "kick": 5,
+            "snare": 13,
+            "tom": 3
+          },
+          "all_notation": {
+            "kick": 5,
+            "snare": 13,
+            "tom": 3
+          }
+        },
+        "complete_systems": 0
+      }
+    },
+    {
+      "video": "LdN-RbRdoh8",
+      "slug": "dennis-chambers-drum-solo-transcription-LdN-RbRdoh8",
+      "cohort": "manifest",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 0
+    },
+    {
+      "video": "Vz_YrQVOb08",
+      "slug": "j-rod-sullivan-ooh-wee-funk-drum-transcription-Vz_YrQVOb08",
+      "cohort": "manifest",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 0
+    },
+    {
+      "video": "cqVLqlVJr5o",
+      "slug": "virgil-donati-power-drumming-transcriptions-take-1-take-2-cqVLqlVJr5o",
+      "cohort": "manifest",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": true,
+      "notation_systems": 4,
+      "loose": {
+        "complete": {},
+        "partial": {
+          "all.stroke.ref": 64,
+          "all.stroke.tp": 58,
+          "all.kick.ref": 32,
+          "all.kick.tp": 28,
+          "all.snare.ref": 33,
+          "all.snare.tp": 30,
+          "all.tom.ref": 1,
+          "all.tom.tp": 1,
+          "slow.stroke.ref": 58,
+          "slow.stroke.tp": 52,
+          "slow.kick.ref": 32,
+          "slow.kick.tp": 28,
+          "slow.snare.ref": 27,
+          "slow.snare.tp": 24,
+          "slow.tom.ref": 1,
+          "slow.tom.tp": 1,
+          "conf.snare->snare": 29,
+          "fast.stroke.ref": 6,
+          "fast.stroke.tp": 6,
+          "fast.kick.ref": 0,
+          "fast.kick.tp": 0,
+          "fast.snare.ref": 6,
+          "fast.snare.tp": 6,
+          "fast.tom.ref": 0,
+          "fast.tom.tp": 0,
+          "conf.snare->nothing": 2,
+          "conf.tom->snare+tom": 1,
+          "all.stroke.est": 67,
+          "all.kick.est": 35,
+          "all.snare.est": 33,
+          "all.tom.est": 1,
+          "slow.stroke.est": 61,
+          "slow.kick.est": 35,
+          "slow.snare.est": 27,
+          "slow.tom.est": 1,
+          "fast.stroke.est": 6,
+          "fast.kick.est": 0,
+          "fast.snare.est": 6,
+          "fast.tom.est": 0
+        },
+        "unique_fast_moments": {
+          "complete": {
+            "kick": 0,
+            "snare": 0,
+            "tom": 0
+          },
+          "partial": {
+            "kick": 0,
+            "snare": 6,
+            "tom": 0
+          },
+          "all_notation": {
+            "kick": 0,
+            "snare": 6,
+            "tom": 0
+          }
+        },
+        "complete_systems": 0
+      }
+    },
+    {
+      "video": "f2bzDVwLESM",
+      "slug": "vinnie-colaiuta-in-studio-transcription-f2bzDVwLESM",
+      "cohort": "manifest",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 0
+    },
+    {
+      "video": "8fy9aMDJmek",
+      "slug": "steve-gadd-drum-solo-transcription-2023-8fy9aMDJmek",
+      "cohort": "manifest",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 0
+    },
+    {
+      "video": "YxUkGNdv-k8",
+      "slug": "cliff-almond-drum-solo-transcription-YxUkGNdv-k8",
+      "cohort": "manifest",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 0
+    },
+    {
+      "video": "LLe6dL3e93c",
+      "slug": "darryn-farrugia-transcription-attempt-LLe6dL3e93c",
+      "cohort": "manifest",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 2,
+      "loose": {
+        "complete": {},
+        "partial": {
+          "all.stroke.ref": 25,
+          "all.stroke.tp": 22,
+          "all.kick.ref": 9,
+          "all.kick.tp": 9,
+          "all.snare.ref": 17,
+          "all.snare.tp": 13,
+          "all.tom.ref": 0,
+          "all.tom.tp": 0,
+          "slow.stroke.ref": 16,
+          "slow.stroke.tp": 16,
+          "slow.kick.ref": 7,
+          "slow.kick.tp": 7,
+          "slow.snare.ref": 10,
+          "slow.snare.tp": 9,
+          "slow.tom.ref": 0,
+          "slow.tom.tp": 0,
+          "conf.snare->snare": 12,
+          "all.stroke.est": 23,
+          "all.kick.est": 10,
+          "all.snare.est": 14,
+          "all.tom.est": 0,
+          "slow.stroke.est": 17,
+          "slow.kick.est": 8,
+          "slow.snare.est": 10,
+          "slow.tom.est": 0,
+          "fast.stroke.ref": 9,
+          "fast.stroke.tp": 6,
+          "fast.kick.ref": 2,
+          "fast.kick.tp": 2,
+          "fast.snare.ref": 7,
+          "fast.snare.tp": 4,
+          "fast.tom.ref": 0,
+          "fast.tom.tp": 0,
+          "conf.snare->nothing": 3,
+          "conf.snare->kick": 1,
+          "fast.stroke.est": 6,
+          "fast.kick.est": 2,
+          "fast.snare.est": 4,
+          "fast.tom.est": 0
+        },
+        "unique_fast_moments": {
+          "complete": {
+            "kick": 0,
+            "snare": 0,
+            "tom": 0
+          },
+          "partial": {
+            "kick": 2,
+            "snare": 7,
+            "tom": 0
+          },
+          "all_notation": {
+            "kick": 2,
+            "snare": 7,
+            "tom": 0
+          }
+        },
+        "complete_systems": 0
+      }
+    },
+    {
+      "video": "8AHvVFQ0_To",
+      "slug": "eric-mooreii-transcription-8AHvVFQ0_To",
+      "cohort": "manifest",
+      "incomplete_truth": [],
+      "strict_counts": {
+        "all.n": 4,
+        "all.dur": 2.458000000000002,
+        "fill.n": 4,
+        "fill.dur": 2.458000000000002,
+        "all.kick.tp": 4,
+        "all.kick.est": 4,
+        "all.kick.ref": 10,
+        "fill.kick.tp": 4,
+        "fill.kick.est": 4,
+        "fill.kick.ref": 10,
+        "all.snare.tp": 4,
+        "all.snare.est": 4,
+        "all.snare.ref": 4,
+        "fill.snare.tp": 4,
+        "fill.snare.est": 4,
+        "fill.snare.ref": 4,
+        "all.tom.tp": 12,
+        "all.tom.est": 13,
+        "all.tom.ref": 12,
+        "fill.tom.tp": 12,
+        "fill.tom.est": 13,
+        "fill.tom.ref": 12,
+        "all.stroke.tp": 21,
+        "all.stroke.est": 21,
+        "all.stroke.ref": 26,
+        "fill.stroke.tp": 21,
+        "fill.stroke.est": 21,
+        "fill.stroke.ref": 26,
+        "conf.tom->tom": 12,
+        "size.6->tom_low": 1,
+        "size.ok": 10,
+        "size.n": 12,
+        "size.3->tom_low": 4,
+        "conf.snare->snare": 4,
+        "size.6->tom": 4,
+        "size.7->tom_high": 2,
+        "size.7->tom_low": 1,
+        "songs": 1,
+        "slow.n": 4,
+        "slow.dur": 2.458000000000002,
+        "slow.kick.tp": 4,
+        "slow.kick.est": 4,
+        "slow.kick.ref": 10,
+        "slow.snare.tp": 4,
+        "slow.snare.est": 4,
+        "slow.snare.ref": 4,
+        "slow.tom.tp": 12,
+        "slow.tom.est": 13,
+        "slow.tom.ref": 12,
+        "slow.stroke.tp": 21,
+        "slow.stroke.est": 21,
+        "slow.stroke.ref": 26
+      },
+      "with_strict_truth": true,
+      "notation_systems": 8,
+      "loose": {
+        "complete": {},
+        "partial": {
+          "all.stroke.ref": 108,
+          "all.stroke.tp": 90,
+          "all.kick.ref": 63,
+          "all.kick.tp": 44,
+          "all.snare.ref": 22,
+          "all.snare.tp": 22,
+          "all.tom.ref": 25,
+          "all.tom.tp": 23,
+          "slow.stroke.ref": 102,
+          "slow.stroke.tp": 86,
+          "slow.kick.ref": 62,
+          "slow.kick.tp": 43,
+          "slow.snare.ref": 22,
+          "slow.snare.tp": 22,
+          "slow.tom.ref": 20,
+          "slow.tom.tp": 20,
+          "conf.snare->snare": 22,
+          "all.stroke.est": 95,
+          "all.kick.est": 48,
+          "all.snare.est": 22,
+          "all.tom.est": 27,
+          "slow.stroke.est": 91,
+          "slow.kick.est": 47,
+          "slow.snare.est": 22,
+          "slow.tom.est": 24,
+          "conf.tom->tom": 21,
+          "fast.stroke.ref": 6,
+          "fast.stroke.tp": 4,
+          "fast.kick.ref": 1,
+          "fast.kick.tp": 1,
+          "fast.snare.ref": 0,
+          "fast.snare.tp": 0,
+          "fast.tom.ref": 5,
+          "fast.tom.tp": 3,
+          "conf.tom->nothing": 2,
+          "fast.stroke.est": 4,
+          "fast.kick.est": 1,
+          "fast.snare.est": 0,
+          "fast.tom.est": 3
+        },
+        "unique_fast_moments": {
+          "complete": {
+            "kick": 0,
+            "snare": 0,
+            "tom": 0
+          },
+          "partial": {
+            "kick": 1,
+            "snare": 0,
+            "tom": 5
+          },
+          "all_notation": {
+            "kick": 1,
+            "snare": 0,
+            "tom": 5
+          }
+        },
+        "complete_systems": 0
+      }
+    },
+    {
+      "video": "huUem3tatWs",
+      "slug": "alvaro-lópez-drum-solo-transcription-huUem3tatWs",
+      "cohort": "manifest",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 0
+    },
+    {
+      "video": "2w8zYUzZmyw",
+      "slug": "2w8zYUzZmyw",
+      "cohort": "ollie",
+      "incomplete_truth": [],
+      "strict_counts": {
+        "all.n": 4,
+        "all.dur": 2.6339999999999995,
+        "fast.n": 4,
+        "fast.dur": 2.6339999999999995,
+        "all.kick.tp": 8,
+        "all.kick.est": 8,
+        "all.kick.ref": 8,
+        "fast.kick.tp": 8,
+        "fast.kick.est": 8,
+        "fast.kick.ref": 8,
+        "all.snare.tp": 9,
+        "all.snare.est": 9,
+        "all.snare.ref": 9,
+        "fast.snare.tp": 9,
+        "fast.snare.est": 9,
+        "fast.snare.ref": 9,
+        "all.tom.tp": 20,
+        "all.tom.est": 23,
+        "all.tom.ref": 21,
+        "fast.tom.tp": 20,
+        "fast.tom.est": 23,
+        "fast.tom.ref": 21,
+        "all.stroke.tp": 37,
+        "all.stroke.est": 39,
+        "all.stroke.ref": 38,
+        "fast.stroke.tp": 37,
+        "fast.stroke.est": 39,
+        "fast.stroke.ref": 38,
+        "conf.snare->snare": 9,
+        "conf.tom->tom": 20,
+        "size.8->tom_high": 4,
+        "size.ok": 17,
+        "size.n": 20,
+        "size.7->tom_high": 8,
+        "size.7->tom_low": 2,
+        "size.6->tom": 4,
+        "size.6->tom_low": 1,
+        "size.3->tom_low": 1,
+        "conf.tom->nothing": 1,
+        "songs": 1
+      },
+      "with_strict_truth": true,
+      "notation_systems": 5,
+      "canonical_reader": {
+        "status": "completed"
+      }
+    },
+    {
+      "video": "5JKuX18DXXo",
+      "slug": "5JKuX18DXXo",
+      "cohort": "ollie",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 0,
+      "canonical_reader": {
+        "status": "reader_rejected",
+        "reason": "unstable native Shorts page boundary"
+      }
+    },
+    {
+      "video": "80S4pKQNfBw",
+      "slug": "80S4pKQNfBw",
+      "cohort": "ollie",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 0,
+      "canonical_reader": {
+        "status": "reader_rejected",
+        "reason": "unstable native Shorts page boundary"
+      }
+    },
+    {
+      "video": "DQBb-t18OLw",
+      "slug": "DQBb-t18OLw",
+      "cohort": "ollie",
+      "incomplete_truth": [],
+      "strict_counts": {
+        "all.n": 2,
+        "all.dur": 2.3499999999999988,
+        "fast.n": 2,
+        "fast.dur": 2.3499999999999988,
+        "all.kick.tp": 15,
+        "all.kick.est": 15,
+        "all.kick.ref": 15,
+        "fast.kick.tp": 15,
+        "fast.kick.est": 15,
+        "fast.kick.ref": 15,
+        "all.snare.tp": 5,
+        "all.snare.est": 6,
+        "all.snare.ref": 5,
+        "fast.snare.tp": 5,
+        "fast.snare.est": 6,
+        "fast.snare.ref": 5,
+        "all.tom.tp": 8,
+        "all.tom.est": 10,
+        "all.tom.ref": 8,
+        "fast.tom.tp": 8,
+        "fast.tom.est": 10,
+        "fast.tom.ref": 8,
+        "all.stroke.tp": 28,
+        "all.stroke.est": 28,
+        "all.stroke.ref": 28,
+        "fast.stroke.tp": 28,
+        "fast.stroke.est": 28,
+        "fast.stroke.ref": 28,
+        "conf.tom->tom": 8,
+        "size.8->tom_high": 2,
+        "size.ok": 7,
+        "size.n": 8,
+        "size.8->tom_low": 1,
+        "conf.snare->snare": 5,
+        "size.7->tom_high": 2,
+        "size.3->tom_low": 3,
+        "songs": 1
+      },
+      "with_strict_truth": true,
+      "notation_systems": 4,
+      "canonical_reader": {
+        "status": "completed"
+      }
+    },
+    {
+      "video": "HmfiP97JWvQ",
+      "slug": "HmfiP97JWvQ",
+      "cohort": "ollie",
+      "incomplete_truth": [],
+      "strict_counts": {
+        "all.n": 1,
+        "all.dur": 0.3789999999999978,
+        "fast.n": 1,
+        "fast.dur": 0.3789999999999978,
+        "all.kick.tp": 0,
+        "all.kick.est": 1,
+        "all.kick.ref": 0,
+        "fast.kick.tp": 0,
+        "fast.kick.est": 1,
+        "fast.kick.ref": 0,
+        "all.snare.tp": 4,
+        "all.snare.est": 5,
+        "all.snare.ref": 5,
+        "fast.snare.tp": 4,
+        "fast.snare.est": 5,
+        "fast.snare.ref": 5,
+        "all.tom.tp": 0,
+        "all.tom.est": 0,
+        "all.tom.ref": 1,
+        "fast.tom.tp": 0,
+        "fast.tom.est": 0,
+        "fast.tom.ref": 1,
+        "all.stroke.tp": 5,
+        "all.stroke.est": 5,
+        "all.stroke.ref": 6,
+        "fast.stroke.tp": 5,
+        "fast.stroke.est": 5,
+        "fast.stroke.ref": 6,
+        "conf.tom->snare": 1,
+        "conf.snare->nothing": 1,
+        "conf.snare->snare": 4,
+        "songs": 1
+      },
+      "with_strict_truth": true,
+      "notation_systems": 10,
+      "canonical_reader": {
+        "status": "completed"
+      }
+    },
+    {
+      "video": "ILMsnSvEcwU",
+      "slug": "ILMsnSvEcwU",
+      "cohort": "ollie",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": true,
+      "notation_systems": 0,
+      "canonical_reader": {
+        "status": "completed"
+      }
+    },
+    {
+      "video": "LOlbqboyiHw",
+      "slug": "LOlbqboyiHw",
+      "cohort": "ollie",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 0,
+      "canonical_reader": {
+        "status": "reader_rejected",
+        "reason": "unstable native Shorts page boundary"
+      }
+    },
+    {
+      "video": "LYTPLv8a5Hk",
+      "slug": "LYTPLv8a5Hk",
+      "cohort": "ollie",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 0,
+      "canonical_reader": {
+        "status": "reader_rejected",
+        "reason": "unstable native Shorts page boundary"
+      }
+    },
+    {
+      "video": "O4KnrQzMFok",
+      "slug": "O4KnrQzMFok",
+      "cohort": "ollie",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 0,
+      "canonical_reader": {
+        "status": "reader_rejected",
+        "reason": "unstable native Shorts page boundary"
+      }
+    },
+    {
+      "video": "RXPA93tRp5U",
+      "slug": "RXPA93tRp5U",
+      "cohort": "ollie",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 0,
+      "canonical_reader": {
+        "status": "reader_rejected",
+        "reason": "unstable native Shorts page boundary"
+      }
+    },
+    {
+      "video": "T7uw_Y2lWfI",
+      "slug": "T7uw_Y2lWfI",
+      "cohort": "ollie",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 0,
+      "canonical_reader": {
+        "status": "reader_rejected",
+        "reason": "unstable native Shorts page boundary"
+      }
+    },
+    {
+      "video": "TVvo_UJT-3U",
+      "slug": "TVvo_UJT-3U",
+      "cohort": "ollie",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 0,
+      "canonical_reader": {
+        "status": "reader_rejected",
+        "reason": "unstable native Shorts page boundary"
+      }
+    },
+    {
+      "video": "TdU43ovgyW0",
+      "slug": "TdU43ovgyW0",
+      "cohort": "ollie",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 0,
+      "canonical_reader": {
+        "status": "reader_rejected",
+        "reason": "unstable native Shorts page boundary"
+      }
+    },
+    {
+      "video": "ToHVE1EuzX4",
+      "slug": "ToHVE1EuzX4",
+      "cohort": "ollie",
+      "incomplete_truth": [],
+      "strict_counts": {
+        "all.n": 1,
+        "all.dur": 1.9110000000000014,
+        "fast.n": 1,
+        "fast.dur": 1.9110000000000014,
+        "all.kick.tp": 7,
+        "all.kick.est": 7,
+        "all.kick.ref": 7,
+        "fast.kick.tp": 7,
+        "fast.kick.est": 7,
+        "fast.kick.ref": 7,
+        "all.snare.tp": 0,
+        "all.snare.est": 0,
+        "all.snare.ref": 1,
+        "fast.snare.tp": 0,
+        "fast.snare.est": 0,
+        "fast.snare.ref": 1,
+        "all.tom.tp": 14,
+        "all.tom.est": 17,
+        "all.tom.ref": 15,
+        "fast.tom.tp": 14,
+        "fast.tom.est": 17,
+        "fast.tom.ref": 15,
+        "all.stroke.tp": 20,
+        "all.stroke.est": 21,
+        "all.stroke.ref": 22,
+        "fast.stroke.tp": 20,
+        "fast.stroke.est": 21,
+        "fast.stroke.ref": 22,
+        "conf.snare->tom": 1,
+        "conf.tom->tom": 13,
+        "size.3->tom_high": 3,
+        "size.ok": 7,
+        "size.n": 13,
+        "size.6->tom_high": 2,
+        "size.3->tom_low": 7,
+        "size.3->tom": 1,
+        "conf.tom->nothing": 2,
+        "songs": 1
+      },
+      "with_strict_truth": true,
+      "notation_systems": 7,
+      "canonical_reader": {
+        "status": "completed"
+      }
+    },
+    {
+      "video": "UTh9WKu1-Lw",
+      "slug": "UTh9WKu1-Lw",
+      "cohort": "ollie",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 0,
+      "canonical_reader": {
+        "status": "completed"
+      }
+    },
+    {
+      "video": "UWQxxs3_dms",
+      "slug": "UWQxxs3_dms",
+      "cohort": "ollie",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 1,
+      "canonical_reader": {
+        "status": "completed"
+      }
+    },
+    {
+      "video": "UwWTgoRXiew",
+      "slug": "UwWTgoRXiew",
+      "cohort": "ollie",
+      "incomplete_truth": [],
+      "strict_counts": {
+        "all.n": 5,
+        "all.dur": 4.060000000000002,
+        "fast.n": 2,
+        "fast.dur": 1.3359999999999985,
+        "all.kick.tp": 9,
+        "all.kick.est": 9,
+        "all.kick.ref": 9,
+        "fast.kick.tp": 5,
+        "fast.kick.est": 5,
+        "fast.kick.ref": 5,
+        "all.snare.tp": 16,
+        "all.snare.est": 18,
+        "all.snare.ref": 16,
+        "fast.snare.tp": 2,
+        "fast.snare.est": 2,
+        "fast.snare.ref": 2,
+        "all.tom.tp": 21,
+        "all.tom.est": 21,
+        "all.tom.ref": 21,
+        "fast.tom.tp": 11,
+        "fast.tom.est": 11,
+        "fast.tom.ref": 11,
+        "all.stroke.tp": 46,
+        "all.stroke.est": 48,
+        "all.stroke.ref": 46,
+        "fast.stroke.tp": 18,
+        "fast.stroke.est": 18,
+        "fast.stroke.ref": 18,
+        "conf.snare->snare": 16,
+        "conf.tom->tom": 21,
+        "size.7->tom_high": 9,
+        "size.ok": 13,
+        "size.n": 21,
+        "size.7->tom_low": 1,
+        "size.6->tom_high": 5,
+        "size.6->tom_low": 2,
+        "size.3->tom_low": 4,
+        "fill.n": 3,
+        "fill.dur": 2.7240000000000038,
+        "fill.kick.tp": 4,
+        "fill.kick.est": 4,
+        "fill.kick.ref": 4,
+        "fill.snare.tp": 14,
+        "fill.snare.est": 16,
+        "fill.snare.ref": 14,
+        "fill.tom.tp": 10,
+        "fill.tom.est": 10,
+        "fill.tom.ref": 10,
+        "fill.stroke.tp": 28,
+        "fill.stroke.est": 30,
+        "fill.stroke.ref": 28,
+        "songs": 1,
+        "slow.n": 3,
+        "slow.dur": 2.7240000000000038,
+        "slow.kick.tp": 4,
+        "slow.kick.est": 4,
+        "slow.kick.ref": 4,
+        "slow.snare.tp": 14,
+        "slow.snare.est": 16,
+        "slow.snare.ref": 14,
+        "slow.tom.tp": 10,
+        "slow.tom.est": 10,
+        "slow.tom.ref": 10,
+        "slow.stroke.tp": 28,
+        "slow.stroke.est": 30,
+        "slow.stroke.ref": 28
+      },
+      "with_strict_truth": true,
+      "notation_systems": 11,
+      "canonical_reader": {
+        "status": "completed"
+      }
+    },
+    {
+      "video": "VDhEWOZsHtQ",
+      "slug": "VDhEWOZsHtQ",
+      "cohort": "ollie",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 0,
+      "canonical_reader": {
+        "status": "reader_rejected",
+        "reason": "unstable native Shorts page boundary"
+      }
+    },
+    {
+      "video": "XEQ48BclyJ0",
+      "slug": "XEQ48BclyJ0",
+      "cohort": "ollie",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": true,
+      "notation_systems": 0,
+      "canonical_reader": {
+        "status": "completed"
+      }
+    },
+    {
+      "video": "XwVZ0IWlLZ0",
+      "slug": "XwVZ0IWlLZ0",
+      "cohort": "ollie",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 0,
+      "canonical_reader": {
+        "status": "reader_rejected",
+        "reason": "unstable native Shorts page boundary"
+      }
+    },
+    {
+      "video": "YJRkJQ-E1EE",
+      "slug": "YJRkJQ-E1EE",
+      "cohort": "ollie",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 0,
+      "canonical_reader": {
+        "status": "reader_rejected",
+        "reason": "unstable native Shorts page boundary"
+      }
+    },
+    {
+      "video": "d70zGTjtVdQ",
+      "slug": "d70zGTjtVdQ",
+      "cohort": "ollie",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 0,
+      "canonical_reader": {
+        "status": "reader_rejected",
+        "reason": "unstable native Shorts page boundary"
+      }
+    },
+    {
+      "video": "gwQF1xZCaeY",
+      "slug": "gwQF1xZCaeY",
+      "cohort": "ollie",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 0,
+      "canonical_reader": {
+        "status": "reader_rejected",
+        "reason": "unstable native Shorts page boundary"
+      }
+    },
+    {
+      "video": "hAmorNAulLU",
+      "slug": "hAmorNAulLU",
+      "cohort": "ollie",
+      "incomplete_truth": [],
+      "strict_counts": {
+        "all.n": 1,
+        "all.dur": 0.5240000000000009,
+        "fast.n": 1,
+        "fast.dur": 0.5240000000000009,
+        "all.kick.tp": 0,
+        "all.kick.est": 0,
+        "all.kick.ref": 2,
+        "fast.kick.tp": 0,
+        "fast.kick.est": 0,
+        "fast.kick.ref": 2,
+        "all.snare.tp": 2,
+        "all.snare.est": 5,
+        "all.snare.ref": 2,
+        "fast.snare.tp": 2,
+        "fast.snare.est": 5,
+        "fast.snare.ref": 2,
+        "all.tom.tp": 0,
+        "all.tom.est": 0,
+        "all.tom.ref": 5,
+        "fast.tom.tp": 0,
+        "fast.tom.est": 0,
+        "fast.tom.ref": 5,
+        "all.stroke.tp": 5,
+        "all.stroke.est": 5,
+        "all.stroke.ref": 7,
+        "fast.stroke.tp": 5,
+        "fast.stroke.est": 5,
+        "fast.stroke.ref": 7,
+        "conf.snare->snare": 2,
+        "conf.tom->nothing": 2,
+        "conf.tom->snare": 3,
+        "songs": 1
+      },
+      "with_strict_truth": true,
+      "notation_systems": 11,
+      "canonical_reader": {
+        "status": "completed"
+      }
+    },
+    {
+      "video": "hsM-F5aB1CA",
+      "slug": "hsM-F5aB1CA",
+      "cohort": "ollie",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 0,
+      "canonical_reader": {
+        "status": "completed"
+      }
+    },
+    {
+      "video": "ieO_oUmCOEo",
+      "slug": "ieO_oUmCOEo",
+      "cohort": "ollie",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 0,
+      "canonical_reader": {
+        "status": "reader_rejected",
+        "reason": "unstable native Shorts page boundary"
+      }
+    },
+    {
+      "video": "kVnNOnSIblk",
+      "slug": "kVnNOnSIblk",
+      "cohort": "ollie",
+      "incomplete_truth": [],
+      "strict_counts": {
+        "all.n": 9,
+        "all.dur": 6.689999999999997,
+        "fill.n": 7,
+        "fill.dur": 4.944,
+        "all.kick.tp": 27,
+        "all.kick.est": 27,
+        "all.kick.ref": 28,
+        "fill.kick.tp": 21,
+        "fill.kick.est": 21,
+        "fill.kick.ref": 22,
+        "all.snare.tp": 23,
+        "all.snare.est": 30,
+        "all.snare.ref": 24,
+        "fill.snare.tp": 14,
+        "fill.snare.est": 19,
+        "fill.snare.ref": 14,
+        "all.tom.tp": 15,
+        "all.tom.est": 20,
+        "all.tom.ref": 24,
+        "fill.tom.tp": 8,
+        "fill.tom.est": 10,
+        "fill.tom.ref": 15,
+        "all.stroke.tp": 71,
+        "all.stroke.est": 74,
+        "all.stroke.ref": 76,
+        "fill.stroke.tp": 47,
+        "fill.stroke.est": 48,
+        "fill.stroke.ref": 51,
+        "conf.snare->snare": 23,
+        "conf.tom->tom": 15,
+        "size.7->tom_high": 11,
+        "size.ok": 11,
+        "size.n": 15,
+        "fast.n": 2,
+        "fast.dur": 1.7459999999999969,
+        "fast.kick.tp": 6,
+        "fast.kick.est": 6,
+        "fast.kick.ref": 6,
+        "fast.snare.tp": 9,
+        "fast.snare.est": 11,
+        "fast.snare.ref": 10,
+        "fast.tom.tp": 7,
+        "fast.tom.est": 10,
+        "fast.tom.ref": 9,
+        "fast.stroke.tp": 24,
+        "fast.stroke.est": 26,
+        "fast.stroke.ref": 25,
+        "conf.tom->nothing": 4,
+        "conf.tom->snare": 5,
+        "size.3->tom_high": 2,
+        "size.3->tom": 1,
+        "conf.snare->nothing": 1,
+        "size.7->tom_low": 1,
+        "songs": 1,
+        "slow.n": 7,
+        "slow.dur": 4.944,
+        "slow.kick.tp": 21,
+        "slow.kick.est": 21,
+        "slow.kick.ref": 22,
+        "slow.snare.tp": 14,
+        "slow.snare.est": 19,
+        "slow.snare.ref": 14,
+        "slow.tom.tp": 8,
+        "slow.tom.est": 10,
+        "slow.tom.ref": 15,
+        "slow.stroke.tp": 47,
+        "slow.stroke.est": 48,
+        "slow.stroke.ref": 51
+      },
+      "with_strict_truth": true,
+      "notation_systems": 20,
+      "canonical_reader": {
+        "status": "completed"
+      }
+    },
+    {
+      "video": "kb1pUl2zXOk",
+      "slug": "kb1pUl2zXOk",
+      "cohort": "ollie",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 0,
+      "canonical_reader": {
+        "status": "reader_rejected",
+        "reason": "unstable native Shorts page boundary"
+      }
+    },
+    {
+      "video": "rAXW_bEx83U",
+      "slug": "rAXW_bEx83U",
+      "cohort": "ollie",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 0,
+      "canonical_reader": {
+        "status": "completed"
+      }
+    },
+    {
+      "video": "tKWGuuI5TU4",
+      "slug": "tKWGuuI5TU4",
+      "cohort": "ollie",
+      "incomplete_truth": [],
+      "strict_counts": {},
+      "with_strict_truth": false,
+      "notation_systems": 0,
+      "canonical_reader": {
+        "status": "reader_rejected",
+        "reason": "unstable native Shorts page boundary"
+      }
+    }
+  ],
+  "reader_rejections": [
+    {
+      "video": "5JKuX18DXXo",
+      "status": "reader_rejected",
+      "reason": "unstable native Shorts page boundary"
+    },
+    {
+      "video": "80S4pKQNfBw",
+      "status": "reader_rejected",
+      "reason": "unstable native Shorts page boundary"
+    },
+    {
+      "video": "LOlbqboyiHw",
+      "status": "reader_rejected",
+      "reason": "unstable native Shorts page boundary"
+    },
+    {
+      "video": "LYTPLv8a5Hk",
+      "status": "reader_rejected",
+      "reason": "unstable native Shorts page boundary"
+    },
+    {
+      "video": "O4KnrQzMFok",
+      "status": "reader_rejected",
+      "reason": "unstable native Shorts page boundary"
+    },
+    {
+      "video": "RXPA93tRp5U",
+      "status": "reader_rejected",
+      "reason": "unstable native Shorts page boundary"
+    },
+    {
+      "video": "T7uw_Y2lWfI",
+      "status": "reader_rejected",
+      "reason": "unstable native Shorts page boundary"
+    },
+    {
+      "video": "TVvo_UJT-3U",
+      "status": "reader_rejected",
+      "reason": "unstable native Shorts page boundary"
+    },
+    {
+      "video": "TdU43ovgyW0",
+      "status": "reader_rejected",
+      "reason": "unstable native Shorts page boundary"
+    },
+    {
+      "video": "VDhEWOZsHtQ",
+      "status": "reader_rejected",
+      "reason": "unstable native Shorts page boundary"
+    },
+    {
+      "video": "XwVZ0IWlLZ0",
+      "status": "reader_rejected",
+      "reason": "unstable native Shorts page boundary"
+    },
+    {
+      "video": "YJRkJQ-E1EE",
+      "status": "reader_rejected",
+      "reason": "unstable native Shorts page boundary"
+    },
+    {
+      "video": "d70zGTjtVdQ",
+      "status": "reader_rejected",
+      "reason": "unstable native Shorts page boundary"
+    },
+    {
+      "video": "gwQF1xZCaeY",
+      "status": "reader_rejected",
+      "reason": "unstable native Shorts page boundary"
+    },
+    {
+      "video": "ieO_oUmCOEo",
+      "status": "reader_rejected",
+      "reason": "unstable native Shorts page boundary"
+    },
+    {
+      "video": "kb1pUl2zXOk",
+      "status": "reader_rejected",
+      "reason": "unstable native Shorts page boundary"
+    },
+    {
+      "video": "tKWGuuI5TU4",
+      "status": "reader_rejected",
+      "reason": "unstable native Shorts page boundary"
+    }
+  ],
+  "prediction_hashes": {
+    "scores/chops/chopround3/vault_absolute/cache/manifest/2-insane-crossover-drum-fills-TzngsvZ-L20/student-chopround3_A_absolute-fold0.npy": "e99fd1201f5e8654833131f0649903e351f6235fadc6c544682e1c97edd7f68b",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/2-insane-crossover-drum-fills-TzngsvZ-L20/student-chopround3_A_absolute-fold1.npy": "6b9d7d69dcc854687dcbac6e0c4fcb77ca7edfb065af3e9f0b0e3aa5b056fb82",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/aaron-sterling-drum-solo-transcription-bh-AFB6dkz4/student-chopround3_A_absolute-fold0.npy": "019286fd53b7468ee4692ce96a9b02427bae6c194915cb5358619c692448205f",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/aaron-sterling-drum-solo-transcription-bh-AFB6dkz4/student-chopround3_A_absolute-fold1.npy": "5c208284f9b9ca53ad02fc92227519e653725ea1cdff52b08783d12808bdd681",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/alvaro-lópez-drum-solo-transcription-huUem3tatWs/student-chopround3_A_absolute-fold0.npy": "4832a2fa7571b8f4279cac4ce99169913c5769310b303c2199a00fc969ed0f2f",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/alvaro-lópez-drum-solo-transcription-huUem3tatWs/student-chopround3_A_absolute-fold1.npy": "dd5a4759fa35303c2e2773e30d8abac96813cfc69ece1bb1575efb3df4722b7f",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/anika-nilles-wild-boy-fill-breakdown-9DAQnR7rxHc/student-chopround3_A_absolute-fold0.npy": "5c7340c5428e9d4a2f52c8fe2e1442acc44d72372bd2dcf43f5fa1fd7940ad9b",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/anika-nilles-wild-boy-fill-breakdown-9DAQnR7rxHc/student-chopround3_A_absolute-fold1.npy": "b46a703946d77d9d5736cc970b1993fb60f2d8187c573847d3d24e357ddd1368",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/benny-greb-drum-fill-breakdown-extreme-hand-and-foot-singles-cXYwSjW0oQY/student-chopround3_A_absolute-fold0.npy": "f6a88ca6ebd3e1024e0260cd0fd3af0631c7b9de6277627261c860a3cafa4e06",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/benny-greb-drum-fill-breakdown-extreme-hand-and-foot-singles-cXYwSjW0oQY/student-chopround3_A_absolute-fold1.npy": "b8ad34f37ab3f64b90574e073e85ad850da95ad3c45466a22f3d0d4f9ae27597",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/benny-greb-transcription-crazy-subdivision-switches-full-not--G0PB-HWh-w/student-chopround3_A_absolute-fold0.npy": "a581c21076dc40445ca4d9804f78e9ec6eba83e7ebb0c0aa9f880486eb67728e",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/benny-greb-transcription-crazy-subdivision-switches-full-not--G0PB-HWh-w/student-chopround3_A_absolute-fold1.npy": "4a428ebf859e46e841d584b36aed05034089a49901ebf7e3a71578017cedfaf5",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/blazing-drum-solo-stanton-moore-maple-plank-notation-video-b-Vl2q-MKCM/student-chopround3_A_absolute-fold0.npy": "0eba15a726dcb22a3324d649e255d0059ff29879bc184405824ae3314a6626b9",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/blazing-drum-solo-stanton-moore-maple-plank-notation-video-b-Vl2q-MKCM/student-chopround3_A_absolute-fold1.npy": "ce8ab5f5f56509ede5105e568b503c929d4e58ca32af9f45f7eaeeb9187e95fb",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/calvin-rodgers-drum-solo-transcription-goose-as-a-loose-drtDkmbTWO0/student-chopround3_A_absolute-fold0.npy": "dfea27768773ca2e929d56922e5ad1344e173fba953bf27505bd6488986179a0",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/calvin-rodgers-drum-solo-transcription-goose-as-a-loose-drtDkmbTWO0/student-chopround3_A_absolute-fold1.npy": "d767f06febb0aa5416f242640109c14eef1b3f8aea67833de544dcea8ddeb697",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/chris-coleman-drum-transcription-birch-infinite-performance--MZJJARIGmA/student-chopround3_A_absolute-fold0.npy": "1175d741cee856abb603351c8385231fa676b5fefe7c0428b3b7ee484e23aaee",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/chris-coleman-drum-transcription-birch-infinite-performance--MZJJARIGmA/student-chopround3_A_absolute-fold1.npy": "85e98465088b33bcd4bb6067502c38ab4520cace2ac0738e8059d8fb5038a188",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/chris-coleman-go-solo-transcription-jtbhIahu35Q/student-chopround3_A_absolute-fold0.npy": "af2bb6d798c0b76e2e71ae02f74d4ddf192192faa4df2be91d155cc5ded62f58",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/chris-coleman-go-solo-transcription-jtbhIahu35Q/student-chopround3_A_absolute-fold1.npy": "f7ad04eb5f7494a70e7d9f68dc44c018e549fff980d4c29e48ab6bb7b613ec5a",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/cliff-almond-drum-solo-transcription-YxUkGNdv-k8/student-chopround3_A_absolute-fold0.npy": "27e1b594362b56e0c7303f0fd9e53126ba759848b4f1c1653b9ef75855fc7668",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/cliff-almond-drum-solo-transcription-YxUkGNdv-k8/student-chopround3_A_absolute-fold1.npy": "5389716ee78a1f38e177a46b0007aefd4a664b0425225f112d7ce2c746952418",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/darryn-farrugia-transcription-attempt-LLe6dL3e93c/student-chopround3_A_absolute-fold0.npy": "3d76303ecae11f5a2b9b2ae489495fb79aa4bac0948430103371b2ae17abae11",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/darryn-farrugia-transcription-attempt-LLe6dL3e93c/student-chopround3_A_absolute-fold1.npy": "135c2d7eb841c9b3bf101357d51a5adf14c0f165e65011c2a51b8a001d28601e",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/dennis-chambers-drum-solo-transcription-LdN-RbRdoh8/student-chopround3_A_absolute-fold0.npy": "3aeb4b671f5afd7dcf6305db66d29fbae92ff0c782e5e9865bc1bcad07263e17",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/dennis-chambers-drum-solo-transcription-LdN-RbRdoh8/student-chopround3_A_absolute-fold1.npy": "e9acaa98c9dc8e1f797bb8462d749fd7563e5b90090b48cf0058ffd8b21d7532",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/drum-solo-transcription-vinnie-colaiuta-w-jeff-beck-live-at-GXyMskwBEsc/student-chopround3_A_absolute-fold0.npy": "b1ee228f96ca5f681f212aa06593c79cf37f91b251fb0e64ceff113876db38e5",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/drum-solo-transcription-vinnie-colaiuta-w-jeff-beck-live-at-GXyMskwBEsc/student-chopround3_A_absolute-fold1.npy": "703866d7fede89314144e5e8f7d160c548e1c5e82dd7292b8f3905561281383d",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/eric-moore-transcription-pasic-drum-solo-JG2xMCBwL1Y/student-chopround3_A_absolute-fold0.npy": "514a41f229779406321461532b15a64b0b73d59f6bc8a3e9ca2c7e6374811892",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/eric-moore-transcription-pasic-drum-solo-JG2xMCBwL1Y/student-chopround3_A_absolute-fold1.npy": "6509b13cf28f2a27a3006b53ebdddf020ec452732c436f246e8b83d561bcc1c3",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/eric-mooreii-drum-solo-transcription-Ikg4P3F_Wj8/student-chopround3_A_absolute-fold0.npy": "d89df82bb30098b3d8b838419bd88b30a170740d0e969ee4deeba2eb9680aca9",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/eric-mooreii-drum-solo-transcription-Ikg4P3F_Wj8/student-chopround3_A_absolute-fold1.npy": "c281e26a0d64979a73de984f7a88ddcddd41ae8fbfa8260310996d84419d9ddf",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/eric-mooreii-transcription-8AHvVFQ0_To/student-chopround3_A_absolute-fold0.npy": "1baa37ff31f20382255b563904171eeddbae78bf7a06bd0cc6d6b37c9d5d72eb",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/eric-mooreii-transcription-8AHvVFQ0_To/student-chopround3_A_absolute-fold1.npy": "478a55e8b2cb72099708742f32af7c22ec5f3d85f27e68ebc2fdebfc1bcf4c12",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/gergo-borlai-drum-solo-transcription-funk-drum-solo-8iCRbuU-JnE/student-chopround3_A_absolute-fold0.npy": "8e8881c188f7fdbd09ad01e8e2c325513120c5b3986d6835f18a81c35d72b076",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/gergo-borlai-drum-solo-transcription-funk-drum-solo-8iCRbuU-JnE/student-chopround3_A_absolute-fold1.npy": "06ced04f7bf2291baeac564af74dd8e0d0336c58ba8c1533e67a90c9d5b83471",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/great-angles-horrible-sound-don-t-judge-me-i-m-working-on-it-EGmd5rCmFlQ/student-chopround3_A_absolute-fold0.npy": "700b94e1eb13215c647bd5984d9b7f46271f0651369b751533a8223cf0b4ba00",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/great-angles-horrible-sound-don-t-judge-me-i-m-working-on-it-EGmd5rCmFlQ/student-chopround3_A_absolute-fold1.npy": "ec8bb937b13315b5b0c2f50f665126c00163ac7e710d425cd20433197c4e9850",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/how-to-transcribe-drums-figure-out-what-your-favorite-drumme-tGuWxslLpa0/student-chopround3_A_absolute-fold0.npy": "9624d6a1b418719a8c251cd75171e11b31acdd9e560f5dfa9ba2366f16db2cf8",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/how-to-transcribe-drums-figure-out-what-your-favorite-drumme-tGuWxslLpa0/student-chopround3_A_absolute-fold1.npy": "806e9fb140a8d8fb8561e1498840270406f8ec841fc663ccdc4269e9b077378f",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/insane-thomas-pridgen-drum-fills-zildjian-live-thomas-pridge-57cD4c5_xT8/student-chopround3_A_absolute-fold0.npy": "c0091706ad815afc0044d971ba48a0c0a48c63a2c07d358ad79f23bfdcaafc20",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/insane-thomas-pridgen-drum-fills-zildjian-live-thomas-pridge-57cD4c5_xT8/student-chopround3_A_absolute-fold1.npy": "7190fc78a0822501e67055013f1ebfc096058530f89f27430a055fb2c088077f",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/j-rod-sullivan-ooh-wee-funk-drum-transcription-Vz_YrQVOb08/student-chopround3_A_absolute-fold0.npy": "f818a17a908450a599af3cbe5e5580dcda9099282534c65060cf1afdafd3516d",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/j-rod-sullivan-ooh-wee-funk-drum-transcription-Vz_YrQVOb08/student-chopround3_A_absolute-fold1.npy": "f031ea18008ef39124da7fc8fb6674fed35b645c7476ec551b9a7b940d4413d6",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/jay-kalo-drum-solo-transcription-7SSDvY9jGhk/student-chopround3_A_absolute-fold0.npy": "9f724f268a0c13061b9a431aeeac22789236c91fbd8cb67e5663a15077dcbf0c",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/jay-kalo-drum-solo-transcription-7SSDvY9jGhk/student-chopround3_A_absolute-fold1.npy": "d9c85875840528431b637d3edda4f3d41d8ccaaea0b391448b28524c329784e7",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/larnell-lewis-drum-solo-transcription-from-zildjian-live-eik7Wk03o-8/student-chopround3_A_absolute-fold0.npy": "c53068de5b3e6b7680924d924649b19b543f575e0c61d637cf21d235c987136b",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/larnell-lewis-drum-solo-transcription-from-zildjian-live-eik7Wk03o-8/student-chopround3_A_absolute-fold1.npy": "51fb029bd97876af93a61b4af797a9cc7c602653b0770d5335c41839ebb91bb2",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/mark-guiliana-drum-solo-transcription-7-ways-feat-jason-lind-9oWUjm6OY14/student-chopround3_A_absolute-fold0.npy": "bdf47e579aca0982ff87173903f906c195ed40e1298449e08ccc3001e22aeffb",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/mark-guiliana-drum-solo-transcription-7-ways-feat-jason-lind-9oWUjm6OY14/student-chopround3_A_absolute-fold1.npy": "2a6961707dd22d2fddcb452275303b45fa74fd9cf3dd018b44beca773d1fafce",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/mark-guiliana-drum-transcription-from-instagram-exploration-dTK0atUjfX0/student-chopround3_A_absolute-fold0.npy": "84a25b17cf1d3a9c90a772008c772e0d3a7940943da591a8e52b9c80978816c7",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/mark-guiliana-drum-transcription-from-instagram-exploration-dTK0atUjfX0/student-chopround3_A_absolute-fold1.npy": "eeb0bdad733803f0cb09030de88b24156d7cbf6dace52231136a29cc725e1514",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/mark-guiliana-transcription-drum-solo-notation-DjNPar4HSyg/student-chopround3_A_absolute-fold0.npy": "04c0f7e11a8eea3dd8281028b84e63380aa18d994413b52ab8594dcca8abf88b",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/mark-guiliana-transcription-drum-solo-notation-DjNPar4HSyg/student-chopround3_A_absolute-fold1.npy": "b17a8530745f78e45d0d09eabc00d839be434d30e510d501f858d9d2c439833e",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/nate-smith-rambo-riff-transcription-from-npr-tiny-desk-conce-qLhHwfg9N1w/student-chopround3_A_absolute-fold0.npy": "a16273bbe22af18ab39f4e57e6057b793cba56ccf036bd7637c21e8d03e0ce26",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/nate-smith-rambo-riff-transcription-from-npr-tiny-desk-conce-qLhHwfg9N1w/student-chopround3_A_absolute-fold1.npy": "bbbce34415a8ef264ab4b74c894365483668a45684ef127cbab7c8b531d0fb13",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/nate-smith-solo-transcription-Oo0SReYA4po/student-chopround3_A_absolute-fold0.npy": "822f88272e70de17e3e730bca008fd2d532073ea923fba16887113c2d4902f46",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/nate-smith-solo-transcription-Oo0SReYA4po/student-chopround3_A_absolute-fold1.npy": "93dfeead7c0f8c14699d71255e716a3982dbd17f378e7901b5ed663175544c7e",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/nate-smith-solo-transcription-the-fearless-flyers-tIdzPYMUEys/student-chopround3_A_absolute-fold0.npy": "c680e5d95279f4d2131bad657956efcdc3c0e5c066c61d9abf3cb9e4626f9eae",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/nate-smith-solo-transcription-the-fearless-flyers-tIdzPYMUEys/student-chopround3_A_absolute-fold1.npy": "c5e1b5f4af6b09e6243e9663be381a3a8414bddbd3ba460eb87c9ae13f030219",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/raul-pineda-drum-solo-transcription-k8Provk4f5Y/student-chopround3_A_absolute-fold0.npy": "6b07cfe014b51139edc3fb10173a77afccf029930d0cdbfeafe593f422e6a290",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/raul-pineda-drum-solo-transcription-k8Provk4f5Y/student-chopround3_A_absolute-fold1.npy": "25a986248df7a07e920c269a4f8c0d73349897f7a9f79525c097bd1611484c5d",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/robert-sput-searight-transcription-actual-proof-D1GRAVLM54M/student-chopround3_A_absolute-fold0.npy": "652754e9437bbfe1e05c2e76eaf69bfeb9b1190ff94afc3a9b6c2f0cc78c407d",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/robert-sput-searight-transcription-actual-proof-D1GRAVLM54M/student-chopround3_A_absolute-fold1.npy": "047c5c2b0f7b22f839326b819c53f20c9203d4ddfdb87afc92156c2665542120",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/sonny-emory-drum-solo-transcription-S8-zxLpHDxc/student-chopround3_A_absolute-fold0.npy": "f60e995590d46286e6ceb7ed41cfd2c4217a15eb95693ceba14c1ad92f337755",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/sonny-emory-drum-solo-transcription-S8-zxLpHDxc/student-chopround3_A_absolute-fold1.npy": "bc9b2cc08ebe1cbd16bf9b23901bd01b57c16cbce6a94d1254e507cd4de2a6d5",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/steve-gadd-drum-solo-transcription-2023-8fy9aMDJmek/student-chopround3_A_absolute-fold0.npy": "b50d72822254b26a32dfa9f4a93989887b2e0bce6575febb6db3e5c5968120dc",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/steve-gadd-drum-solo-transcription-2023-8fy9aMDJmek/student-chopround3_A_absolute-fold1.npy": "865bd64488aad67133af310e9aa4e771abfffe8589ac6663572f78b3c8de93e3",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/steve-smith-drum-solo-transcription-vic-firth-performance-sp-W5J8TG4j5IE/student-chopround3_A_absolute-fold0.npy": "5732517f959313044ef4992c0a77ac3efc65654f7863f35e2ff763a35d6481fb",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/steve-smith-drum-solo-transcription-vic-firth-performance-sp-W5J8TG4j5IE/student-chopround3_A_absolute-fold1.npy": "1621b9a6f1d854dd10c6a6318a93593433cd757a47e5bfb50b4d886076f10f72",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/todd-sucherman-transcription-solo-excerpts-8PVjQjLNaTc/student-chopround3_A_absolute-fold0.npy": "788109c442efa0fd1c1ff3dc534a253021053842c2fe5c9a314cc0ee0f0f2794",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/todd-sucherman-transcription-solo-excerpts-8PVjQjLNaTc/student-chopround3_A_absolute-fold1.npy": "79595d8503a4c81ddffe2e0040ceb12ccf33f8227e5794fceefdf6c2c04ab1ce",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/tony-royster-jr-rushin-drum-transcription-EEJEkbpBnjY/student-chopround3_A_absolute-fold0.npy": "a86fc658f6e3f0cd46cc6c23d326e24e4669620eb7fb322e38db7365ac44c642",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/tony-royster-jr-rushin-drum-transcription-EEJEkbpBnjY/student-chopround3_A_absolute-fold1.npy": "dffed5e2e851c8b44bcedaad8b564721e4048c0d2aba6cfbf8508b5fe9764d4c",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/tony-royster-jr-transcription-katy-perry-soundcheck--YJ97E8GcWY/student-chopround3_A_absolute-fold0.npy": "14d3dbd717d0b8a876f5ba71330c50ffb3aba1019a09b953764a3f443507b290",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/tony-royster-jr-transcription-katy-perry-soundcheck--YJ97E8GcWY/student-chopround3_A_absolute-fold1.npy": "bacfe4e04829d2111152fa2b137c80ba3291f7cf3b5afc987839d56525517f12",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/transcription-larnell-lewis-what-about-me-solo-k8R49UlSqu0/student-chopround3_A_absolute-fold0.npy": "e6287e3a316738ab3e88328cbee12345461a5ae5e07e661ddb5fdd807fa19717",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/transcription-larnell-lewis-what-about-me-solo-k8R49UlSqu0/student-chopround3_A_absolute-fold1.npy": "fc923df3f2fed8df05b3647720c911c702cf5874406e0cf7a3fd256049f07595",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/vinnie-colaiuta-in-studio-transcription-f2bzDVwLESM/student-chopround3_A_absolute-fold0.npy": "73c295591b0b601221fd6eef9cc27e0d2a5e46e9a99475fca2dda0dbcc76735e",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/vinnie-colaiuta-in-studio-transcription-f2bzDVwLESM/student-chopround3_A_absolute-fold1.npy": "39ca0f5e9e49126eb723704c3bd42b7cbfc0043620f479838a2a4931c57ef7f4",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/vinnie-colaiuta-lick-by-mike-dawson-transcription-28s7JkTb2z0/student-chopround3_A_absolute-fold0.npy": "e2e4af470928c7737a62bd0222bc7bba8977ee6a5f426fe5740b4c8217e0e439",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/vinnie-colaiuta-lick-by-mike-dawson-transcription-28s7JkTb2z0/student-chopround3_A_absolute-fold1.npy": "2d44d622b4569f242884300b6105036ef71c4d8d99acb215dde602e67162c04a",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/vinnie-colaiuta-transcription-actual-proof-solo-tfHonSNFf54/student-chopround3_A_absolute-fold0.npy": "ddc1462573072ac087fd6f974f8a9d17853416145b4dfc14b3bc5564ba7ea1c3",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/vinnie-colaiuta-transcription-actual-proof-solo-tfHonSNFf54/student-chopround3_A_absolute-fold1.npy": "c9ccb5613179616b913476e64966cb581e86e693313e2cfad69aada8672254a0",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/vinnie-colaiuta-transcription-solo-on-attack-of-the-20-lb-pi-WSB7bJ5Zc_4/student-chopround3_A_absolute-fold0.npy": "efd483411f76d09f2af3a35de604bf90227d163f7e7103d769f7dc990e870f9b",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/vinnie-colaiuta-transcription-solo-on-attack-of-the-20-lb-pi-WSB7bJ5Zc_4/student-chopround3_A_absolute-fold1.npy": "5dfe2d3983ba02d32eb5cb2b3e4800ba98df8cc65f93476ecfe00b22e237d833",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/virgil-donati-drum-transcription-just-jammin-on-a-riff-PGdpHkC5Mx0/student-chopround3_A_absolute-fold0.npy": "dd9edacdab37a50360cd3371d355861c672e0f8b024ef1a5df25b4161e5b54ff",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/virgil-donati-drum-transcription-just-jammin-on-a-riff-PGdpHkC5Mx0/student-chopround3_A_absolute-fold1.npy": "b7d3b2c5965c63f21872aca236366476e7b2f4a6ad85f4d8ff931a5e7e499f4a",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/virgil-donati-power-drumming-transcriptions-take-1-take-2-cqVLqlVJr5o/student-chopround3_A_absolute-fold0.npy": "e1ed0717cc51b6c8b1b500200ab51639b5427eb38c1c24ec7b82842f0a552f02",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/virgil-donati-power-drumming-transcriptions-take-1-take-2-cqVLqlVJr5o/student-chopround3_A_absolute-fold1.npy": "5b7b33d8eaefaf32a52f4faad376f4debbfb66261d229085a44deef91ac1108f",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/zackgrooves-drum-transcription-zack-graybeal-y5IRZ3p_m_E/student-chopround3_A_absolute-fold0.npy": "59e215386774ef4fa76cf69fdd03f2b5ca730356988545ef832f557e1e831a6e",
+    "scores/chops/chopround3/vault_absolute/cache/manifest/zackgrooves-drum-transcription-zack-graybeal-y5IRZ3p_m_E/student-chopround3_A_absolute-fold1.npy": "c66f565f434c48337d985f7250935c6eaac2e7d739122a7048930da6db4c674b",
+    "vault_truth/olliewoods_shorts/2w8zYUzZmyw/student-chopround3_A_absolute-fold0.npy": "1cd960372c641e3816458dc855a73ae196f5fb8ffe8248cda65d6dc2f379b6ed",
+    "vault_truth/olliewoods_shorts/2w8zYUzZmyw/student-chopround3_A_absolute-fold1.npy": "a4607dc87d41b16d37341fae8cb02918e0471f276e73b345aa9b94ef8f927360",
+    "vault_truth/olliewoods_shorts/5JKuX18DXXo/student-chopround3_A_absolute-fold0.npy": "a1dfcd5804df7b1dd185562a33ada3d1637ddbf2767402b912324d4ce592818e",
+    "vault_truth/olliewoods_shorts/5JKuX18DXXo/student-chopround3_A_absolute-fold1.npy": "3c62f74b1491d9b602e9f30d182093ff739310260d2dbbf3b4e7144bc5ee1737",
+    "vault_truth/olliewoods_shorts/80S4pKQNfBw/student-chopround3_A_absolute-fold0.npy": "b08b3e3484d331efe5fd45ed97d8f84fabf69c37fc000993861ab73a6c08b6a2",
+    "vault_truth/olliewoods_shorts/80S4pKQNfBw/student-chopround3_A_absolute-fold1.npy": "788c9991f34beca042679f5e6b6b01d619f55e9ba0021fe1805abd4a0d0b87ee",
+    "vault_truth/olliewoods_shorts/DQBb-t18OLw/student-chopround3_A_absolute-fold0.npy": "841351769e187f94b8eeb155fabdf92fb8ad6cf2428d3cb753f1757a48a3b502",
+    "vault_truth/olliewoods_shorts/DQBb-t18OLw/student-chopround3_A_absolute-fold1.npy": "ec2a9eca0cf8f15b27169a6f56f4fbf557c345dcac7a0467c5ad935ccacf01ab",
+    "vault_truth/olliewoods_shorts/HmfiP97JWvQ/student-chopround3_A_absolute-fold0.npy": "cd9bc89d0ead5160efc8170eebb818b4c9bcd746fb0740bf535972c7ea4a1bd2",
+    "vault_truth/olliewoods_shorts/HmfiP97JWvQ/student-chopround3_A_absolute-fold1.npy": "794c15846fe4de4c6b6f9937f4fb61ee1a307fbd362fca0fc8f1828baeae1e0b",
+    "vault_truth/olliewoods_shorts/ILMsnSvEcwU/student-chopround3_A_absolute-fold0.npy": "83fcdd4df0cdc2d48a35f338b4f4c1804c1fcedcbe34c556008d9879f989008a",
+    "vault_truth/olliewoods_shorts/ILMsnSvEcwU/student-chopround3_A_absolute-fold1.npy": "1ba78868a19460f0c1ca511e44165f3bb67ea8f0ba53ab0d4b09aee93fb2b4dc",
+    "vault_truth/olliewoods_shorts/LOlbqboyiHw/student-chopround3_A_absolute-fold0.npy": "84e0f0e47e613fd9ea237f5faf7f6437de71e3cf2a9c7ac0f02fd63ae41113c5",
+    "vault_truth/olliewoods_shorts/LOlbqboyiHw/student-chopround3_A_absolute-fold1.npy": "db9bbeed3e80238a1bca791cdfaed8a95aae11ea26c8f0b936a9ca0c1c9b21c4",
+    "vault_truth/olliewoods_shorts/LYTPLv8a5Hk/student-chopround3_A_absolute-fold0.npy": "34a853d03026dd8f9d3225fadc20cf5dcc2d98ff8067ff6e314502b2c36f0aad",
+    "vault_truth/olliewoods_shorts/LYTPLv8a5Hk/student-chopround3_A_absolute-fold1.npy": "0abc5b719e14a8d81abb13b78f505b5a9cbaf4b179eaa79c120a785ac0cd36d5",
+    "vault_truth/olliewoods_shorts/O4KnrQzMFok/student-chopround3_A_absolute-fold0.npy": "0ee125186854b8cf00667492ffe5f22aa1c1feb92f0ade62c44a20205185e3de",
+    "vault_truth/olliewoods_shorts/O4KnrQzMFok/student-chopround3_A_absolute-fold1.npy": "0da687dfcceed4755960030515e8e3796af4073adc58f53b142e11ca16c460e3",
+    "vault_truth/olliewoods_shorts/RXPA93tRp5U/student-chopround3_A_absolute-fold0.npy": "de7bddf7e006f55856f1ed87ffe81f9db177e5de36549db5392d10b2f7f7d316",
+    "vault_truth/olliewoods_shorts/RXPA93tRp5U/student-chopround3_A_absolute-fold1.npy": "34b874454b0d7499a05eba3b1788802f34e72ab699603dc63aa1e7401672d076",
+    "vault_truth/olliewoods_shorts/T7uw_Y2lWfI/student-chopround3_A_absolute-fold0.npy": "9b2a4e41744193813fd68540381e2626d7e84782411a898fe197b2ec7889d1df",
+    "vault_truth/olliewoods_shorts/T7uw_Y2lWfI/student-chopround3_A_absolute-fold1.npy": "869780b2cc54686a570b6a338cf74334422644abd4839f8542e1044d4b965e7b",
+    "vault_truth/olliewoods_shorts/TVvo_UJT-3U/student-chopround3_A_absolute-fold0.npy": "c7061f5ddedba36214a6afdcfbefa6a746d87a878d9798aabdf71057570929a4",
+    "vault_truth/olliewoods_shorts/TVvo_UJT-3U/student-chopround3_A_absolute-fold1.npy": "d4fe397ba092e40cca01ff334f69b4542ffedd11e3bfa8d9b7deea515b471697",
+    "vault_truth/olliewoods_shorts/TdU43ovgyW0/student-chopround3_A_absolute-fold0.npy": "776acb82fabff605519a5fdeb2c9a6bc551c2fb9153d2b055524a01571232b69",
+    "vault_truth/olliewoods_shorts/TdU43ovgyW0/student-chopround3_A_absolute-fold1.npy": "b95fb28741938f848d152bc3c29a82826d8d5ed42295c31e5e9370139a6e4242",
+    "vault_truth/olliewoods_shorts/ToHVE1EuzX4/student-chopround3_A_absolute-fold0.npy": "56a9228684dc0d261725fc71670baa92c3b8cfe2d2fdaccf72d3aaf6a95c7cb0",
+    "vault_truth/olliewoods_shorts/ToHVE1EuzX4/student-chopround3_A_absolute-fold1.npy": "646b54ef4dd20001baa368f8fcec854f3fd839998180f45096e679e60279ed52",
+    "vault_truth/olliewoods_shorts/UTh9WKu1-Lw/student-chopround3_A_absolute-fold0.npy": "db1b6d261e9321ffa0b7b91bed090d37a7d6460a52d4da570216c063915b6f34",
+    "vault_truth/olliewoods_shorts/UTh9WKu1-Lw/student-chopround3_A_absolute-fold1.npy": "ad09cb0651f5876f17a4882363c4a9c02ebb7e5693d4a4e6943265737f0bafcf",
+    "vault_truth/olliewoods_shorts/UWQxxs3_dms/student-chopround3_A_absolute-fold0.npy": "7e388b3c5518fdc55b229d1bf5d95bfa820a23e9f8da629f4cae707cf8cbba2e",
+    "vault_truth/olliewoods_shorts/UWQxxs3_dms/student-chopround3_A_absolute-fold1.npy": "f1fa224499643bfea350078f0c154aa9fd742277348fad8f018676b78f0143b6",
+    "vault_truth/olliewoods_shorts/UwWTgoRXiew/student-chopround3_A_absolute-fold0.npy": "4c6224f82e95482744f11d331cf9902fbdc1fd5df2ee6b85f8db500a0bb601a1",
+    "vault_truth/olliewoods_shorts/UwWTgoRXiew/student-chopround3_A_absolute-fold1.npy": "fd4f707bf1b1f65a544915b09f4341f8542f572da117d6565b51f0a0e884b23b",
+    "vault_truth/olliewoods_shorts/VDhEWOZsHtQ/student-chopround3_A_absolute-fold0.npy": "f1eebbb7c7e6d082f82cd1ac17159193a46e5145f8ccd310ab2c5e4bee8a8fda",
+    "vault_truth/olliewoods_shorts/VDhEWOZsHtQ/student-chopround3_A_absolute-fold1.npy": "a00188e84717a7d5cdd2fc85e417b9748d7f267ba89cf2e9eba794583b56774f",
+    "vault_truth/olliewoods_shorts/XEQ48BclyJ0/student-chopround3_A_absolute-fold0.npy": "2ccd4f1462bc59136ec12837df77dea4a0dbee3405aadb71b5069c545efcf8cb",
+    "vault_truth/olliewoods_shorts/XEQ48BclyJ0/student-chopround3_A_absolute-fold1.npy": "c7d6f580a13f7a8dd57b9d8498eef67dbbcaf1d6f9e6a834d9eaa5015e8dd31c",
+    "vault_truth/olliewoods_shorts/XwVZ0IWlLZ0/student-chopround3_A_absolute-fold0.npy": "af23b7ab96770fcc72d14ce1aeed1828dc8a24e357e827c82f3d805cdf7995cf",
+    "vault_truth/olliewoods_shorts/XwVZ0IWlLZ0/student-chopround3_A_absolute-fold1.npy": "5883963025335ef9789f4d3e3b982fcffe70722f7f8a2bdeaa64e16c2ead5314",
+    "vault_truth/olliewoods_shorts/YJRkJQ-E1EE/student-chopround3_A_absolute-fold0.npy": "8499e59ab44afb69610dc58f5ec3af98c9f8991fdf71742ef194515a948065eb",
+    "vault_truth/olliewoods_shorts/YJRkJQ-E1EE/student-chopround3_A_absolute-fold1.npy": "25bad0de0ecb050c2b2791a19203e26dc70a01495e8a0cbb3786952ae4fd412b",
+    "vault_truth/olliewoods_shorts/d70zGTjtVdQ/student-chopround3_A_absolute-fold0.npy": "88ca3d9199cf707b7e8f31a1cc6c0cf5b1fcaacfa0ba988276f8e895eec59581",
+    "vault_truth/olliewoods_shorts/d70zGTjtVdQ/student-chopround3_A_absolute-fold1.npy": "58205e51f3abca9bb669a6ab300c133edfc7fdbb3846ed9688e572391ca51bd9",
+    "vault_truth/olliewoods_shorts/gwQF1xZCaeY/student-chopround3_A_absolute-fold0.npy": "9beb3991adbb89e1939dba5e518061f8a44b46450aa8f681db13837b5ad4c3b5",
+    "vault_truth/olliewoods_shorts/gwQF1xZCaeY/student-chopround3_A_absolute-fold1.npy": "ee8974ba0988c9078c513f0b60aac3509eb0fd627b11117da9a0503bc3367f31",
+    "vault_truth/olliewoods_shorts/hAmorNAulLU/student-chopround3_A_absolute-fold0.npy": "08716d1f9001a9ba27f365c7a159341c066d86e8985f08fbf98aad09192c80dd",
+    "vault_truth/olliewoods_shorts/hAmorNAulLU/student-chopround3_A_absolute-fold1.npy": "b117e1b7d3b8968db697bbc74d79c4776b36a3a1702cfe0c96b0423673dd4123",
+    "vault_truth/olliewoods_shorts/hsM-F5aB1CA/student-chopround3_A_absolute-fold0.npy": "d60a77e867e9c90931463f8910ee06f437880f5cca39b35fe411f24b2c964471",
+    "vault_truth/olliewoods_shorts/hsM-F5aB1CA/student-chopround3_A_absolute-fold1.npy": "ad85c3bf5131993c4a0a8a27e27ed9d0ba547490f14a4b2397704224930d5ff0",
+    "vault_truth/olliewoods_shorts/ieO_oUmCOEo/student-chopround3_A_absolute-fold0.npy": "0ca833cd5346886bf69eebe46e68d49ea704e0d6a0e0dca696f3fe89bc7e4888",
+    "vault_truth/olliewoods_shorts/ieO_oUmCOEo/student-chopround3_A_absolute-fold1.npy": "82ac76bfc71aa4486b4d3d3c8884c3874ac022247ee2c6077738d3ef0f7900f9",
+    "vault_truth/olliewoods_shorts/kVnNOnSIblk/student-chopround3_A_absolute-fold0.npy": "d6cb2300269a5e89626d8328351fbf746cb3212f3e8c0b102934ac237802cdb7",
+    "vault_truth/olliewoods_shorts/kVnNOnSIblk/student-chopround3_A_absolute-fold1.npy": "8ebc9ae5f23df81627b315f799425688d1aacf2508b8109eaf8a6a6e2051aaf2",
+    "vault_truth/olliewoods_shorts/kb1pUl2zXOk/student-chopround3_A_absolute-fold0.npy": "e6d4264cfd78e255cfa2fce86230150eaeb63cf7c8633bd06cfe20fba6449c3e",
+    "vault_truth/olliewoods_shorts/kb1pUl2zXOk/student-chopround3_A_absolute-fold1.npy": "ffbbc2d92e6703a5eaeabfba53b3023e901e65d44a94561ca9e9bdedf087d65e",
+    "vault_truth/olliewoods_shorts/rAXW_bEx83U/student-chopround3_A_absolute-fold0.npy": "dc61dad83fee6fcfd2007c355b58f65122c2537a17f898240fd6b8d9bfaa69ff",
+    "vault_truth/olliewoods_shorts/rAXW_bEx83U/student-chopround3_A_absolute-fold1.npy": "d1d5903d27d5e04258b4c4ff4c73b66f1e8b79031a565bc59900c24b5ad5043e",
+    "vault_truth/olliewoods_shorts/tKWGuuI5TU4/student-chopround3_A_absolute-fold0.npy": "295ac5dd922acb93201169e3b0383877eb4aa43c4091d245be205283c3eeaa14",
+    "vault_truth/olliewoods_shorts/tKWGuuI5TU4/student-chopround3_A_absolute-fold1.npy": "c6f00ec00c9b25efe09708c5f15b78b03463ace4134656bcb13fe86eff454979"
+  },
+  "previous_openings": [
+    {
+      "timestamp": "2026-10-03T16:15:49.131027+00:00",
+      "command": "/home/ericshim/groovemap/.venv/bin/python tools/gpu/vault_absolute.py run --plan scores/chops/chopround3/plan.json --arm A",
+      "model_tag": "chopround3_A_absolute",
+      "opening_id": "cd068aac75184c65ae983babf3e5a373",
+      "pid": 184058,
+      "outcome": "failed after truth generation, before inference/scoring: the write guard blocked numba JIT cache writes from librosa (\"cannot cache function ... no locator available\"); fixed by NUMBA_CACHE_DIR in a guard-allowed folder (and feature() tmp-file path allowed). Outputs preserved in scores/chops/chopround3/vault_absolute.attempt1-failed and vault_truth.attempt1/. Rerun approved."
+    }
+  ],
+  "plan": "chopround3",
+  "arm": "A",
+  "model_tag": "chopround3_A_absolute",
+  "opening_id": "e07d4c643ea545fc8deca1fdec374f64",
+  "vault_log_row": {
+    "timestamp": "2026-10-03T16:51:26.799718+00:00",
+    "command": "/home/ericshim/groovemap/.venv/bin/python tools/gpu/vault_absolute.py run --plan scores/chops/chopround3/plan.json --arm A",
+    "model_tag": "chopround3_A_absolute",
+    "opening_id": "e07d4c643ea545fc8deca1fdec374f64",
+    "pid": 226642
+  },
+  "excluded": {
+    "mixed_performance": {
+      "6CLJH8YJtFM": {
+        "video": "6CLJH8YJtFM",
+        "slug": "larnell-lewis-drum-solo-transcription-change-your-mind-6CLJH8YJtFM",
+        "train_peers": [
+          "K_AtZoNIoKo",
+          "N0PXFlgigjw",
+          "ZsMtIfjkubo"
+        ],
+        "reason": "excluded: train peer K_AtZoNIoKo N0PXFlgigjw ZsMtIfjkubo"
+      },
+      "GAA07M1brJw": {
+        "video": "GAA07M1brJw",
+        "slug": "jojo-mayer-transcription-drum-solo-notation-GAA07M1brJw",
+        "train_peers": [
+          "qLi8dFevOF0"
+        ],
+        "reason": "excluded: train peer qLi8dFevOF0"
+      },
+      "LAdCiQAb-C0": {
+        "video": "LAdCiQAb-C0",
+        "slug": "j-rod-sullivan-your-success-full-transcription-LAdCiQAb-C0",
+        "train_peers": [
+          "bd17mxbLaNE"
+        ],
+        "reason": "excluded: train peer bd17mxbLaNE"
+      },
+      "ROdoBlEcfcM": {
+        "video": "ROdoBlEcfcM",
+        "slug": "solved-jojo-mayer-secret-cross-stick-groove-ROdoBlEcfcM",
+        "train_peers": [
+          "qLi8dFevOF0"
+        ],
+        "reason": "excluded: train peer qLi8dFevOF0"
+      }
+    },
+    "manual": {
+      "xH-pMgRZWCA": {
+        "video": "xH-pMgRZWCA",
+        "channel": "olliewoods_shorts",
+        "reason": "Eric Moore II Short; audio inconclusive vs train 9juoKgimeR4 (and vault Ikg4P3F_Wj8, 8AHvVFQ0_To, JG2xMCBwL1Y); may be the same performance as a train song",
+        "evidence": "WSL scratch/dedup_ollie/groups.json (inconclusive pairs)"
+      },
+      "YytKWBpYIyM": {
+        "video": "YytKWBpYIyM",
+        "channel": "olliewoods_shorts",
+        "reason": "audio-confirmed same performance as cDqw_3-F0Ag, grouped with xH-pMgRZWCA by the ambiguous-together rule; same train-peer risk",
+        "evidence": "WSL scratch/dedup_ollie/groups.json"
+      },
+      "cDqw_3-F0Ag": {
+        "video": "cDqw_3-F0Ag",
+        "channel": "olliewoods_shorts",
+        "reason": "audio-confirmed same performance as YytKWBpYIyM; same train-peer risk",
+        "evidence": "WSL scratch/dedup_ollie/groups.json"
+      }
+    }
+  },
+  "development": {
+    "channels": [
+      "moyin",
+      "dailychops",
+      "olliewoods",
+      "alexblack",
+      "olliewoods_shorts"
+    ],
+    "strict_held_out_fast_f1_percent": {
+      "kick": 83.03,
+      "snare": 82.42,
+      "tom": 82.89
+    },
+    "provenance": "user supplied frozen chop development result; not recomputed here"
+  },
+  "ensemble": "seed mean per fold, then fold mean",
+  "device": {
+    "device": "cuda",
+    "reason": "14.6 GiB free; capped at 2 GiB",
+    "cpu_check": {
+      "checked": true,
+      "songs": {
+        "gergo-borlai-drum-solo-transcription-funk-drum-solo-8iCRbuU-JnE": {
+          "student_fold0": {
+            "max_abs": 0.0005376338958740234,
+            "mean_abs": 6.501271855086088e-06,
+            "peak_frames_differ": 1
+          },
+          "student_fold1": {
+            "max_abs": 0.000590980052947998,
+            "mean_abs": 4.959510533808498e-06,
+            "peak_frames_differ": 0
+          }
+        },
+        "robert-sput-searight-transcription-actual-proof-D1GRAVLM54M": {
+          "student_fold0": {
+            "max_abs": 0.000459134578704834,
+            "mean_abs": 5.489432624017354e-06,
+            "peak_frames_differ": 0
+          },
+          "student_fold1": {
+            "max_abs": 0.0005818605422973633,
+            "mean_abs": 4.789955710293725e-06,
+            "peak_frames_differ": 2
+          }
+        },
+        "2w8zYUzZmyw": {
+          "student_fold0": {
+            "max_abs": 0.00020891427993774414,
+            "mean_abs": 3.550759174686391e-06,
+            "peak_frames_differ": 0
+          },
+          "student_fold1": {
+            "max_abs": 0.00024953484535217285,
+            "mean_abs": 3.743318757187808e-06,
+            "peak_frames_differ": 0
+          },
+          "mix": {
+            "max_abs": 0.0003846585750579834,
+            "mean_abs": 6.663843578280648e-06
+          }
+        },
+        "5JKuX18DXXo": {
+          "student_fold0": {
+            "max_abs": 0.0004279017448425293,
+            "mean_abs": 4.892945071333088e-06,
+            "peak_frames_differ": 0
+          },
+          "student_fold1": {
+            "max_abs": 0.0005709528923034668,
+            "mean_abs": 5.6852950365282595e-06,
+            "peak_frames_differ": 0
+          },
+          "mix": {
+            "max_abs": 0.0006111562252044678,
+            "mean_abs": 9.543055057292804e-06
+          }
+        }
+      },
+      "max_abs": 0.0006111562252044678
+    }
+  },
+  "inputs_sha256": "7c5159b82555284ef91d4527d59db8654f01d2a80c584172ee52cf9938a0863c"
+}

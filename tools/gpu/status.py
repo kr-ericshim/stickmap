@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""groovemap WSL 작업 현황 TUI. sync.sh push가 ~/.local/bin/gm-status로 설치한다.
+"""groovemap WSL 작업 현황 TUI (학습·예측·채점, 수집·판독, 작업별 CPU). sync.sh push가 ~/.local/bin/gm-status로 설치한다.
 
 Usage: gm-status [--once] [-n SECONDS] [--all] [--queue-log FILE]
 터미널에서는 실시간 화면(q 종료, r 새로고침, a 모든 태그, ↑↓ 스크롤)을 띄우고,
@@ -34,8 +34,31 @@ LAUNCHER_VALUE_OPTS = {"--jobs", "--parallel", "--only", "--queue-log"}
 @dataclass
 class Proc:
     pid: int
+    ppid: int
     secs: int
     argv: list[str]
+
+
+@dataclass
+class CpuGroup:
+    label: str
+    kind: str
+    cores: float        # CPU cores in use over the last sample window
+    count: int
+    rss: float          # GiB
+    secs: int           # age of the oldest process
+
+
+@dataclass
+class HarvestJob:
+    kind: str           # fetch / read
+    channel: str
+    state: str          # run / ok / bad / stopped
+    started: float
+    finished: float
+    done: int
+    total: int | None
+    results: dict[str, int] = field(default_factory=dict)
 
 
 @dataclass
@@ -80,6 +103,9 @@ class Snapshot:
     gpu: tuple[float, float, float, float] | None
     load: float
     cpus: int
+    mem: tuple[float, float] | None             # used, total GiB
+    cpu_groups: list[CpuGroup]
+    harvest: list[HarvestJob]
     tags: list[Tag]
     global_total: int
     other: list[tuple[str, str, int, int]]      # script, output, count, max secs
@@ -97,15 +123,15 @@ def opt(argv: list[str], name: str) -> str | None:
 
 def processes() -> list[Proc]:
     try:
-        out = subprocess.run(["ps", "-eo", "pid=,etimes=,args="], capture_output=True, text=True,
+        out = subprocess.run(["ps", "-eo", "pid=,ppid=,etimes=,args="], capture_output=True, text=True,
                              timeout=5).stdout
     except (OSError, subprocess.SubprocessError):
         return []
     procs = []
     for line in out.splitlines():
-        parts = line.split(None, 2)
-        if len(parts) == 3 and parts[0].isdigit() and parts[1].isdigit():
-            procs.append(Proc(int(parts[0]), int(parts[1]), parts[2].split()))
+        parts = line.split(None, 3)
+        if len(parts) == 4 and all(x.isdigit() for x in parts[:3]):
+            procs.append(Proc(int(parts[0]), int(parts[1]), int(parts[2]), parts[3].split()))
     return procs
 
 
@@ -124,6 +150,139 @@ def env_of(pid: int, key: str) -> str | None:
     except OSError:
         pass
     return None
+
+
+# Scripts named for what they do; anything else shows its script or program name.
+KINDS = {"harvest_read.py": "판독", "batch.py": "판독", "harvest.py": "수집·분리", "train.py": "학습",
+         "predict.py": "예측", "gpu_predict.py": "예측", "prepare_score.py": "채점 준비",
+         "fill_score.py": "채점", "fill_seq.py": "채점", "global_score.py": "채점",
+         "score_tags.sh": "채점", "score_wsl.sh": "채점", "train_tags.py": "학습 큐"}
+WRAPPERS = {"harvest_job.py", "gm-status", "status.py"}
+LABEL_OPTS = ("--only", "--tag", "--channel")
+_cpu_prev: tuple[float, dict[int, int]] | None = None
+
+
+def cpu_ticks() -> dict[int, int]:
+    ticks = {}
+    for stat in Path("/proc").glob("[0-9]*/stat"):
+        try:
+            fields = stat.read_text().rsplit(")", 1)[1].split()
+            ticks[int(stat.parent.name)] = int(fields[11]) + int(fields[12])
+        except (OSError, IndexError, ValueError):
+            continue
+    return ticks
+
+
+def rss_gib(pid: int) -> float:
+    try:
+        for line in Path(f"/proc/{pid}/status").read_text().splitlines():
+            if line.startswith("VmRSS:"):
+                return int(line.split()[1]) / 1048576
+    except (OSError, ValueError, IndexError):
+        pass
+    return 0.0
+
+
+def cpu_groups(procs: list[Proc]) -> list[CpuGroup]:
+    """Cores used per job since the previous call, child processes folded into their script."""
+    global _cpu_prev
+    if not Path("/proc/self/stat").exists():
+        return []
+    if _cpu_prev is None or time.time() - _cpu_prev[0] > 60:
+        _cpu_prev = (time.time(), cpu_ticks())
+        time.sleep(0.5)
+    now, ticks = time.time(), cpu_ticks()
+    then, before = _cpu_prev
+    _cpu_prev = (now, ticks)
+    hz = os.sysconf("SC_CLK_TCK") if hasattr(os, "sysconf") else 100
+    span = max(now - then, 0.1)
+    by_pid = {p.pid: p for p in procs}
+
+    def owner(p: Proc) -> Proc | None:
+        seen = 0
+        while p is not None and seen < 50:
+            script = script_of(p.argv)
+            if script and Path(script).name not in WRAPPERS:
+                return p
+            p, seen = by_pid.get(p.ppid), seen + 1
+        return None
+
+    groups: dict[str, CpuGroup] = {}
+    for p in procs:
+        used = ticks.get(p.pid, 0) - before.get(p.pid, ticks.get(p.pid, 0))
+        if Path(script_of(p.argv)).name in WRAPPERS or (p.argv and Path(p.argv[0]).name == "watch"):
+            continue
+        head = owner(p)
+        if head is not None:
+            script = Path(script_of(head.argv)).name
+            extra = next((v for v in (opt(head.argv, o) for o in LABEL_OPTS) if v), "")
+            label, kind = (script + (" " + extra if extra else "")), KINDS.get(script, "")
+        else:
+            label, kind = Path(p.argv[0]).name if p.argv else str(p.pid), ""
+        g = groups.setdefault(label, CpuGroup(label, kind, 0.0, 0, 0.0, 0))
+        g.cores += max(used, 0) / hz / span
+        g.count += 1
+        g.secs = max(g.secs, p.secs)
+        if head is not None:
+            g.rss += rss_gib(p.pid)
+    busy = [g for g in groups.values() if g.cores >= 0.05]
+    return sorted(busy, key=lambda g: -g.cores)
+
+
+def mem_stats() -> tuple[float, float] | None:
+    info = {}
+    for line in read_text(Path("/proc/meminfo")).splitlines():
+        parts = line.split()
+        if len(parts) >= 2 and parts[1].isdigit():
+            info[parts[0].rstrip(":")] = int(parts[1])
+    if "MemTotal" not in info or "MemAvailable" not in info:
+        return None
+    return (info["MemTotal"] - info["MemAvailable"]) / 1048576, info["MemTotal"] / 1048576
+
+
+def harvest_jobs() -> list[HarvestJob]:
+    """Detached fetch/read jobs from tools/gpu/harvest_job.py: logs/harvest/{fetch,read}_ID.json + .log."""
+    import json
+    folder = ROOT / "logs" / "harvest"
+    jobs = []
+    for path in folder.glob("*_*.json") if folder.is_dir() else ():
+        kind = path.name.split("_", 1)[0]
+        if kind not in ("fetch", "read"):
+            continue
+        try:
+            state = json.loads(path.read_text())
+        except (OSError, ValueError):
+            continue
+        argv = [str(w) for w in state.get("command", [])]
+        if state.get("exit") is None:
+            alive = Path(f"/proc/{state.get('pid')}").exists() if Path("/proc").is_dir() else True
+            status = "run" if alive else "stopped"
+        else:
+            status = "ok" if state["exit"] == 0 else "bad"
+        ids = argv[argv.index("--ids") + 1:] if "--ids" in argv else []
+        ids = [w for w in ids[:next((i for i, w in enumerate(ids) if w.startswith("-")), len(ids))]]
+        total: int | None = len(ids) or None
+        if kind == "read" and "--latest-fetch" in argv and total is None:
+            pointer = read_text(folder / "latest_fetch.txt").strip()
+            try:
+                total = len(json.loads(read_text(ROOT / pointer)).get("videos", [])) or None
+            except ValueError:
+                pass
+        if status != "run" and state.get("videos") is not None:
+            total = len(state["videos"])
+        text = read_text(path.with_suffix(".log"))
+        results: dict[str, int] = {}
+        if kind == "read":
+            for m in re.finditer(r"^  (\w[\w ]*): strict ", text, re.M):
+                results[m.group(1)] = results.get(m.group(1), 0) + 1
+            done = sum(results.values())
+        else:
+            started = len(re.findall(r"^\[[^\]]+\] \S+ ", text, re.M))
+            done = started if status != "run" else max(0, started - 1)
+        jobs.append(HarvestJob(kind, opt(argv, "--only") or "", status, state.get("started", 0.0),
+                               state.get("finished") or 0.0, done, total, results))
+    jobs.sort(key=lambda j: j.started)
+    return jobs
 
 
 def gpu_stats() -> tuple[float, float, float, float] | None:
@@ -303,7 +462,8 @@ def collect(queue_log: str) -> Snapshot:
         load = os.getloadavg()[0]
     events.sort(key=lambda e: e[0])
     others = sorted(((s, o, len(v), max(v)) for (s, o), v in other.items()), key=lambda x: -x[3])
-    return Snapshot(time.time(), gpu, load, os.cpu_count() or 1, ordered, global_total, others, events)
+    return Snapshot(time.time(), gpu, load, os.cpu_count() or 1, mem_stats(), cpu_groups(procs), harvest_jobs(),
+                    ordered, global_total, others, events)
 
 
 # ---------------------------------------------------------------- layout
@@ -358,6 +518,13 @@ def cell(state: str, frame: int, text: str = "") -> tuple[str, str]:
     return "-", "dim"
 
 
+HARVEST_KIND = {"fetch": "수집·분리", "read": "판독"}
+
+
+def progress(j: HarvestJob) -> str:
+    return f"{j.done}/{j.total}" if j.total else f"{j.done}개"
+
+
 def tag_status(t: Tag) -> tuple[str, str]:
     if t.scoring:
         return f"채점 중 · {dur(t.scoring_secs)}째", "run"
@@ -392,12 +559,18 @@ def render(s: Snapshot, frame: int, cols: int, show_all: bool, interval: float, 
     waiting = [t for t in s.tags if not (t.training or t.predicting or t.scoring)
                and ((t.queued_score and t.trained and not t.scored_at) or (t.queued_train and not t.folds))]
     now: list[tuple[str, str]] = [(" 지금  ", "head")]
-    if active:
-        for i, t in enumerate(active):
-            text, style = tag_status(t)
-            now += [(", " if i else "", "dim"), (t.name, "key"), (" " + text.split(" · ")[0], style)]
+    items: list[list[tuple[str, str]]] = []
+    for t in active:
+        text, style = tag_status(t)
+        items.append([(t.name, "key"), (" " + text.split(" · ")[0], style)])
+    for j in s.harvest:
+        if j.state == "run":
+            items.append([(j.channel or "전체", "key"), (f" {HARVEST_KIND[j.kind]} 중 {progress(j)}", "run")])
+    if items:
+        for i, item in enumerate(items):
+            now += [(", ", "dim")] * bool(i) + item
     else:
-        now.append(("실행 중인 학습·채점 없음", "dim"))
+        now.append(("실행 중인 학습·채점·판독 없음", "dim"))
     if waiting:
         now += [("   다음 ", "dim"), (", ".join(t.name for t in waiting), "wait")]
     lines += [[], now, []]
@@ -413,7 +586,32 @@ def render(s: Snapshot, frame: int, cols: int, show_all: bool, interval: float, 
     frac = s.load / s.cpus
     lines.append([(pad(" CPU", 8), "head"), (bar(frac, bw), level(frac)),
                   (f" 부하 {s.load:.1f} / {s.cpus}코어", "")])
+    if s.mem:
+        used, total = s.mem
+        lines.append([(pad(" RAM", 8), "head"), (bar(used / total, bw), level(used / total)),
+                      (f" {used:4.1f} / {total:.1f} GiB", "")])
+    if s.cpu_groups:
+        lines.append([(pad("", 8), ""), ("CPU 쓰는 작업", "dim")])
+        for g in s.cpu_groups[:6]:
+            lines.append([(pad("", 8), ""), (pad(f"{g.cores:4.1f}코어", 9, right=True), level(g.cores / s.cpus)),
+                          ("  " + pad(g.kind, 10), "run" if g.kind else "dim"), (clip(g.label, 34), "key"),
+                          (f" ×{g.count}" if g.count > 1 else "", "dim"),
+                          (f"  {g.rss:.1f} GiB" if g.rss >= 0.1 else "", "dim"), (f"  {dur(g.secs)}째", "dim")])
     lines.append([])
+
+    shown_jobs = [j for j in s.harvest if j.state == "run"] + [j for j in s.harvest if j.state != "run"][-3:]
+    if shown_jobs:
+        lines.append([(" 수집·판독", "head")])
+        for j in sorted(shown_jobs, key=lambda j: j.started):
+            text, style = cell(j.state if j.state != "stopped" else "bad", frame)
+            when = (f"{dur(int(s.taken - j.started))}째" if j.state == "run"
+                    else "기록 없이 멈춤" if j.state == "stopped"
+                    else time.strftime("%H:%M", time.localtime(j.finished)) + (" 실패" if j.state == "bad" else " 끝"))
+            summary = " · ".join(f"{k} {v}" for k, v in sorted(j.results.items(), key=lambda kv: -kv[1]))
+            lines.append([("  " + pad(text, 3), style), (pad(HARVEST_KIND[j.kind], 10), ""),
+                          (pad(clip(j.channel or "전체", 12), 13), "key"), (pad(progress(j), 8), style),
+                          (pad(when, 11), "run" if j.state == "run" else "dim"), (summary, "dim")])
+        lines.append([])
 
     cols_spec = [("태그", 14, False), ("fold0", 7, False), ("fold1", 7, False), ("fold2", 7, False),
                  ("예측", 6, False), ("준비", 6, False), ("커버", 6, False), ("솔로", 6, False),

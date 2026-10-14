@@ -4,7 +4,7 @@ Only notes inside accepted systems count, and a detection outside them is not a
 false positive (see tools/truth_video/evaluate.py). The truth marks what the
 transcriber wrote; unmarked ghost notes or articulations are not negatives.
 
-    uv run python tools/harvest/score.py [--tier scoring] [--only atthedrum yeol]
+    .venv/bin/python tools/harvest/score.py [--tier scoring] [--only atthedrum yeol]
 """
 
 from __future__ import annotations
@@ -20,15 +20,19 @@ sys.path.insert(0, str(ROOT / "tools" / "truth_video"))
 sys.path.insert(0, str(Path(__file__).parent))
 
 import harvest  # noqa: E402
+import vault  # noqa: E402
 from align import match  # noqa: E402
 from evaluate import detect, family  # noqa: E402
 
 FAMILIES = ("kick", "snare", "tom", "hihat", "cymbal")
 
 
-def songs(only: list[str] | None) -> list[dict]:
-    rows = [r for r in harvest.manifest().values() if r.get("status") in ("read", "compacted")]
-    return [r for r in rows if not only or r["channel"] in only]
+def songs(only: list[str] | None, final: bool = False, loose: bool = False) -> list[dict]:
+    seal = vault.Vault()
+    statuses = ("read", "compacted", "unreadable", "fetched") if loose else ("read", "compacted")
+    rows = [r for r in seal.rows.values() if r.get("status") in statuses
+            and (not only or r["channel"] in only) and seal.contains_song(r) == final]
+    return vault.filter_final(rows, seal=seal)[0] if final else rows
 
 
 def load(folder: Path, tier: str) -> tuple[list[dict], list[list[float]]]:
@@ -54,14 +58,18 @@ def tally(truth: list[dict], hits, intervals) -> dict:
     return out
 
 
-def main() -> None:
+def main(model_tag: str | None = None, command: str | None = None) -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--tier", choices=["strict", "scoring"], default="strict")
     parser.add_argument("--only", nargs="*")
+    parser.add_argument("--final", action="store_true", help="open and score ONLY the sealed test vault (logged)")
+    parser.add_argument("--model-tag", help="model identity for the vault opening log (default: FT_TAG or detector)")
     args = parser.parse_args()
+    if args.final:
+        vault.open_final(vault.model_tag("evaluate:detect", model_tag or args.model_tag), command)
     totals: dict[str, Counter] = defaultdict(Counter)
     positions: dict[str, Counter] = defaultdict(Counter)
-    for row in songs(args.only):
+    for row in songs(args.only, final=args.final):
         song = harvest.SONGS / row["slug"]
         try:
             truth, intervals = load(song / "truth", args.tier)

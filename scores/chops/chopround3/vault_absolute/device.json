@@ -1,0 +1,66 @@
+{
+  "device": "cuda",
+  "reason": "14.6 GiB free; capped at 2 GiB",
+  "cpu_check": {
+    "checked": true,
+    "songs": {
+      "gergo-borlai-drum-solo-transcription-funk-drum-solo-8iCRbuU-JnE": {
+        "student_fold0": {
+          "max_abs": 0.0005376338958740234,
+          "mean_abs": 6.501271855086088e-06,
+          "peak_frames_differ": 1
+        },
+        "student_fold1": {
+          "max_abs": 0.000590980052947998,
+          "mean_abs": 4.959510533808498e-06,
+          "peak_frames_differ": 0
+        }
+      },
+      "robert-sput-searight-transcription-actual-proof-D1GRAVLM54M": {
+        "student_fold0": {
+          "max_abs": 0.000459134578704834,
+          "mean_abs": 5.489432624017354e-06,
+          "peak_frames_differ": 0
+        },
+        "student_fold1": {
+          "max_abs": 0.0005818605422973633,
+          "mean_abs": 4.789955710293725e-06,
+          "peak_frames_differ": 2
+        }
+      },
+      "2w8zYUzZmyw": {
+        "student_fold0": {
+          "max_abs": 0.00020891427993774414,
+          "mean_abs": 3.550759174686391e-06,
+          "peak_frames_differ": 0
+        },
+        "student_fold1": {
+          "max_abs": 0.00024953484535217285,
+          "mean_abs": 3.743318757187808e-06,
+          "peak_frames_differ": 0
+        },
+        "mix": {
+          "max_abs": 0.0003846585750579834,
+          "mean_abs": 6.663843578280648e-06
+        }
+      },
+      "5JKuX18DXXo": {
+        "student_fold0": {
+          "max_abs": 0.0004279017448425293,
+          "mean_abs": 4.892945071333088e-06,
+          "peak_frames_differ": 0
+        },
+        "student_fold1": {
+          "max_abs": 0.0005709528923034668,
+          "mean_abs": 5.6852950365282595e-06,
+          "peak_frames_differ": 0
+        },
+        "mix": {
+          "max_abs": 0.0006111562252044678,
+          "mean_abs": 9.543055057292804e-06
+        }
+      }
+    },
+    "max_abs": 0.0006111562252044678
+  }
+}

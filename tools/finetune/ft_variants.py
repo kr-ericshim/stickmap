@@ -48,7 +48,10 @@ def full(song: Path, act: np.ndarray, name: str, sensitivity: float = 1.0):
     response = snare(song, act, name)
     act, mix = act[:n], mix[:n]
     thr = [t / sensitivity for t in models.DEFAULT_THRESHOLDS]
-    thr[2] *= float(os.environ.get("FT_TOM_SCALE", "1"))  # a stricter tom threshold for a recalibrated model
+    # Threshold multipliers (larger = stricter), without changing activation,
+    # mix, snare-response or rescue calibration. Defaults preserve old scores.
+    for column, inst in enumerate(models.ADTOF_CLASSES):
+        thr[column] *= float(os.environ.get(f"FT_{inst.upper()}_SCALE", "1"))
     attacks = np.load(song / "attacks.htdemucs.npy")
     hits = models.pick_hits(act, thr, mix=mix, snare=response)
     hits = fill_snares(tom_runs(hits, act, mix, attacks, thr), act, response, attacks)
