@@ -321,7 +321,8 @@ def create_plan(name: str, directory: Path, *, arms=DEFAULT_ARMS, folds=2, steps
         plan['absent_weak_reviews'] = sorted(set(plan['absent_weak_reviews']))
         for filename in ('tools/finetune/weak_set.py', 'tools/finetune/weak_order.py',
                          'tools/finetune/WEAK_ORDER.md', 'tools/gpu/chops_recipe/weakorder.py'):
-            hashes[filename] = sha(ROOT / filename)
+            if (ROOT / filename).exists():  # WEAK_ORDER.md is a local note, not in the public repository
+                hashes[filename] = sha(ROOT / filename)
     plan['promotion'] = promotion_policy(plan)
     print_train_policy(plan)
     for e in tags:
