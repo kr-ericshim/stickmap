@@ -13,3 +13,12 @@ truth/
 .claude/
 reports/
 tools/truth_video/tests/fixtures/
+
+# 개인 실험 기록 (공개본에서 제외)
+docs/kit-adaptation.md
+docs/ux-critique.md
+docs/notation-readability.md
+docs/notation-metrics.json
+docs/notation-before-after.png
+docs/time-signature-verification.md
+tools/finetune/WEAK_ORDER.md
