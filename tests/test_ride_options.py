@@ -33,3 +33,9 @@ def test_ride_options_default_and_legacy(tmp_path):
     assert options["ride_runs"] is True
     assert options["grid"] == 8
     assert options["sound_names"] == {"cymbal-1": "ride_bell"}
+
+
+def test_tom_rescue_defaults_on(tmp_path):
+    assert pipeline.Options().tom_rescue is True
+    assert OptionsPatch().tom_rescue is True
+    assert library.load_options(tmp_path)["tom_rescue"] is True

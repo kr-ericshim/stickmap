@@ -40,11 +40,13 @@ class Options:
     sensitivity: float = 1  # divides the default thresholds: 2 picks up hits half as strong
     ride_runs: bool = True
     cymbal_veto: bool = True
+    tom_rescue: bool = True  # bring back snare+tom and kick+tom unisons the snare-echo rule drops (tom_rescue.py)
     sound_names: dict[str, str] = field(default_factory=dict)  # the user's names for the song's sound groups (kit.py)
     pdf: bool = True
     preview: bool = False
     force: bool = False
     refresh_stale: bool = False  # remake caches whose code changed; off keeps re-scoring from caches fast
+    web_hints: bool = True
 
     def __post_init__(self) -> None:
         if self.time_signature is not None:
@@ -198,6 +200,11 @@ def run(
             # Quiet snares in fills only where the user has not named the song's sounds: an
             # attack they sorted into a group of its own must not come back as a snare.
             hits = fill_snares(hits, activations, np.load(snare_npy), attacks)
+            if opts.tom_rescue:
+                from .tom_rescue import rescue
+
+                thresholds = opts.thresholds or [t / opts.sensitivity for t in models.DEFAULT_THRESHOLDS]
+                hits = rescue(hits, activations, np.load(cache_paths(song_dir, opts)["mix"]), np.load(snare_npy), thresholds, log)
         hits = tom_sizes(drums, hits)
     if opts.ride_runs:
         cymbal_count = sum(hit.inst == "cymbal" for hit in hits)
@@ -225,6 +232,9 @@ def run(
 
     common = dict(title=display_title(meta, song_dir / "meta.json"), subtitle=meta.uploader, grid=opts.grid,
                   triplets=opts.triplets, beat_shift=opts.beat_shift, tempo_scale=opts.tempo_scale)
+    from . import web_hints
+
+    hint = web_hints.load_or_fetch(song_dir, meta, common["title"]) if opts.web_hints else None
     if opts.time_signature is not None:
         from .signature_quantize import quantize_signature
 
@@ -235,13 +245,32 @@ def run(
         )
     else:
         score = quantize(hits, grid["beats"], grid["downbeats"], attacks=attacks, meter=opts.meter, odd_bars=opts.odd_bars, **common)
+        if opts.meter in (None, 4) and opts.odd_bars == "none":
+            from .bar_phase import bar_start_candidates
+
+            try:
+                score.bar_start_candidates = bar_start_candidates(
+                    hits, grid["beats"], grid["downbeats"], beat_shift=opts.beat_shift, tempo_scale=opts.tempo_scale)
+            except ValueError as error:  # candidates are optional; the score stands without them
+                log(f"bar start candidates skipped: {error}")
         if opts.meter is None:
             from .meter_suggestion import suggest_signature
 
             score.time_signature_suggestion = suggest_signature(
                 score, activations, np.load(attacks_npy) if attacks_npy.exists() else [],
                 grid["beats"], grid["downbeats"],
+                web_hint=hint.get("signature") if isinstance(hint, dict) else None,
+                source=web_hints.source(hint) if isinstance(hint, dict) and "url" in hint else None,
             )
+
+    if hint:
+        try:
+            score.web_hint = {"source": "Songsterr", "common": hint.get("common", []),
+                              **{key: hint[key] for key in ("url", "artist", "title", "signature", "bpm")}}
+            score.tempo_suggestion = web_hints.suggest_tempo(hint, score.tempo)
+        except Exception as error:  # a hint is optional; a malformed one must not stop the score
+            log(f"web hint ignored: {error!r}")
+            score.web_hint = score.tempo_suggestion = None
 
     if score.merged_strokes:
         log(f"quantization: {score.merged_strokes} strokes merged into occupied slots")

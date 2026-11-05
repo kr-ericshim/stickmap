@@ -577,6 +577,19 @@ def _half_plan(
     return selected
 
 
+def bar_grid(
+    hits: Sequence[Hit], beats: Sequence[float], downbeats: Sequence[float], *,
+    meter: int | None = None, odd_bars: str = "none", beat_shift: float = 0, tempo_scale: float = 1,
+) -> tuple[list[float], list[int]]:
+    """The beats `quantize` counts and the beat indices where its bars start."""
+    beats = _rescale(_recount(hits, _steady_beats(beats)), downbeats, tempo_scale)
+    if fraction := beat_shift % 1:  # part of a beat later: those points between beats become the beats
+        beats = [a + fraction * (b - a) for a, b in zip(beats, beats[1:])]
+    if len(beats) < 2:
+        raise ValueError("At least two beats are required")
+    return beats, _boundaries(beats, downbeats, meter, odd_bars, floor(beat_shift), _snare_parity(hits, beats))
+
+
 def quantize(
     hits: Sequence[Hit], beats: Sequence[float], downbeats: Sequence[float], *,
     title: str = "", subtitle: str = "", grid: int = 16,
@@ -609,12 +622,8 @@ def quantize(
 
     if odd_bars not in ODD_BAR_MODES or tempo_scale not in (0.5, 1, 2) or (4 * beat_shift) % 1:
         raise ValueError("odd_bars: none, auto or detected; tempo_scale: 0.5, 1 or 2; beat_shift: steps of 0.25")
-    beats = _rescale(_recount(hits, _steady_beats(beats)), downbeats, tempo_scale)
-    if fraction := beat_shift % 1:  # part of a beat later: those points between beats become the beats
-        beats = [a + fraction * (b - a) for a, b in zip(beats, beats[1:])]
-    if len(beats) < 2:
-        raise ValueError("At least two beats are required")
-    boundaries = _boundaries(beats, downbeats, meter, odd_bars, floor(beat_shift), _snare_parity(hits, beats))
+    beats, boundaries = bar_grid(hits, beats, downbeats, meter=meter, odd_bars=odd_bars,
+                                 beat_shift=beat_shift, tempo_scale=tempo_scale)
     first, last = boundaries[0], boundaries[-1]
     left_interval, right_interval = beats[1] - beats[0], beats[-1] - beats[-2]
     times = [

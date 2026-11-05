@@ -7,12 +7,31 @@ from collections.abc import Sequence
 
 import numpy as np
 
-from .metre import Signature
+from .metre import Signature, parse_signatures
 from .pulse import FPS, _autocorrelation, _evidence, _period
 from .score import Score
 
 
-def suggest_signature(score: Score, activations: np.ndarray, attacks: Sequence[float], beats: Sequence[float], downbeats: Sequence[float]) -> dict | None:
+def suggest_signature(score: Score, activations: np.ndarray, attacks: Sequence[float], beats: Sequence[float], downbeats: Sequence[float],
+                      web_hint: str | None = None, source: dict | None = None) -> dict | None:
+    if web_hint:
+        try:
+            signatures = parse_signatures(web_hint)
+        except ValueError:
+            signatures = ()
+        if signatures and web_hint != "4/4":
+            current = {(bar.beats, bar.denominator) for bar in score.bars}
+            if current and current != {(s.numerator, s.denominator) for s in signatures}:
+                audio = (_suggest_audio(score, activations, attacks, beats, downbeats, candidate=web_hint)
+                         if len(signatures) == 1 else None)
+                return {**(audio or {}), "time_signature": web_hint,
+                        "reasons": ["web_hint", *((audio or {}).get("reasons", []))],
+                        "audio_agrees": audio is not None, "source": source or {"name": "Songsterr"}}
+    return _suggest_audio(score, activations, attacks, beats, downbeats)
+
+
+def _suggest_audio(score: Score, activations: np.ndarray, attacks: Sequence[float], beats: Sequence[float],
+                   downbeats: Sequence[float], candidate: str | None = None) -> dict | None:
     if len(score.bars) < 4 or any(bar.beats != 4 for bar in score.bars) or len(beats) < 8 or len(downbeats) < 4:
         return None
     positions = np.interp(downbeats, beats, np.arange(len(beats)))
@@ -27,7 +46,8 @@ def suggest_signature(score: Score, activations: np.ndarray, attacks: Sequence[f
     ac = _autocorrelation(body)
     current = float(np.interp(bar_seconds * FPS, np.arange(len(ac)), ac))
     hint = re.search(r"(?<!\d)((?:[1-9]|[12][0-9]|3[0-2])/(?:16|8|4))(?!\d)", score.title)
-    candidates = [hint[1]] if hint and hint[1] != "4/4" else ["3/4", "5/4", "6/8", "7/8", "9/8", "12/8"]
+    candidates = [candidate] if candidate else [hint[1]] if hint and hint[1] != "4/4" else ["3/4", "5/4", "6/8", "7/8", "9/8", "12/8"]
+    has_hint = bool(candidate or hint)
     ranked = []
     for value in candidates:
         signature = Signature.parse(value)
@@ -41,12 +61,12 @@ def suggest_signature(score: Score, activations: np.ndarray, attacks: Sequence[f
         return None
     ranked.sort(reverse=True)
     repetition, value, length = ranked[0]
-    if repetition < (0.06 if hint else 0.2) or repetition - current < (0.04 if hint else 0.12):
+    if repetition < (0.06 if has_hint else 0.2) or repetition - current < (0.04 if has_hint else 0.12):
         return None
-    if not hint and len(ranked) > 1 and repetition - ranked[1][0] < 0.06:
+    if not has_hint and len(ranked) > 1 and repetition - ranked[1][0] < 0.06:
         return None  # audio alone often cannot distinguish related counting levels
     reasons = ["erratic_downbeats", "bar_period_mismatch"]
-    if hint:
+    if hint and not candidate:
         reasons.insert(0, "title_hint")
     return {"time_signature": value, "reasons": reasons, "suggested_bar_seconds": round(length, 4),
             "current_bar_seconds": round(bar_seconds, 4), "repetition": round(repetition, 4),

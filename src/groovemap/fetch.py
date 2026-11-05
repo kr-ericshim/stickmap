@@ -25,6 +25,8 @@ class SongMeta:
     duration: float = 0.0
     video_id: str = ""
     fingerprint: str = ""  # content hash of a local source file
+    artist: str = ""
+    track: str = ""
 
     def save(self, path: Path) -> None:
         path.write_text(json.dumps(asdict(self), ensure_ascii=False, indent=1), encoding="utf-8")
@@ -79,6 +81,8 @@ def _meta_from_info(info: dict) -> SongMeta:
         uploader=info.get("channel") or info.get("uploader") or "",
         duration=float(info.get("duration") or 0),
         video_id=video_id,
+        artist=info.get("artist") or info.get("creator") or "",
+        track=info.get("track") or "",
     )
 
 

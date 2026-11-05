@@ -48,6 +48,7 @@ class OptionsPatch(BaseModel):
     sensitivity: Annotated[float, Field(ge=0.5, le=5)] = 1
     ride_runs: bool = True
     cymbal_veto: bool = True
+    tom_rescue: bool = True
     sound_names: dict[str, str] = Field(default_factory=dict)
 
     @field_validator("time_signature")

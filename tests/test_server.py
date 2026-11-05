@@ -866,7 +866,8 @@ def test_pipeline_progress_real_run_and_unchanged_logs(tmp_path, monkeypatch):
         ("score", "running"), ("score", "done"),
     ]
     assert logs == ["drum separation (htdemucs, cpu): cached", "beat tracking: cached",
-                    "drum transcription (on drums): cached", "ride runs: 0 of 0 cymbal hits -> ride",
+                    "drum transcription (on drums): cached", "tom rescue: 0 of 0 candidates",
+                    "ride runs: 0 of 0 cymbal hits -> ride",
                     "cymbal veto: 0 of 0 ride runs -> cymbal"]
     events.clear()
     pipeline.run(path, meta, pipeline.Options(pdf=False, force=True), log=lambda line: None,

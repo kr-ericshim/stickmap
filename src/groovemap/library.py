@@ -31,6 +31,7 @@ DEFAULT_OPTIONS = {
     "sensitivity": 1,
     "ride_runs": True,
     "cymbal_veto": True,
+    "tom_rescue": True,
     "sound_names": {},  # sound group id -> instrument or "ignore"; replayed from soundmap.json (see kit.py)
 }
 

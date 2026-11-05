@@ -108,6 +108,9 @@ class Score:
 
     pulse: dict | None = None  # explicit-signature pulse diagnostics; absent in legacy scores
     time_signature_suggestion: dict | None = None
+    tempo_suggestion: dict | None = None
+    web_hint: dict | None = None
+    bar_start_candidates: list[dict] | None = None  # one-click alternatives to the bar start, never applied
 
     def to_json(self) -> str:
         raw = asdict(self)
@@ -116,6 +119,12 @@ class Score:
             raw.pop("pulse")
         if self.time_signature_suggestion is None:
             raw.pop("time_signature_suggestion")
+        if self.tempo_suggestion is None:
+            raw.pop("tempo_suggestion")
+        if self.web_hint is None:
+            raw.pop("web_hint")
+        if self.bar_start_candidates is None:
+            raw.pop("bar_start_candidates")
         for bar in raw["bars"]:
             for note in bar["notes"]:
                 if note["raw_time"] is None:

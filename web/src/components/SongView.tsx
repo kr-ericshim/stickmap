@@ -306,6 +306,7 @@ export function SongView({ song, onChange, onDeleted, onRetranscribe, onError }:
   const signature = song.options.time_signature
   const signatures = SIGNATURES.includes(signature as TimeSignature) || !signature ? SIGNATURES : [...SIGNATURES, signature]
   const suggestion = signature ? undefined : song.score.time_signature_suggestion
+  const tempoSuggestion = song.options.tempo_scale === 1 ? song.score.tempo_suggestion : undefined
   // A new signature redefines what a beat is, so the other bar corrections start over.
   const setSignature = (time_signature: TimeSignature | null) =>
     setOption({ time_signature, beat_shift: 0, tempo_scale: 1, meter_changes: [] })
@@ -317,6 +318,8 @@ export function SongView({ song, onChange, onDeleted, onRetranscribe, onError }:
     ? Math.max(...signature.split('+').map((value) => Number(value.split('/')[0])))
     : Math.max(...song.score.bars.map((bar) => bar.beats), 1)
   const reach = Math.min(11, barBeats - 1)
+  // Shown for the score as it stands; each candidate is an absolute bar start.
+  const barStartCandidates = (song.score.bar_start_candidates ?? []).filter((c) => c.beat_shift !== song.options.beat_shift)
   const shiftChoices = [...new Set([...Array.from({ length: 2 * reach + 1 }, (_, i) => i - reach), song.options.beat_shift])]
     .sort((a, b) => a - b)
   const barAt = (time: number) => {
@@ -333,6 +336,7 @@ export function SongView({ song, onChange, onDeleted, onRetranscribe, onError }:
 
   const options = song.options
   const rideRuns = options.ride_runs ?? true // songs saved before the option read as on
+  const tomRescue = options.tom_rescue ?? true
   // Reading corrections away from the defaults the server starts every song with (library.DEFAULT_OPTIONS).
   const changedSettings = [
     options.grid !== 16,
@@ -345,6 +349,7 @@ export function SongView({ song, onChange, onDeleted, onRetranscribe, onError }:
     options.beat_shift !== 0,
     options.odd_bars !== 'none',
     rideRuns === false,
+    tomRescue === false,
   ].filter(Boolean).length
   const soundNames = Object.keys(options.sound_names ?? {}).length
   const videoShown = showVideo && videoMode !== 'off'
@@ -457,6 +462,34 @@ export function SongView({ song, onChange, onDeleted, onRetranscribe, onError }:
               >
                 {suggestion.time_signature}로 바꾸기
               </button>
+            </p>
+          )}
+
+          {tempoSuggestion && (
+            <p className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+              <span>
+                <a href={tempoSuggestion.source.url} target="_blank" rel="noreferrer" className="underline underline-offset-2">Songsterr</a>
+                {' '}기준 템포가 {tempoSuggestion.web_bpm} BPM일 수 있습니다
+              </span>
+              <button
+                disabled={busy}
+                onClick={() => setOption({ tempo_scale: tempoSuggestion.tempo_scale, beat_shift: 0 })}
+                className="rounded-full bg-brass/20 px-2.5 py-0.5 font-medium text-brass-deep hover:bg-brass/30 disabled:opacity-50"
+              >
+                ×{tempoSuggestion.tempo_scale}로 보기
+              </button>
+            </p>
+          )}
+
+          {song.score.web_hint && (
+            <p className="mt-1.5 text-xs text-mute">
+              <a href={song.score.web_hint.url} target="_blank" rel="noreferrer" className="underline underline-offset-2">Songsterr 악보</a>
+              {' · '}{song.score.web_hint.artist} — {song.score.web_hint.title}
+              {song.score.web_hint.signature && ` · ${song.score.web_hint.signature}`}
+              {!song.score.web_hint.signature && (song.score.web_hint.common?.length ?? 0) > 1 &&
+                ` · 변박 (${song.score.web_hint.common!.join('·')})`}
+              {song.score.web_hint.bpm != null && ` · ${song.score.web_hint.bpm} BPM`}
+              {' · 사용자 작성 악보, 적용 전 확인'}
             </p>
           )}
 
@@ -783,6 +816,23 @@ export function SongView({ song, onChange, onDeleted, onRetranscribe, onError }:
                     <ChevronIcon className="-rotate-90" />
                   </button>
                 </div>
+                {barStartCandidates.map((candidate) => (
+                  <button
+                    key={candidate.beat_shift}
+                    disabled={busy}
+                    title={
+                      candidate.reason === 'drums'
+                        ? `드럼 패턴 기준 후보 (${formatShift(candidate.beat_shift)})`
+                        : `마디 시작을 반 박 ${candidate.reason === 'half_beat_earlier' ? '앞으로' : '뒤로'}`
+                    }
+                    onClick={() => setOption({ beat_shift: candidate.beat_shift })}
+                    className="rounded-full bg-brass/15 px-2.5 py-0.5 font-mono tabular-nums text-brass-deep hover:bg-brass/25 disabled:opacity-50"
+                  >
+                    {candidate.reason === 'drums'
+                      ? formatShift(candidate.beat_shift)
+                      : candidate.reason === 'half_beat_earlier' ? '반 박 ←' : '반 박 →'}
+                  </button>
+                ))}
               </div>
               {signature !== null && (
                 <div className="flex flex-wrap items-center gap-2">
@@ -853,6 +903,19 @@ export function SongView({ song, onChange, onDeleted, onRetranscribe, onError }:
                 <span>
                   연속 심벌을 라이드로
                   <span className="block text-mute">끄면 모든 심벌을 크래시로 표기</span>
+                </span>
+              </label>
+              <label className="flex items-start gap-2">
+                <input
+                  type="checkbox"
+                  checked={tomRescue}
+                  disabled={busy}
+                  onChange={(event) => setOption({ tom_rescue: event.target.checked })}
+                  className="mt-0.5 accent-brass"
+                />
+                <span>
+                  동시타 탐 살리기
+                  <span className="block text-mute">스네어·킥과 함께 친 탐을 지우지 않음</span>
                 </span>
               </label>
               <p className="max-w-[38ch] leading-relaxed text-mute">
@@ -1028,13 +1091,25 @@ function isSignature(value: string): value is TimeSignature {
   return new Set(parts.map((part) => part.split('/')[1])).size === 1
 }
 
-function suggestionReasons(suggestion: TimeSignatureSuggestion): string {
-  const reasons = suggestion.reasons.map((reason) =>
-    reason === 'title_hint'
-      ? '제목에 적힌 박자'
-      : reason === 'bar_period_mismatch'
-        ? `패턴이 ${suggestion.suggested_bar_seconds.toFixed(2)}초마다 반복`
-        : '마디 첫 박이 들쭉날쭉',
-  )
-  return reasons.join(' · ')
+function formatShift(value: number): string {
+  return `${value > 0 ? '+' : ''}${value}박`
+}
+
+function suggestionReasons(suggestion: TimeSignatureSuggestion) {
+  return <>
+    {suggestion.reasons.map((reason, index) => (
+      <span key={reason}>
+        {index > 0 && ' · '}
+        {reason === 'web_hint'
+          ? <a href={suggestion.source?.url} target="_blank" rel="noreferrer" className="underline underline-offset-2">Songsterr 악보</a>
+          : reason === 'title_hint'
+            ? '제목에 적힌 박자'
+            : reason === 'bar_period_mismatch' && suggestion.suggested_bar_seconds != null
+              ? `패턴이 ${suggestion.suggested_bar_seconds.toFixed(2)}초마다 반복`
+              : '마디 첫 박이 들쭉날쭉'}
+      </span>
+    ))}
+    {suggestion.audio_agrees === false && ' · 오디오에서는 확인되지 않음'}
+    {suggestion.audio_agrees === true && ' · 오디오도 일치'}
+  </>
 }

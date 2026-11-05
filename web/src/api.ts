@@ -41,12 +41,41 @@ export type TimeSignature = `${number}/${4 | 8 | 16}` | `${number}/${4 | 8 | 16}
 
 export type TimeSignatureSuggestion = {
   time_signature: TimeSignature
-  reasons: ('title_hint' | 'erratic_downbeats' | 'bar_period_mismatch')[]
-  suggested_bar_seconds: number
-  current_bar_seconds: number
-  repetition: number
-  current_repetition: number
-  erratic_downbeat_fraction: number
+  reasons: ('web_hint' | 'title_hint' | 'erratic_downbeats' | 'bar_period_mismatch')[]
+  suggested_bar_seconds?: number
+  current_bar_seconds?: number
+  repetition?: number
+  current_repetition?: number
+  erratic_downbeat_fraction?: number
+  audio_agrees?: boolean
+  source?: WebHintSource
+}
+
+export type WebHintSource = {
+  name: 'Songsterr'
+  url: string
+  artist: string
+  title: string
+}
+
+// Another bar start worth one click: drum-pattern picks and the half-beat moves.
+export type BarStartCandidate = {
+  beat_shift: number
+  reason: 'drums' | 'half_beat_earlier' | 'half_beat_later'
+}
+
+export type TempoSuggestion = {
+  tempo_scale: 0.5 | 2
+  web_bpm: number
+  current_bpm: number
+  source: WebHintSource
+}
+
+export type WebHint = Omit<WebHintSource, 'name'> & {
+  source: 'Songsterr'
+  signature: TimeSignature | null
+  common?: string[] // most frequent signatures, shown when the tab is too mixed to summarise
+  bpm: number | null
 }
 
 export type Score = {
@@ -67,6 +96,9 @@ export type Score = {
     display_tempo_unit: 'quarter' | 'dotted-quarter'
   }
   time_signature_suggestion?: TimeSignatureSuggestion
+  bar_start_candidates?: BarStartCandidate[]
+  tempo_suggestion?: TempoSuggestion
+  web_hint?: WebHint
 }
 
 // What the user named a sound group: an instrument to write it as, or 'ignore' to leave it out.
@@ -84,9 +116,11 @@ export type Options = {
   odd_bars: 'none' | 'auto' | 'detected'
   beat_shift: number
   tempo_scale: 0.5 | 1 | 2
+  web_hints?: boolean
   sensitivity: number
   voices: 1 | 2
   ride_runs: boolean // evenly spaced cymbal runs are written as ride, lone cymbals as crash
+  tom_rescue?: boolean // snare+tom and kick+tom unisons keep their tom (absent on older songs: on)
   sound_names: Record<string, SoundName> // sound group id -> name; {} means the detector's labels stand
 }
 
