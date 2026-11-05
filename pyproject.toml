@@ -1,7 +1,7 @@
 [project]
 name = "stickmap"
 version = "0.1.0"
-description = "Personal drum transcription CLI: song -> drum stem -> onsets -> quantized MusicXML"
+description = "Automatic drum transcription: song in, draft drum score (MusicXML, MIDI, PDF) out, with a web player"
 requires-python = ">=3.12,<3.13"
 dependencies = [
   "torch>=2.4",
@@ -47,3 +47,4 @@ adtof-pytorch = { git = "https://github.com/xavriley/ADTOF-pytorch.git", rev = "
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["."]

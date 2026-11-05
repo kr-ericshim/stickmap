@@ -12,7 +12,7 @@ push: code and training/feature caches; install status.py as ~/.local/bin/gm-sta
 pull: scores/TAG/{covers,solos,global}.json and scores/done.txt only.
 --predictions: instead pull student-TAG-fold{0,1,2}.npy and final checkpoints
                for the Mac score_tags.sh fallback (no scores required).
-Environment: GPU_HOST=gpu-host, GPU_REMOTE_DIR=groovemap (relative to remote home).
+Environment: GPU_HOST=gpu-host (an SSH alias), GPU_REMOTE_DIR=groovemap (relative to remote home).
 No deletion, venv sync, or shipped-weight replacement. Audio transfer is opt-in.
 EOF
 }

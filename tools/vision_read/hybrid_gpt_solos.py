@@ -11,7 +11,7 @@ sys.dont_write_bytecode = True
 from common import DATA, ROOT, dump, load, sha, validate
 from hybrid_gpt_compare import compare
 from solos_extract import DENSE
-from solos_finish import STATE, REMOTE, REMOTE_DATA, run, transfer_and_gate
+from solos_finish import HOST, STATE, REMOTE, REMOTE_DATA, run, transfer_and_gate
 
 
 def utc():
@@ -135,7 +135,7 @@ def main():
     dump(folder/'run.json', {**combined_config, 'batch_wall_seconds': batch['batch_wall_seconds'],
                             'completed': len(results), 'quota_stopped': False, 'results': results})
     state.update(status='dense_audio_gates', systems_read=len(results), heartbeat_utc=utc()); dump(STATE, state)
-    run(['rsync', '-a', str(ROOT/'tools/vision_read')+'/', 'gpu-host:'+REMOTE+'/tools/vision_read/'])
+    run(['rsync', '-a', str(ROOT/'tools/vision_read')+'/', HOST+':'+REMOTE+'/tools/vision_read/'])
     transfer_and_gate(combined, DENSE)
     report = DATA/'HYBRID_SOLOS_REPORT.md'
     text = report.read_text().replace('# Hybrid CV + Gemini dense solos', '# Hybrid CV + vision dense solos', 1)
@@ -144,9 +144,9 @@ def main():
     text += '\n## GPT takeover\n\n'+f'Complete gold 기준을 통과한 `{chosen}`를 사용했다. 같은 WSL `auto_timing.stage`, `solos_gate.py`, `solos_verify.py`와 scratch 출력 경로를 사용했다. Gemini 대기 coordinator 종료 기록은 `hybrid-solos-dense-v1-state.json`에 있다. 혼합 run의 config.origins가 각 raw reading 출처를 기록한다.\n\n'
     text += (DATA/'eric-rejection-diagnosis.md').read_text()
     report.write_text(text)
-    run(['rsync', '-a', report, 'gpu-host:'+REMOTE_DATA+'/REPORT.md'])
+    run(['rsync', '-a', report, HOST+':'+REMOTE_DATA+'/REPORT.md'])
     for name in ('eric-rejection-diagnosis.json', 'eric-rejection-diagnosis.md'):
-        run(['rsync', '-a', DATA/name, 'gpu-host:'+REMOTE_DATA+'/'+name])
+        run(['rsync', '-a', DATA/name, HOST+':'+REMOTE_DATA+'/'+name])
     state.update(status='complete', finished_utc=utc()); dump(STATE, state)
     print('COMPLETE: dense readings, unchanged WSL gates and report', flush=True)
 

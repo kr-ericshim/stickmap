@@ -495,7 +495,7 @@ def report(result):
             lines.append(f'| loose manifest / {scope} | {subset} | ' +
                          ' | '.join(cell(summary[subset][c]['prf']) for c in CLASSES) + ' |')
     lines += ['', '| A 비교 기준: strict held-out fast F1 | Kick | Snare | Tom |', '|---|---:|---:|---:|',
-              '| 개발 지표 (사용자가 제공한 동결 결과) | 83.03 | 82.42 | 82.89 |']
+              '| 개발 지표 (모델 고정 시점) | 83.03 | 82.42 | 82.89 |']
     for cohort, summary in result['strict'].items():
         lines.append(f'| vault {cohort} | ' + ' | '.join(cell([summary['fast'][c]['prf'][2]]) for c in CLASSES) + ' |')
     device = result.get('device', {})

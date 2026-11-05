@@ -20,7 +20,7 @@ from pathlib import Path
 from queue import Queue
 from typing import Annotated, Any, Literal
 
-from fastapi import Body, FastAPI, File, Form, HTTPException, UploadFile
+from fastapi import Body, FastAPI, File, Form, HTTPException, Request, UploadFile
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse, Response
@@ -150,6 +150,32 @@ def stop_process(force: bool) -> None:
         watchdog = threading.Timer(8, os._exit, args=(0,))
         watchdog.daemon = True
         watchdog.start()
+
+
+# Names this server answers to. Any web page can make the browser send requests to 127.0.0.1, and a
+# page whose domain re-resolves to 127.0.0.1 (DNS rebinding) even reads the answers, so requests for
+# other host names are refused, and so are changes sent from another site's page.
+LOOPBACK_HOSTS = frozenset({"localhost", "127.0.0.1", "::1"})
+ALLOWED_HOSTS = LOOPBACK_HOSTS
+
+
+def _hostname(netloc: str) -> str:
+    """'127.0.0.1:8765' -> '127.0.0.1', '[::1]:8765' -> '::1'."""
+    if netloc.startswith("["):
+        return netloc[1:].partition("]")[0].lower()
+    return netloc.rpartition(":")[0].lower() if netloc.count(":") == 1 else netloc.lower()
+
+
+def request_refusal(method: str, host: str, origin: str | None, hosts: frozenset[str] | None) -> str | None:
+    """Why a request must be refused, or None. `hosts` None skips the host check (bound to every interface)."""
+    if hosts is not None and _hostname(host) not in hosts:
+        return "unknown host"
+    if method in ("GET", "HEAD", "OPTIONS") or origin is None:
+        return None
+    site = origin.partition("://")[2]
+    if site == host or _hostname(site) in LOOPBACK_HOSTS:  # same page, or the dev server on another port
+        return None
+    return "cross-site request"
 
 
 BUSY = "지금 다른 곡을 채보하는 중입니다. 끝난 뒤 다시 시도하세요."
@@ -399,8 +425,12 @@ class JobRunner:
 
 
 def create_app(
-    songs_dir: Path, static_dir: Path | None = None, shutdown: Callable[[bool], None] = stop_process
+    songs_dir: Path,
+    static_dir: Path | None = None,
+    shutdown: Callable[[bool], None] = stop_process,
+    hosts: frozenset[str] | None | Literal["default"] = "default",
 ) -> FastAPI:
+    allowed = ALLOWED_HOSTS if hosts == "default" else hosts
     songs_dir = songs_dir.resolve()
     execution_lock = threading.Lock()
     runner = JobRunner(songs_dir, execution_lock)
@@ -421,6 +451,15 @@ def create_app(
         allow_methods=["GET", "POST", "DELETE"],
         allow_headers=["Content-Type", "Range"],
     )
+
+    @app.middleware("http")
+    async def local_only(request: Request, call_next: Callable[[Request], Any]) -> Response:
+        refusal = request_refusal(
+            request.method, request.headers.get("host", ""), request.headers.get("origin"), allowed
+        )
+        if refusal is not None:
+            return JSONResponse({"detail": refusal}, status_code=403)
+        return await call_next(request)
 
     @app.exception_handler(RequestValidationError)
     async def validation_error(request: Any, error: RequestValidationError) -> JSONResponse:

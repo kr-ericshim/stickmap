@@ -176,10 +176,12 @@ def serve(
 
     import uvicorn
 
-    from .server import create_app
+    from .server import ALLOWED_HOSTS, create_app
 
     static = Path(__file__).resolve().parents[2] / "web" / "dist"
-    server = create_app(out, static if static.is_dir() else None)
+    # Bound to every interface, the names it is reached by are unknown, so only the cross-site check stays.
+    hosts = None if host in ("0.0.0.0", "::") else ALLOWED_HOSTS | {host.strip("[]").lower()}
+    server = create_app(out, static if static.is_dir() else None, hosts=hosts)
     if open_:
         timer = threading.Timer(1, webbrowser.open, args=[f"http://{host}:{port}"])
         timer.daemon = True

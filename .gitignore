@@ -22,3 +22,5 @@ docs/notation-metrics.json
 docs/notation-before-after.png
 docs/time-signature-verification.md
 tools/finetune/WEAK_ORDER.md
+tools/**/DEVLOG.md
+docs/*.local.md

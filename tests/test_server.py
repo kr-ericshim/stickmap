@@ -1154,3 +1154,26 @@ def test_meter_changes_alone_use_the_saved_signature(tmp_path, fakes):
         response = client.post("/api/songs/groove/score", json={"meter_changes": change})
         assert response.status_code == 422
         assert "time_signature" in response.json()["detail"]
+
+
+def test_other_sites_cannot_change_anything(tmp_path):
+    evil = {"Origin": "https://evil.example"}
+    with TestClient(create_app(tmp_path)) as client:
+        assert client.post("/api/songs/retranscribe", headers=evil).status_code == 403
+        upload = client.post("/api/upload", headers=evil, files={"file": ("a.wav", b"RIFF", "audio/wav")})
+        assert upload.status_code == 403
+        assert client.delete("/api/songs/x", headers={"Origin": "null"}).status_code == 403
+        assert client.get("/api/jobs").json() == []
+        # Reading is left to CORS; the app's own page and the dev server can change things.
+        assert client.get("/api/songs", headers=evil).status_code == 200
+        assert client.post("/api/songs/retranscribe", headers={"Origin": "http://testserver"}).status_code == 200
+        assert client.post("/api/songs/retranscribe", headers={"Origin": "http://localhost:5173"}).status_code == 200
+
+
+def test_rebound_host_names_are_refused(tmp_path):
+    with TestClient(create_app(tmp_path)) as client:
+        assert client.get("/api/songs", headers={"Host": "attacker.example"}).status_code == 403
+        assert client.get("/api/songs", headers={"Host": "127.0.0.1:8765"}).status_code == 200
+        assert client.get("/api/songs", headers={"Host": "[::1]:8765"}).status_code == 200
+    with TestClient(create_app(tmp_path, hosts=None)) as client:
+        assert client.get("/api/songs", headers={"Host": "studio.local:8765"}).status_code == 200
