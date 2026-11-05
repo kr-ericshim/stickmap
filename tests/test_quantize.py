@@ -5,8 +5,8 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from groovemap.quantize import quantize
-from groovemap.score import DIVISIONS, INSTRUMENTS, Hit, Score
+from stickmap.quantize import quantize
+from stickmap.score import DIVISIONS, INSTRUMENTS, Hit, Score
 
 
 def steady(beats=16, interval=0.5):
@@ -289,7 +289,7 @@ def test_uneven_fast_strokes_keep_a_slot_each():
 
 
 def test_second_stroke_of_a_double_is_not_read_as_lateness():
-    from groovemap.quantize import _offsets
+    from stickmap.quantize import _offsets
 
     times = [i * 0.5 for i in range(24)]
     doubles = [Hit(beat + late, "tom", 1) for beat in times[:20] for late in (0.0, 0.055)]

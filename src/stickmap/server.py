@@ -218,7 +218,7 @@ class JobRunner:
         self.rates: list[float] = []  # processing seconds per audio second of finished jobs
 
     def start(self) -> None:
-        self.thread = threading.Thread(target=self._work, name="groovemap-worker", daemon=True)
+        self.thread = threading.Thread(target=self._work, name="stickmap-worker", daemon=True)
         self.thread.start()
 
     def stop(self) -> None:
@@ -414,7 +414,7 @@ def create_app(
         finally:
             await run_in_threadpool(runner.stop)
 
-    app = FastAPI(title="groovemap", lifespan=lifespan)
+    app = FastAPI(title="stickmap", lifespan=lifespan)
     app.add_middleware(
         CORSMiddleware,
         allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
@@ -662,7 +662,7 @@ def create_app(
         filename = Path((file.filename or "audio.wav").replace("\\", "/")).name
         if filename in ("", ".", ".."):
             raise HTTPException(400, "invalid upload filename")
-        temporary = Path(tempfile.mkdtemp(prefix="groovemap-upload-")) / filename
+        temporary = Path(tempfile.mkdtemp(prefix="stickmap-upload-")) / filename
         try:
             with temporary.open("wb") as destination:
                 shutil.copyfileobj(file.file, destination)

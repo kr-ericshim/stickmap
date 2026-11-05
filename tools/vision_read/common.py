@@ -8,7 +8,7 @@ from fractions import Fraction
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-DATA = Path(os.environ.get('GROOVEMAP_VISION_DATA', ROOT / '.eval-cache/vision_pilot')).resolve()
+DATA = Path(os.environ.get('STICKMAP_VISION_DATA', ROOT / '.eval-cache/vision_pilot')).resolve()
 if DATA not in ((ROOT / '.eval-cache/vision_pilot').resolve(), (ROOT / 'scratch/hybrid_solos').resolve()):
     raise ValueError('vision data must be vision_pilot or scratch/hybrid_solos')
 BENCH = DATA / 'bench'

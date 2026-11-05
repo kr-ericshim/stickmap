@@ -4,9 +4,9 @@ import soundfile as sf
 
 pytest.importorskip("adtof_pytorch")
 
-from groovemap import models
-from groovemap.fills import attack_times, fill_snares, tom_runs
-from groovemap.score import Hit
+from stickmap import models
+from stickmap.fills import attack_times, fill_snares, tom_runs
+from stickmap.score import Hit
 
 TOM = models.ADTOF_CLASSES.index("tom")
 

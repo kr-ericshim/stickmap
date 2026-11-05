@@ -78,7 +78,7 @@ export default function App() {
     const active = jobs.filter((job) => job.status === 'queued' || job.status === 'running').length
     const question = active
       ? `채보 작업 ${active}개가 아직 진행 중입니다. 지금 끄면 작업이 중단되고, 그 곡은 나중에 '채보 시작'으로 다시 돌려야 합니다. 그래도 끌까요?`
-      : 'groovemap 엔진(서버)을 끌까요? 다시 쓰려면 바탕화면의 \'groovemap 실행\'을 여세요.'
+      : 'stickmap 엔진(서버)을 끌까요? 다시 쓰려면 바탕화면의 \'stickmap 실행\'을 여세요.'
     if (!window.confirm(question)) return
     try {
       await api.shutdown(active > 0)
@@ -203,7 +203,7 @@ function Stopped() {
       <div className="max-w-xl">
         <p className="font-display text-5xl leading-[1.05] font-bold tracking-tight [font-stretch:80%]">엔진을 껐습니다.</p>
         <p className="mt-5 text-base text-paper/60">
-          이 탭은 닫아도 됩니다. 다시 쓰려면 바탕화면의 ‘groovemap 실행’을 여세요.
+          이 탭은 닫아도 됩니다. 다시 쓰려면 바탕화면의 ‘stickmap 실행’을 여세요.
         </p>
       </div>
     </div>

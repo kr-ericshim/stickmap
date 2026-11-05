@@ -3,7 +3,7 @@ import pytest
 
 pytest.importorskip("adtof_pytorch")
 
-from groovemap import models
+from stickmap import models
 
 KICK, SNARE, TOM = (models.ADTOF_CLASSES.index(inst) for inst in ("kick", "snare", "tom"))
 
@@ -75,7 +75,7 @@ def test_fast_stroke_at_the_very_end_is_kept():
 
 
 def test_drum_sounds_are_learned_from_hits_that_stand_alone():
-    from groovemap import dynamics
+    from stickmap import dynamics
 
     spectrogram = np.ones((4, 200), dtype=np.float32)
     together = np.arange(10, 150, 10)

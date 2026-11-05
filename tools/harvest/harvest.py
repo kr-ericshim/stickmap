@@ -39,7 +39,7 @@ LISTS = OUT / "lists"
 # 1080p by default: at 720p many staffs fall under the reader's 8 px line spacing (truth/harvest/PILOT1080.md).
 VIDEO_FORMAT = "bv*[height=1080][vcodec^=avc1]/bv*[height=1080]/bv*[height<=1080]"
 MAX_HEIGHT = 1080
-PIPELINE_HEIGHT = 720  # the pipeline's own video download (src/groovemap/fetch.py) is 720p
+PIPELINE_HEIGHT = 720  # the pipeline's own video download (src/stickmap/fetch.py) is 720p
 MIN_FREE_GB = 6.0  # stop fetching below this much free disk
 DURATION = (75, 480)  # seconds: skips shorts and long streams
 
@@ -186,7 +186,7 @@ def fetch(per_channel: int, only: list[str] | None, seed: int, *, device: str = 
             if attempted and channel.get("sleep"):  # e.g. Instagram rate limits
                 time.sleep(float(channel["sleep"]))
             for attempt in range(3):  # YouTube's CDN refuses now and then (HTTP 403)
-                run = subprocess.run([sys.executable, '-m', 'groovemap.cli', "transcribe", url,
+                run = subprocess.run([sys.executable, '-m', 'stickmap.cli', "transcribe", url,
                                       "--out", str(SONGS), "--no-pdf", '--device', device],
                                      cwd=ROOT, env=command_env(), capture_output=True, text=True)
                 if run.returncode == 0:

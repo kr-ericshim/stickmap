@@ -2,8 +2,8 @@
 import numpy as np
 import pytest
 
-from groovemap.metre import Signature
-from groovemap.pulse import _evidence, _follow, _resolve_residue, build_pulse
+from stickmap.metre import Signature
+from stickmap.pulse import _evidence, _follow, _resolve_residue, build_pulse
 
 
 @pytest.mark.parametrize('opening_weight', [.15, 1.])

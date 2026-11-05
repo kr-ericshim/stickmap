@@ -1,6 +1,6 @@
-# groovemap HTTP API
+# stickmap HTTP API
 
-Local, single-user. Served by `groovemap serve` on `127.0.0.1:8765`. All JSON. Errors are
+Local, single-user. Served by `stickmap serve` on `127.0.0.1:8765`. All JSON. Errors are
 `{"detail": "<message>"}` with a 4xx/5xx status.
 
 ## Types
@@ -58,7 +58,7 @@ type SongSummary = {
 
 type Song = SongSummary & {
   options: Options          // the options the current score was made with
-  score: Score              // contents of score.json (see src/groovemap/score.py)
+  score: Score              // contents of score.json (see src/stickmap/score.py)
   has_drums: boolean        // a separated drum stem is available
   has_mr: boolean           // drums.htdemucs.wav exists, so the backing track can be made
   has_video: boolean        // video.mp4 was downloaded with the song
@@ -141,7 +141,7 @@ sample-accurate or gapless. WebAudio schedules the individual click sounds. If b
 are missing/unreadable, the click toggle is unavailable; score playback and score-based
 count-in remain available.
 
-Outputs carry fingerprints of the code that made them (`src/groovemap/fingerprint.py`): the syntax
+Outputs carry fingerprints of the code that made them (`src/stickmap/fingerprint.py`): the syntax
 tree of a function and of everything in the package it reaches, so comments and unrelated code do
 not count. Every score writes `code_version` (fingerprint of `pipeline.run`) into `options.json`;
 every cached model output gets a stamp in `cache.json` (its producer's fingerprint, combined with
@@ -158,7 +158,7 @@ given options and reuses cached model outputs.
 
 On an unusual kit the detector mislabels whole sounds, differently per recording (JD Beck at
 NAMM: 5 of 42 notated snares found, 16 of the misses called kick). No automatic rule fixed this
-without hurting ordinary kits, so the correction is opt-in and by ear (`src/groovemap/kit.py`):
+without hurting ordinary kits, so the correction is opt-in and by ear (`src/stickmap/kit.py`):
 
 - `GET .../sounds` groups the detected hits by detected class × timbre (a class splits into at
   most 4 groups, only while its strokes fall clearly in two along a spectral axis), plus

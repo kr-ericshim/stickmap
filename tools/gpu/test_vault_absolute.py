@@ -419,7 +419,7 @@ def test_snapshot_detects_changed_truth_added_truth_and_changed_checkpoint(env):
 
 def test_full_chain_averages_folds_and_snare_stays_final(env):
     import ft_variants
-    from groovemap import models, dynamics, fills, toms
+    from stickmap import models, dynamics, fills, toms
     song = absolute.vault.SONGS / 'fixture-main'
     cache = env.directory / 'cache/manifest/fixture-main'
     cache.mkdir(parents=True)
@@ -468,7 +468,7 @@ def test_prediction_uses_both_seeds_in_each_separate_fold_file(env):
 
 def test_audio_preparation_uses_m4a_or_video_and_only_explicit_caches(env):
     import adtof_pytorch.audio as audio
-    from groovemap import models
+    from stickmap import models
     job = absolute.preflight(env.plan)
     job['songs'] = [job['songs'][0], *[s for s in job['songs'] if s['cohort'] == 'ollie'][:2]]
     ollie = job['songs'][1:]
@@ -536,7 +536,7 @@ def test_pick_device_needs_free_vram_and_caps_memory(monkeypatch):
 def test_device_check_compares_cuda_arrays_with_cpu_rerun(env, monkeypatch):
     import torch
     import train
-    from groovemap import models
+    from stickmap import models
     job = absolute.preflight(env.plan)
     songs = [*[s for s in job['songs'] if s['cohort'] == 'manifest'][:1], *[s for s in job['songs'] if s['cohort'] == 'ollie'][:1]]
     job['songs'] = songs

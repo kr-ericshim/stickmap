@@ -15,7 +15,7 @@ from evaluate import family, score
 ROOT=Path(__file__).resolve().parents[2]
 
 
-SCRATCH=Path(tempfile.gettempdir())/'groovemap-truth-video-tests';SCRATCH.mkdir(parents=True,exist_ok=True)
+SCRATCH=Path(tempfile.gettempdir())/'stickmap-truth-video-tests';SCRATCH.mkdir(parents=True,exist_ok=True)
 
 class ReaderTests(unittest.TestCase):
     def test_one_to_one_attacks(self):

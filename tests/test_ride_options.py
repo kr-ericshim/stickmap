@@ -3,8 +3,8 @@ import json
 import pytest
 from pydantic import ValidationError
 
-from groovemap import library, pipeline
-from groovemap.server import OptionsPatch
+from stickmap import library, pipeline
+from stickmap.server import OptionsPatch
 
 
 @pytest.mark.parametrize("value", [True, False])

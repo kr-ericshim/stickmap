@@ -1,6 +1,6 @@
 from notation_metric import measure
-from groovemap.musicxml import to_musicxml
-from groovemap.score import Bar, Hit, Note, Score
+from stickmap.musicxml import to_musicxml
+from stickmap.score import Bar, Hit, Note, Score
 
 
 def test_metric_counts_chords_once_and_matches_raw_timing():

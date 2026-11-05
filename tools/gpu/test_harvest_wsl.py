@@ -123,7 +123,7 @@ def test_fetch_additional_limit_device_and_this_venv(dataset, tmp_path, monkeypa
 
     def run(argv, **kwargs):
         calls.append(argv)
-        if 'groovemap.cli' in argv:
+        if 'stickmap.cli' in argv:
             video = argv[argv.index('transcribe') + 1].split('=')[-1]
             song = harvest.SONGS / ('song-' + video)
             song.mkdir()
@@ -135,7 +135,7 @@ def test_fetch_additional_limit_device_and_this_venv(dataset, tmp_path, monkeypa
     monkeypatch.setattr(harvest.subprocess, 'run', run)
     harvest.fetch(2, ['dailychops'], 1, device='cuda', additional=True, limit=1)
     assert len(harvest.manifest()) == 1
-    assert calls[0][:3] == [sys.executable, '-m', 'groovemap.cli']
+    assert calls[0][:3] == [sys.executable, '-m', 'stickmap.cli']
     assert calls[0][-2:] == ['--device', 'cuda']
     assert 'uv' not in calls[0]
     # The pipeline's 720p video is replaced by the default 1080p one.
@@ -155,7 +155,7 @@ def test_fetch_sharper_video_keeps_720p_until_success(dataset, tmp_path, monkeyp
     song = harvest.SONGS / 'song-abcdefghijk'
 
     def run(argv, **kwargs):
-        if 'groovemap.cli' in argv:
+        if 'stickmap.cli' in argv:
             song.mkdir()
             (song / 'video.mp4').write_bytes(b'original 720p')
         else:

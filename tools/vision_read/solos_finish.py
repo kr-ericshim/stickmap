@@ -21,7 +21,7 @@ def run(args):
 
 
 def remote(args):
-    command='cd '+shlex.quote(REMOTE)+' && GROOVEMAP_VISION_DATA='+shlex.quote(REMOTE_DATA)+' '+shlex.join(list(map(str,args)))
+    command='cd '+shlex.quote(REMOTE)+' && STICKMAP_VISION_DATA='+shlex.quote(REMOTE_DATA)+' '+shlex.join(list(map(str,args)))
     run(['ssh','gpu-host',command])
 
 

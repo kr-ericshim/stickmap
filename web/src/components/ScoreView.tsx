@@ -44,7 +44,7 @@ const STAFF_PAD = 2.5 // units above and below the staff that count as the bar
 const ZOOM_MIN = 0.5
 const ZOOM_MAX = 2
 const ZOOM_STEP = 0.1
-const ZOOM_KEY = 'groovemap.scoreZoom'
+const ZOOM_KEY = 'stickmap.scoreZoom'
 
 function clampZoom(zoom: number) {
   return Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, Math.round(zoom * 100) / 100))

@@ -42,7 +42,7 @@ export function Sidebar({ songs, jobs, selected, onSelect, onRetranscribe, onShu
     <aside className="flex w-72 shrink-0 flex-col bg-lacquer text-paper">
       <button onClick={() => onSelect(null)} className="flex items-center gap-3 px-6 pt-6 pb-5 text-left">
         <Mark />
-        <span className="font-display text-xl font-bold tracking-tight [font-stretch:85%]">groovemap</span>
+        <span className="font-display text-xl font-bold tracking-tight [font-stretch:85%]">stickmap</span>
       </button>
 
       {(active.length > 0 || failed.length > 0) && (
@@ -155,7 +155,7 @@ export function Sidebar({ songs, jobs, selected, onSelect, onRetranscribe, onShu
       </nav>
       <button
         onClick={onShutdown}
-        title="groovemap 서버를 끕니다. 다시 쓰려면 바탕화면의 'groovemap 실행'을 여세요."
+        title="stickmap 서버를 끕니다. 다시 쓰려면 바탕화면의 'stickmap 실행'을 여세요."
         className="flex items-center gap-2 border-t border-paper/10 px-6 py-3 text-left text-xs text-paper/50 hover:text-paper"
       >
         <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round">

@@ -52,7 +52,7 @@ def verify() -> None:
     if before.exists() and json.loads(before.read_text())['torch'] != torch.__version__:
         raise RuntimeError('torch changed during dependency installation')
     for name in ('torchaudio', 'demucs.api', 'beat_this.inference', 'adtof_pytorch.audio',
-                 'cv2', 'librosa', 'soundfile', 'scipy', 'groovemap.cli'):
+                 'cv2', 'librosa', 'soundfile', 'scipy', 'stickmap.cli'):
         import_module(name)
         print('import OK:', name)
     for name in ('ffmpeg', 'ffprobe', 'yt-dlp', 'deno', 'flock', 'setsid', 'rsync'):

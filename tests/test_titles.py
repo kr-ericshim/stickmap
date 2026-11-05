@@ -2,9 +2,9 @@ import json
 
 import pytest
 
-from groovemap import library
-from groovemap.fetch import SongMeta
-from groovemap.library import clean_title
+from stickmap import library
+from stickmap.fetch import SongMeta
+from stickmap.library import clean_title
 
 
 @pytest.mark.parametrize(

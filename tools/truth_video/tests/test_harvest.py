@@ -18,7 +18,7 @@ from harvest_scroll import shift
 import harvest_scan
 
 
-SCRATCH=Path(tempfile.gettempdir())/'groovemap-truth-video-tests';SCRATCH.mkdir(parents=True,exist_ok=True)
+SCRATCH=Path(tempfile.gettempdir())/'stickmap-truth-video-tests';SCRATCH.mkdir(parents=True,exist_ok=True)
 
 class Harvest(unittest.TestCase):
     def test_manifest_partial_last_line_and_updates(self):

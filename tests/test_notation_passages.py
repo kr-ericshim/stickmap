@@ -4,9 +4,9 @@ import xml.etree.ElementTree as ET
 
 import pytest
 
-from groovemap.musicxml import to_musicxml
-from groovemap.quantize import _choices, _strokes, quantize
-from groovemap.score import Hit
+from stickmap.musicxml import to_musicxml
+from stickmap.quantize import _choices, _strokes, quantize
+from stickmap.score import Hit
 
 FIXTURE = json.loads((Path(__file__).parent / "fixtures/notation_passages.json").read_text())
 

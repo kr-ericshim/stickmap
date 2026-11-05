@@ -1,4 +1,4 @@
-// Types and calls for the local groovemap server. See docs/api.md.
+// Types and calls for the local stickmap server. See docs/api.md.
 
 // The five families the detector tells apart, and what was played within each.
 // 'tom' is the mid tom and any tom of unknown size; 'cymbal' is a crash and any cymbal not known to be the ride.

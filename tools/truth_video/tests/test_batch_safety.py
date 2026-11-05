@@ -12,7 +12,7 @@ import harvest
 from manifest_io import read,append
 
 
-SCRATCH=Path(tempfile.gettempdir())/'groovemap-truth-video-tests';SCRATCH.mkdir(parents=True,exist_ok=True)
+SCRATCH=Path(tempfile.gettempdir())/'stickmap-truth-video-tests';SCRATCH.mkdir(parents=True,exist_ok=True)
 
 class BatchSafety(unittest.TestCase):
     def test_watch_retries_a_busy_song_without_consuming_limit(self):

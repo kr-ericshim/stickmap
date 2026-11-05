@@ -2,8 +2,8 @@ from dataclasses import replace
 
 import pytest
 
-from groovemap.cymbals import ride_runs
-from groovemap.score import Hit
+from stickmap.cymbals import ride_runs
+from stickmap.score import Hit
 
 
 @pytest.mark.parametrize("times,expected", [

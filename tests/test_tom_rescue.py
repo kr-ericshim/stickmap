@@ -2,8 +2,8 @@ import hashlib
 
 import numpy as np
 
-from groovemap import tom_rescue
-from groovemap.models import DEFAULT_THRESHOLDS, Hit
+from stickmap import tom_rescue
+from stickmap.models import DEFAULT_THRESHOLDS, Hit
 
 
 def test_model_asset_matches_hash():

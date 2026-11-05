@@ -242,7 +242,7 @@ def create_plan(name: str, directory: Path, *, arms=DEFAULT_ARMS, folds=2, steps
         hashes[relative] = sha(ROOT / relative)
     if table_sha is not None:
         hashes['truth/harvest/same_performance.json'] = table_sha
-    for path in (ROOT / 'src/groovemap').glob('*.py'):
+    for path in (ROOT / 'src/stickmap').glob('*.py'):
         hashes[str(path.relative_to(ROOT))] = sha(path)
     audits, absent_audits, audited_negative_songs = {}, [], []
     training_meta = {r['slug']: r for r in songs}
@@ -926,7 +926,7 @@ def create_retrain_plan(name, base_plan, holdout, batch2_vault, dedup_groups=Non
                  ('chops_common.py', 'chops_compare.py', 'chops_scoring.py')]]:
         hashes[str(path.relative_to(ROOT))] = sha(path)
     for relative in inputs['base'].get('hashes', {}):
-        if relative.startswith(('tools/', 'src/groovemap/')):
+        if relative.startswith(('tools/', 'src/stickmap/')):
             hashes[relative] = sha(ROOT / relative)
     for row in {r['slug']: r for r in references + songs}.values():
         for path in (vault.SONGS / row['slug'] / 'truth').glob('*.json'):

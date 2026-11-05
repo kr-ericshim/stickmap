@@ -14,7 +14,7 @@ from harvest_scan import chromatic_obstructions
 from import_samples import register
 from batch import manifest_read
 
-SCRATCH=Path(tempfile.gettempdir())/'groovemap-truth-video-tests';SCRATCH.mkdir(parents=True,exist_ok=True)
+SCRATCH=Path(tempfile.gettempdir())/'stickmap-truth-video-tests';SCRATCH.mkdir(parents=True,exist_ok=True)
 
 
 def staff(space=9,clef=True):

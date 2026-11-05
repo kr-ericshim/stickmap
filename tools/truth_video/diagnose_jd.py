@@ -54,7 +54,7 @@ def summarize_candidates(rows):
 
 
 def run(song,folder):
-    from groovemap import toms
+    from stickmap import toms
     pre=detect(song,stage='pre-toms')
     # Instrument the real final stage, recording precisely the calls it makes.
     actual_pitch={};original_pitch=toms._pitch

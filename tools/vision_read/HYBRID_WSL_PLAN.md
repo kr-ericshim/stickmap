@@ -6,7 +6,7 @@ rule. A quota/missing result cannot activate it. It is a rollout plan, not
 permission to turn unreviewed notation into strict truth. Existing protected
 reader/scanner/alignment/tier code remains unchanged.
 
-1. **Extract native frames on WSL.** Use the audio-owning Groovemap checkout and
+1. **Extract native frames on WSL.** Use the audio-owning Stickmap checkout and
    its `.venv/bin/python -B`. For the five exact video IDs `jAMDUcKmjD4`,
    `qLi8dFevOF0`, `n3jYSzj9VX0`, `tK9MGMbPS_w`, `Ly7Pbg4EDug`, resolve the
    canonical song directory from `truth/harvest/manifest.jsonl`. For xiangsong

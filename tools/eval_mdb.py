@@ -15,7 +15,7 @@ from pathlib import Path
 
 import numpy as np
 
-from groovemap import models
+from stickmap import models
 
 CLASS_MAP = {"KD": "kick", "SD": "snare", "HH": "hihat", "TT": "tom", "CY": "cymbal"}
 CLASSES = ("kick", "snare", "hihat", "tom", "cymbal")

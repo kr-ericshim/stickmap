@@ -109,7 +109,7 @@ def sealed_paths(seal):
 
 def runtime_files():
     paths = [p for sub in ('tools/gpu', 'tools/vision_read', 'tools/truth_video', 'tools/finetune',
-                          'tools/harvest', 'src/groovemap') for p in (ROOT / sub).rglob('*.py')]
+                          'tools/harvest', 'src/stickmap') for p in (ROOT / sub).rglob('*.py')]
     paths += list((ROOT / 'tools/truth_video/legends').glob('*.json'))
     for name in ('templates', 'harvest_templates'):
         paths += [p for p in (ROOT / 'tools/truth_video' / name).rglob('*')
@@ -368,7 +368,7 @@ def threads(device):
 def mix_activations(job, device):
     """Original-model mix activations for the source-only Ollie folders (scorer input, as import_source)."""
     import numpy as np
-    from groovemap import models
+    from stickmap import models
     threads(device)
     for item in job['songs']:
         if item['cohort'] == 'ollie':
@@ -442,7 +442,7 @@ def device_check(job, record, count=2):
     import numpy as np
     if record['device'] != 'cuda':
         return {'checked': False, 'reason': 'all inference already on CPU'}
-    from groovemap import models
+    from stickmap import models
     songs = ([s for s in job['songs'] if s['cohort'] == 'manifest'][:count] +
              [s for s in job['songs'] if s['cohort'] == 'ollie'][:count])
     threads('cpu')

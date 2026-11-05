@@ -12,10 +12,10 @@ import pytest
 import soundfile as sf
 from fastapi.testclient import TestClient
 
-from groovemap import fetch, fingerprint, library, pipeline, render
-from groovemap.fetch import SongMeta
-from groovemap.score import Bar, Score
-from groovemap.server import BUSY, STAGES, create_app, humanize_error
+from stickmap import fetch, fingerprint, library, pipeline, render
+from stickmap.fetch import SongMeta
+from stickmap.score import Bar, Score
+from stickmap.server import BUSY, STAGES, create_app, humanize_error
 
 
 def write_wav(path):
@@ -1076,7 +1076,7 @@ def test_retranscribe_skips_songs_that_vanish_mid_batch(tmp_path, monkeypatch, f
 
 
 def sound_map():
-    from groovemap import kit
+    from stickmap import kit
 
     example = kit.Example(1.5, 0.9, 1.9)
     return kit.SoundMap([
@@ -1086,7 +1086,7 @@ def sound_map():
 
 
 def test_sound_groups_are_learned_once_and_named_through_the_score(tmp_path, monkeypatch, fakes):
-    from groovemap import kit
+    from stickmap import kit
 
     path = make_song(tmp_path)
     library.save_options(path, library.DEFAULT_OPTIONS | {"sound_names": {"kick-1": "snare", "gone-9": "tom"}})

@@ -64,7 +64,7 @@ def unusable_mix(song):
 def full_hits(song, cache, tag):
     import numpy as np
     import ft_variants
-    from groovemap.dynamics import snare_response
+    from stickmap.dynamics import snare_response
     tree(cache, absolute.ROOT)
     found = sorted(cache.glob(f'student-{tag}-fold*.npy'))
     expected = [cache / f'student-{tag}-fold{k}.npy' for k in (0, 1)]

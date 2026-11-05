@@ -73,7 +73,7 @@ def push(initialize: bool, inputs: bool, tools_only: bool = False) -> None:
     ssh('mkdir -p ' + shlex.quote(token + '/code'))
     try:
         # Nothing is sent to live code/templates/inputs before the writer lock.
-        # --tools-only leaves WSL's src/ (what `groovemap transcribe` runs) untouched, e.g. while
+        # --tools-only leaves WSL's src/ (what `stickmap transcribe` runs) untouched, e.g. while
         # src/ is mid-edit on the Mac.
         parts = ('tools',) if tools_only else ('pyproject.toml', 'uv.lock', 'src', 'tools')
         for name in parts:

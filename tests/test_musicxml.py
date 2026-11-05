@@ -7,9 +7,9 @@ import xml.etree.ElementTree as ET
 
 import pytest
 
-from groovemap.musicxml import to_musicxml
-from groovemap.quantize import quantize
-from groovemap.score import INSTRUMENTS, Bar, Hit, Note, Score
+from stickmap.musicxml import to_musicxml
+from stickmap.quantize import quantize
+from stickmap.score import INSTRUMENTS, Bar, Hit, Note, Score
 
 
 def bar(notes=(), *, beats=4, subdivisions=None, tempo=120, index=0):
@@ -28,7 +28,7 @@ def verify(score, voices=1):
         if expected.denominator == 4:
             group_edges = set(range(24, expected.ticks + 1, 24))
         else:
-            from groovemap.metre import Signature
+            from stickmap.metre import Signature
 
             groups = expected.beat_groups or Signature(expected.beats, expected.denominator).groups
             group_edges = set(accumulate(size * expected.unit_ticks for size in groups))
@@ -372,7 +372,7 @@ SONGS = sorted((Path(__file__).parents[1] / "songs").glob("*/beats.json"))
 @pytest.mark.parametrize("beats_file", SONGS, ids=lambda path: path.parent.name[:20])
 def test_real_songs_spell_into_whole_measures(beats_file):
     np = pytest.importorskip("numpy")
-    models = pytest.importorskip("groovemap.models")
+    models = pytest.importorskip("stickmap.models")
     pytest.importorskip("adtof_pytorch")
     grid = json.loads(beats_file.read_text())
     hits = models.pick_hits(np.load(next(beats_file.parent.glob("activations.drums-*.npy"))))
@@ -457,7 +457,7 @@ def window_spelling(events, start, end):
     ((0, 6, 12, 18), "16 16 16 16"), ((0, 3, 6, 9), "32 32 32 32 r8"),
 ])
 def test_quarter_house_style(offsets, expected):
-    from groovemap.musicxml import _rhythm, _straight
+    from stickmap.musicxml import _rhythm, _straight
 
     start, end = 24, 48
     notes = [Note(start + t, "snare", 90) for t in offsets]
@@ -474,7 +474,7 @@ def test_quarter_house_style(offsets, expected):
 ])
 @pytest.mark.parametrize("start", [0, 36])
 def test_three_eighth_house_style(offsets, expected, start):
-    from groovemap.musicxml import _straight
+    from stickmap.musicxml import _straight
 
     onsets = {start + t: [Note(start + t, "snare", 90)] for t in offsets}
     events = _straight(start, start + 36, onsets)
@@ -488,7 +488,7 @@ def test_three_eighth_house_style(offsets, expected, start):
     (17, [2] * 7 + [3], list(range(0, 204, 12)), ["8 8"] * 7 + ["8 8 8"]),
 ])
 def test_grouped_house_style(beats, groups, ticks, expected):
-    from groovemap.musicxml import _rhythm
+    from stickmap.musicxml import _rhythm
 
     source = Bar(0, beats, [i * 0.25 for i in range(beats + 1)], [4] * beats, 120,
                  [Note(t, "snare", 90) for t in ticks], denominator=8, beat_groups=groups)
@@ -500,7 +500,7 @@ def test_grouped_house_style(beats, groups, ticks, expected):
 
 @pytest.mark.parametrize("mask", range(256))
 def test_all_32nd_masks_conserve_onsets_and_translate_between_groups(mask):
-    from groovemap.musicxml import _duration_choice, _rhythm, _straight
+    from stickmap.musicxml import _duration_choice, _rhythm, _straight
 
     offsets = [t for bit, t in enumerate(range(0, 24, 3)) if mask & (1 << bit)]
     quarter = bar([Note(t, "snare", 90) for t in [0, *(24 + t for t in offsets), 72]], subdivisions=[8] * 4)

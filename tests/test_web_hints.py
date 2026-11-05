@@ -4,10 +4,10 @@ import json
 import numpy as np
 import pytest
 
-from groovemap import web_hints
-from groovemap.fetch import SongMeta, _meta_from_info
-from groovemap.meter_suggestion import suggest_signature
-from groovemap.score import Bar, Score
+from stickmap import web_hints
+from stickmap.fetch import SongMeta, _meta_from_info
+from stickmap.meter_suggestion import suggest_signature
+from stickmap.score import Bar, Score
 
 
 HINT = {"songId": 6700, "artist": "Tool", "title": "Schism", "url": "https://www.songsterr.com/a/wsa/tool-schism-tab-s6700",
@@ -16,7 +16,7 @@ HINT = {"songId": 6700, "artist": "Tool", "title": "Schism", "url": "https://www
 
 @pytest.fixture
 def fake_api(monkeypatch):
-    monkeypatch.setenv("GROOVEMAP_WEB_HINTS", "1")
+    monkeypatch.setenv("STICKMAP_WEB_HINTS", "1")
     # Even a broken mock must not make a real request.
     monkeypatch.setattr(web_hints, "urlopen", lambda *a, **kw: pytest.fail("unexpected network access"))
 
@@ -136,7 +136,7 @@ def test_song_query_and_metadata():
 
 
 def test_cache_positive_negative_and_expiry(tmp_path, monkeypatch):
-    monkeypatch.setenv("GROOVEMAP_WEB_HINTS", "1")
+    monkeypatch.setenv("STICKMAP_WEB_HINTS", "1")
     calls = []
     result = None
     monkeypatch.setattr(web_hints, "_lookup", lambda *query: (calls.append(query), result)[1])
@@ -164,7 +164,7 @@ def test_disabled_never_fetches(tmp_path, monkeypatch):
 
 
 def test_network_errors_are_nonfatal_and_not_cached(tmp_path, monkeypatch):
-    monkeypatch.setenv("GROOVEMAP_WEB_HINTS", "1")
+    monkeypatch.setenv("STICKMAP_WEB_HINTS", "1")
 
     def fail(*args):
         raise OSError("offline")
@@ -203,8 +203,8 @@ def test_title_punctuation_is_ignored():
     ({"time_signature": "4/4"}, False, True), ({"web_hints": False}, False, False),
 ])
 def test_pipeline_hints_do_not_change_score(tmp_path, monkeypatch, options, expect_meter, expect_tempo):
-    from groovemap import pipeline
-    from groovemap import signature_quantize
+    from stickmap import pipeline
+    from stickmap import signature_quantize
 
     np.save(tmp_path / "activations.mix.npy", np.zeros((1, 5)))
     (tmp_path / "beats.json").write_text(json.dumps({"beats": [0, .5, 1, 1.5, 2], "downbeats": [0]}))

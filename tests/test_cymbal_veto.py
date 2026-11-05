@@ -3,10 +3,10 @@ import json
 import numpy as np
 import pytest
 
-from groovemap import cymbal_veto as veto, library, pipeline
-from groovemap.cymbals import ride_runs
-from groovemap.score import Hit
-from groovemap.server import OptionsPatch
+from stickmap import cymbal_veto as veto, library, pipeline
+from stickmap.cymbals import ride_runs
+from stickmap.score import Hit
+from stickmap.server import OptionsPatch
 
 
 def sklearn_model(payload):
@@ -114,8 +114,8 @@ def test_strict_option(value):
 
 @pytest.mark.parametrize('ride_enabled,veto_enabled', [(False, False), (False, True), (True, False), (True, True)])
 def test_pipeline_opt_in_cache_and_confidence_order(tmp_path, monkeypatch, ride_enabled, veto_enabled):
-    from groovemap import dynamics, fingerprint
-    from groovemap.fetch import SongMeta
+    from stickmap import dynamics, fingerprint
+    from stickmap.fetch import SongMeta
 
     np.save(tmp_path / 'activations.mix.npy', np.zeros((1, 5)))
     (tmp_path / 'beats.json').write_text(json.dumps({'beats': [i*.5 for i in range(16)], 'downbeats': [0]}))

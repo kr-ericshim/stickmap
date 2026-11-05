@@ -50,7 +50,7 @@ def track_beats(audio_wav: Path, *, device: str) -> tuple[list[float], list[floa
 
 # ADTOF fine-tuned on drum transcription videos (tools/finetune): it finds more toms and kicks in
 # fast fills. It learned from drum stems only, so the full mix keeps the original weights.
-STEM_WEIGHTS = Path(__file__).with_name("adtof-groovemap-v2.pt")
+STEM_WEIGHTS = Path(__file__).with_name("adtof-stickmap-v2.pt")
 
 
 def drum_activations(wav: Path, *, device: str, weights: Path | None = None) -> np.ndarray:

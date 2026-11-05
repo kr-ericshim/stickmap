@@ -42,10 +42,10 @@ def confusion(truth, hits, tol=0.05):
     return table
 
 def detect(song, sensitivity=1.0, stage="full"):
-    from groovemap import models
-    from groovemap.fills import fill_snares, tom_runs
-    from groovemap.toms import tom_sizes
-    from groovemap.score import Hit
+    from stickmap import models
+    from stickmap.fills import fill_snares, tom_runs
+    from stickmap.toms import tom_sizes
+    from stickmap.score import Hit
     act, mix = np.load(song / "activations.drums-htdemucs.npy"), np.load(song / "activations.mix.npy")
     thr = [t / sensitivity for t in models.DEFAULT_THRESHOLDS]
     if stage == "adtof":

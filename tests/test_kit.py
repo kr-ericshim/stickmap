@@ -4,8 +4,8 @@ import numpy as np
 import pytest
 import soundfile as sf
 
-from groovemap import kit
-from groovemap.score import Hit
+from stickmap import kit
+from stickmap.score import Hit
 
 SR = 44100
 LOW, HIGH, BRIGHT = 60.0, 900.0, 5000.0  # a drum-like tone, a much higher tone, and a hat-like one
@@ -88,7 +88,7 @@ def test_map_round_trips_and_is_kept_until_its_caches_change(tmp_path, monkeypat
     learned = kit.load_or_learn(tmp_path, drums, activations, attacks, hits, times)
     saved = kit.SoundMap.from_dict(json.loads((tmp_path / kit.FILE).read_text()))
     assert saved == learned and set(saved.inputs) == {"drums.wav", "activations.npy", "attacks.npy"}
-    monkeypatch.setattr("groovemap.dynamics._spectrogram", lambda _: pytest.fail("a kept map reads no audio"))
+    monkeypatch.setattr("stickmap.dynamics._spectrogram", lambda _: pytest.fail("a kept map reads no audio"))
     assert kit.load_or_learn(tmp_path, drums, activations, attacks, [], np.array([])) == learned
     monkeypatch.undo()
     # The same sounds, and a new one: a rebuilt map keeps the old ids and numbers the new sound after them.

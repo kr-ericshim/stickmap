@@ -9,15 +9,15 @@ import pytest
 from fastapi.testclient import TestClient
 from scipy.ndimage import gaussian_filter1d
 
-from groovemap import library, pipeline
-from groovemap.metre import Signature
-from groovemap.meter_suggestion import suggest_signature
-from groovemap.midi import to_midi
-from groovemap.musicxml import to_musicxml
-from groovemap.pulse import build_pulse
-from groovemap.score import Bar, Hit, Note, Score
-from groovemap.server import OptionsPatch, create_app
-from groovemap.signature_quantize import quantize_signature
+from stickmap import library, pipeline
+from stickmap.metre import Signature
+from stickmap.meter_suggestion import suggest_signature
+from stickmap.midi import to_midi
+from stickmap.musicxml import to_musicxml
+from stickmap.pulse import build_pulse
+from stickmap.score import Bar, Hit, Note, Score
+from stickmap.server import OptionsPatch, create_app
+from stickmap.signature_quantize import quantize_signature
 
 
 def synthetic(n, denominator, period, drift=0.0, bars=20):
@@ -192,7 +192,7 @@ def test_api_signature_patch_and_missing_cache_never_run_models(tmp_path, monkey
 
 def test_preview_uses_absolute_denominator_times(tmp_path, monkeypatch):
     import soundfile as sf
-    from groovemap import render
+    from stickmap import render
 
     sr = 8000
     source, target = tmp_path / "audio.wav", tmp_path / "preview.wav"
@@ -220,7 +220,7 @@ def test_custom_output_group_order_and_two_voices():
 
 
 def test_cached_pipeline_uses_explicit_path_and_preserves_tracker_cache(tmp_path, monkeypatch):
-    from groovemap.fetch import SongMeta
+    from stickmap.fetch import SongMeta
 
     a, t, hits = synthetic(7,8,.15)
     beats = np.arange(.03,t[-1],.613).tolist()

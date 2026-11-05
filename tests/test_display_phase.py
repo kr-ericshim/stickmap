@@ -1,9 +1,9 @@
 import numpy as np
 import pytest
 
-from groovemap.pulse import refine_display_times
-from groovemap.quantize import quantize
-from groovemap.score import Hit, Score
+from stickmap.pulse import refine_display_times
+from stickmap.quantize import quantize
+from stickmap.score import Hit, Score
 
 
 def test_local_sixteenth_phase_drift_is_repaired_without_changing_raw_hits():

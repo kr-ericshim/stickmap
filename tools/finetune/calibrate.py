@@ -83,7 +83,7 @@ def configurations(scales):
 
 
 def one(task):
-    from groovemap import models, toms
+    from stickmap import models, toms
     originals = (np.load, ft_variants.snare, toms._headless, toms.tom_sizes, models.picked_frames)
     try:
         return _one(task)
@@ -93,7 +93,7 @@ def one(task):
 
 def _one(task):
     item, tags, scales, output = task
-    from groovemap import models, toms
+    from stickmap import models, toms
     import adtof_pytorch as adtof
     import torch
 

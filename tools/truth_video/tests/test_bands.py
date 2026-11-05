@@ -60,7 +60,7 @@ def synthetic_bands(times, insts, seconds=30.):
     return bands.with_peaks(out)
 
 
-SCRATCH=Path(tempfile.gettempdir())/'groovemap-truth-video-tests';SCRATCH.mkdir(parents=True,exist_ok=True)
+SCRATCH=Path(tempfile.gettempdir())/'stickmap-truth-video-tests';SCRATCH.mkdir(parents=True,exist_ok=True)
 
 class BandEvidence(unittest.TestCase):
     def test_synthesized_drums_put_kicks_low_and_snares_mid(self):

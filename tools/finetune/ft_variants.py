@@ -28,7 +28,7 @@ def student(song: Path) -> np.ndarray:
 
 def snare(song: Path, act: np.ndarray, name: str) -> np.ndarray:
     """dynamics.snare_response from these activations, as the pipeline remakes it; cached as snare-<name>.npy."""
-    from groovemap.dynamics import snare_response
+    from stickmap.dynamics import snare_response
 
     folder = CACHE / song.name if (CACHE / song.name).exists() else CACHE / "solos" / song.name
     cached = folder / f"snare-{name}.npy"
@@ -39,9 +39,9 @@ def snare(song: Path, act: np.ndarray, name: str) -> np.ndarray:
 
 
 def full(song: Path, act: np.ndarray, name: str, sensitivity: float = 1.0):
-    from groovemap import models
-    from groovemap.fills import fill_snares, tom_runs
-    from groovemap.toms import tom_sizes
+    from stickmap import models
+    from stickmap.fills import fill_snares, tom_runs
+    from stickmap.toms import tom_sizes
 
     mix = np.load(song / "activations.mix.npy")
     n = min(len(act), len(mix))

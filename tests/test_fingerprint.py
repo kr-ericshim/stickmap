@@ -2,13 +2,13 @@ import shutil
 
 import pytest
 
-from groovemap import fingerprint
+from stickmap import fingerprint
 
 
 @pytest.fixture
 def package(tmp_path, monkeypatch):
     """A copy of the package source to edit; fingerprints read it instead of the real one."""
-    copy = tmp_path / "groovemap"
+    copy = tmp_path / "stickmap"
     shutil.copytree(fingerprint.PACKAGE, copy, ignore=shutil.ignore_patterns("__pycache__"))
     monkeypatch.setattr(fingerprint, "PACKAGE", copy)
     fingerprint._module.cache_clear()

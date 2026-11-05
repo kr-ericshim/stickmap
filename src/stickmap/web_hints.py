@@ -75,7 +75,7 @@ def _slug(value: str) -> str:
 
 
 def _get_json(url: str):
-    request = Request(url, headers={"User-Agent": "Mozilla/5.0 (compatible; Groovemap/0.1)", "Accept-Encoding": "gzip"})
+    request = Request(url, headers={"User-Agent": "Mozilla/5.0 (compatible; Stickmap/0.1)", "Accept-Encoding": "gzip"})
     with urlopen(request, timeout=8) as response:
         body = response.read()
     if body.startswith(b"\x1f\x8b"):
@@ -144,7 +144,7 @@ def _tempo_summary(track: dict, bars: int) -> float | None:
 
 
 def lookup(artist: str, title: str) -> dict | None:
-    if os.environ.get("GROOVEMAP_WEB_HINTS") == "0":
+    if os.environ.get("STICKMAP_WEB_HINTS") == "0":
         return None
     try:
         return _lookup(artist, title)
@@ -192,7 +192,7 @@ def suggest_tempo(hint: dict, current_bpm: float) -> dict | None:
 
 
 def load_or_fetch(song_dir: Path, meta: SongMeta, display_title: str) -> dict | None:
-    if os.environ.get("GROOVEMAP_WEB_HINTS") == "0":
+    if os.environ.get("STICKMAP_WEB_HINTS") == "0":
         return None
     try:
         query = song_query(meta, display_title)
@@ -205,7 +205,7 @@ def load_or_fetch(song_dir: Path, meta: SongMeta, display_title: str) -> dict | 
                 return cached["result"]
         except (OSError, ValueError, KeyError, TypeError, AttributeError):
             pass  # missing or damaged cache: look it up again
-        if os.environ.get("GROOVEMAP_WEB_HINTS") == "0":
+        if os.environ.get("STICKMAP_WEB_HINTS") == "0":
             return None
         # A failed request is not cached: only "Songsterr has no such tab" waits a week.
         result = _lookup(*query)

@@ -30,7 +30,7 @@ PRODUCERS = {
     "adtof_input": ("cymbal_veto", "adtof_input"),
 }
 # Files a producer reads besides its code: the fine-tuned weights shipped in the package.
-PRODUCER_FILES = {"stem_onsets": ("adtof-groovemap-v2.pt",)}
+PRODUCER_FILES = {"stem_onsets": ("adtof-stickmap-v2.pt",)}
 # Everything from cached model outputs to score.json, MusicXML and MIDI.
 SCORE_ROOT = ("pipeline", "run")
 

@@ -17,13 +17,13 @@ import xml.etree.ElementTree as ET
 import numpy as np
 from scipy.optimize import linear_sum_assignment
 
-from groovemap import kit, library
-from groovemap.fills import fill_snares
-from groovemap.musicxml import to_musicxml
-from groovemap.pipeline import Options, cache_paths, detect_hits
-from groovemap.quantize import _strokes, quantize
-from groovemap.score import Hit, Score
-from groovemap.toms import tom_sizes
+from stickmap import kit, library
+from stickmap.fills import fill_snares
+from stickmap.musicxml import to_musicxml
+from stickmap.pipeline import Options, cache_paths, detect_hits
+from stickmap.quantize import _strokes, quantize
+from stickmap.score import Hit, Score
+from stickmap.toms import tom_sizes
 
 COUNTS = ("notes", "events", "notes_32nd", "short_rests", "rests", "unbeamed_flags", "dots", "tuplet_switches", "ghosts", "snares", "snare_ghosts")
 
@@ -114,7 +114,7 @@ def cached_inputs(song: Path, opts: Options) -> tuple[list[Hit], np.ndarray, np.
 def rescore(hits: list[Hit], beats: dict, opts: Options, activations: np.ndarray, attacks: np.ndarray, title: str) -> Score:
     common = dict(title=title, grid=opts.grid, triplets=opts.triplets, beat_shift=opts.beat_shift, tempo_scale=opts.tempo_scale)
     if opts.time_signature:
-        from groovemap.signature_quantize import quantize_signature
+        from stickmap.signature_quantize import quantize_signature
 
         return quantize_signature(hits, beats["beats"], beats["downbeats"], activations=activations, attacks=attacks,
                                   time_signature=opts.time_signature, **common)
@@ -156,7 +156,7 @@ def main() -> None:
                 attacks = np.load(paths["attacks"]) if paths["attacks"].exists() else np.empty(0)
             else:
                 hits, activations, attacks = cached_inputs(song, opts)
-            from groovemap.dynamics import annotate_confidence
+            from stickmap.dynamics import annotate_confidence
 
             paths = cache_paths(song, opts)
             hits = annotate_confidence(hits, activations, np.load(paths["snare"]) if opts.onset_input != "mix" and paths["snare"].exists() else None)

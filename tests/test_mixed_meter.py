@@ -5,13 +5,13 @@ import numpy as np
 import pytest
 from scipy.ndimage import gaussian_filter1d
 
-from groovemap.metre import Signature, parse_signatures
-from groovemap.pipeline import Options
-from groovemap.server import OptionsPatch
-from groovemap.pulse import build_pulse, mixed_bars, _follow
-from groovemap.signature_quantize import quantize_signature
-from groovemap.musicxml import to_musicxml
-from groovemap.score import Hit, Score
+from stickmap.metre import Signature, parse_signatures
+from stickmap.pipeline import Options
+from stickmap.server import OptionsPatch
+from stickmap.pulse import build_pulse, mixed_bars, _follow
+from stickmap.signature_quantize import quantize_signature
+from stickmap.musicxml import to_musicxml
+from stickmap.score import Hit, Score
 
 
 def mixed_pattern(lengths=(7,) * 8 + (6,) * 8, period=.283, pickup=.1):
@@ -143,7 +143,7 @@ def test_sustained_32nds_do_not_define_the_denominator(numerator):
 
 
 def test_placed_changes_start_where_the_user_heard_them():
-    from groovemap.signature_quantize import placed_bars
+    from stickmap.signature_quantize import placed_bars
 
     grid = [i * 0.5 for i in range(30)]
     times, lengths = placed_bars(grid, 7, [(7.0, Signature(6, 8))])
@@ -155,7 +155,7 @@ def test_placed_changes_start_where_the_user_heard_them():
 
 
 def test_meter_changes_are_validated():
-    from groovemap.metre import parse_meter_changes
+    from stickmap.metre import parse_meter_changes
 
     assert parse_meter_changes([{"time": 216.0, "time_signature": "6/8"}], "7/8") == [(216.0, Signature(6, 8))]
     for bad in ([{"time": 1.0, "time_signature": "3/4"}], [{"time": -1, "time_signature": "6/8"}],

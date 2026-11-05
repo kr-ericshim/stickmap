@@ -5,4 +5,4 @@ import pytest
 
 @pytest.fixture(autouse=True)
 def disable_web_hints(monkeypatch):
-    monkeypatch.setenv("GROOVEMAP_WEB_HINTS", "0")
+    monkeypatch.setenv("STICKMAP_WEB_HINTS", "0")

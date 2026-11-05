@@ -1,8 +1,8 @@
 import numpy as np
 
-from groovemap.dynamics import annotate_confidence, ghost_states
-from groovemap.quantize import quantize
-from groovemap.score import Hit
+from stickmap.dynamics import annotate_confidence, ghost_states
+from stickmap.quantize import quantize
+from stickmap.score import Hit
 
 
 def test_only_clear_soft_notes_with_confident_identity_get_parentheses():
@@ -39,7 +39,7 @@ def test_tom_overlap_without_snare_share_is_uncertain():
 
 
 def test_preview_timing_is_raw_and_legacy_scores_still_use_the_display_map():
-    from groovemap.score import Bar, Note, Score
+    from stickmap.score import Bar, Note, Score
 
     bar = Bar(0, 1, [0, 0.5], [4], 120, [Note(12, "snare", 90, raw_time=0.29)])
     assert bar.tick_time(12) == 0.25

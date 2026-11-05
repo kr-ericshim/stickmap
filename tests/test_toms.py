@@ -1,8 +1,8 @@
 import numpy as np
 import soundfile as sf
 
-from groovemap.score import Hit
-from groovemap.toms import HIGH, LOW, MID, _groups, _sizes, tom_sizes
+from stickmap.score import Hit
+from stickmap.toms import HIGH, LOW, MID, _groups, _sizes, tom_sizes
 
 SR = 44100
 

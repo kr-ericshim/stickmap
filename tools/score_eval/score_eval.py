@@ -126,10 +126,10 @@ def rebuild(song, options):
     it needs decoded audio. Cymbal subtype/veto and sound-map work also omitted.
     This is a reproducible family-level replay, not an exact app pipeline replay.
     """
-    from groovemap import models
-    from groovemap.fills import tom_runs, fill_snares
-    from groovemap.dynamics import annotate_confidence
-    from groovemap.quantize import quantize
+    from stickmap import models
+    from stickmap.fills import tom_runs, fill_snares
+    from stickmap.dynamics import annotate_confidence
+    from stickmap.quantize import quantize
     act = np.load(song / 'activations.drums-htdemucs.npy', allow_pickle=False)
     mix = np.load(song / 'activations.mix.npy', allow_pickle=False)
     snare = np.load(song / 'snare.htdemucs.npy', allow_pickle=False)
@@ -141,7 +141,7 @@ def rebuild(song, options):
     grid = load(song / 'beats.json')
     common = {k: options[k] for k in ('grid', 'triplets', 'beat_shift', 'tempo_scale') if k in options}
     if options.get('time_signature'):
-        from groovemap.signature_quantize import quantize_signature
+        from stickmap.signature_quantize import quantize_signature
         score = quantize_signature(hits, grid['beats'], grid['downbeats'], activations=act,
             attacks=attacks, time_signature=options['time_signature'],
             meter_changes=options.get('meter_changes', []), **common)
@@ -377,7 +377,7 @@ def main():
     rows,excluded=eligible_rows()
     if args.limit:rows=rows[:args.limit]
     fingerprints={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest()
-        for p in [*sorted((ROOT/'src/groovemap').glob('*.py')),Path(__file__)]}
+        for p in [*sorted((ROOT/'src/stickmap').glob('*.py')),Path(__file__)]}
     results=[]
     with ProcessPoolExecutor(max_workers=args.workers) as pool:
         futures={pool.submit(one,r):r for r in rows}

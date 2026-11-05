@@ -265,16 +265,16 @@ def copy_existing(channel: str, source: Path) -> list[str]:
 
 
 def attack_function():
-    """groovemap.fills.attack_times, compiled alone so the detector package is never imported."""
+    """stickmap.fills.attack_times, compiled alone so the detector package is never imported."""
     import numpy as np
     import soundfile as sf
     from scipy.ndimage import maximum_filter1d, uniform_filter1d
     from scipy.signal import find_peaks, stft
-    tree = ast.parse((ROOT / 'src/groovemap/fills.py').read_text())
+    tree = ast.parse((ROOT / 'src/stickmap/fills.py').read_text())
     keep = [n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == 'attack_times'
             or isinstance(n, ast.Assign) and any(getattr(t, 'id', None) in ('_HOP', '_BANDS') for t in n.targets)]
     if len(keep) != 3:
-        raise RuntimeError('src/groovemap/fills.py no longer has attack_times/_HOP/_BANDS as expected')
+        raise RuntimeError('src/stickmap/fills.py no longer has attack_times/_HOP/_BANDS as expected')
     namespace = dict(np=np, sf=sf, stft=stft, find_peaks=find_peaks, maximum_filter1d=maximum_filter1d,
                      uniform_filter1d=uniform_filter1d, Path=Path)
     exec(compile(ast.Module(body=keep, type_ignores=[]), 'fills.attack_times', 'exec'), namespace)

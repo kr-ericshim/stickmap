@@ -7,7 +7,7 @@ import unittest
 from tiers import scoring_reasons,write
 
 
-SCRATCH=Path(tempfile.gettempdir())/'groovemap-truth-video-tests';SCRATCH.mkdir(parents=True,exist_ok=True)
+SCRATCH=Path(tempfile.gettempdir())/'stickmap-truth-video-tests';SCRATCH.mkdir(parents=True,exist_ok=True)
 
 class Tiers(unittest.TestCase):
     def row(self):

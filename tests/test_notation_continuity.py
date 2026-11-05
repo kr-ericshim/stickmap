@@ -4,8 +4,8 @@ import xml.etree.ElementTree as ET
 
 import pytest
 
-from groovemap.musicxml import _continuous_tuplets, _duration_choice, _rhythm, to_musicxml
-from groovemap.score import Bar, Note, Score
+from stickmap.musicxml import _continuous_tuplets, _duration_choice, _rhythm, to_musicxml
+from stickmap.score import Bar, Note, Score
 
 
 def make_bar(index, ticks, modes, inst="snare"):

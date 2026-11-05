@@ -44,7 +44,7 @@ def prepare(folder, meta=None):
     from demucs.api import Separator
     import soundfile as sf
     sys.path.insert(0, str(ROOT / 'src'))
-    from groovemap.fills import attack_times
+    from stickmap.fills import attack_times
 
     torch.set_num_threads(1)
     cv2.setNumThreads(1)

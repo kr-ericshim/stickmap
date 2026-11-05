@@ -1,4 +1,4 @@
-"""groovemap CLI: `groovemap transcribe <url | file | search words>`."""
+"""stickmap CLI: `stickmap transcribe <url | file | search words>`."""
 
 from __future__ import annotations
 

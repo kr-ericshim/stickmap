@@ -13,9 +13,9 @@ from pathlib import Path
 
 import numpy as np
 
-from groovemap.bar_phase import DEFAULT_WEIGHTS, bar_start_times, phase_features, rank_bar_phases
-from groovemap.pipeline import Options, detect_hits
-from groovemap.quantize import _boundaries, _recount, _rescale, _snare_parity, _steady_beats
+from stickmap.bar_phase import DEFAULT_WEIGHTS, bar_start_times, phase_features, rank_bar_phases
+from stickmap.pipeline import Options, detect_hits
+from stickmap.quantize import _boundaries, _recount, _rescale, _snare_parity, _steady_beats
 
 TOLERANCE_BEATS = .10
 REQUIRED_AGREEMENT = .90

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""groovemap WSL 작업 현황 TUI (학습·예측·채점, 수집·판독, 작업별 CPU). sync.sh push가 ~/.local/bin/gm-status로 설치한다.
+"""stickmap WSL 작업 현황 TUI (학습·예측·채점, 수집·판독, 작업별 CPU). sync.sh push가 ~/.local/bin/gm-status로 설치한다.
 
 Usage: gm-status [--once] [-n SECONDS] [--all] [--queue-log FILE]
 터미널에서는 실시간 화면(q 종료, r 새로고침, a 모든 태그, ↑↓ 스크롤)을 띄우고,
@@ -552,7 +552,7 @@ def render(s: Snapshot, frame: int, cols: int, show_all: bool, interval: float, 
     lines: list[list[tuple[str, str]]] = []
     host = socket.gethostname()
     stamp = time.strftime("%H:%M:%S", time.localtime(s.taken))
-    left, right = " groovemap 작업 현황", f"{host} · {stamp} "
+    left, right = " stickmap 작업 현황", f"{host} · {stamp} "
     lines.append([(left + " " * max(1, cols - width(left) - width(right)) + right, "title")])
 
     active = [t for t in s.tags if t.training or t.predicting or t.scoring]
@@ -759,7 +759,7 @@ def use_utf8() -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(prog="gm-status", description="groovemap WSL 학습·예측·채점 현황")
+    parser = argparse.ArgumentParser(prog="gm-status", description="stickmap WSL 학습·예측·채점 현황")
     parser.add_argument("--once", action="store_true", help="실시간 화면 대신 한 번만 출력")
     parser.add_argument("-n", "--interval", type=float, default=5.0, help="갱신 간격(초, 기본 5)")
     parser.add_argument("--all", action="store_true", help="이전 태그까지 모두 표시")

@@ -4,9 +4,9 @@ from pathlib import Path
 import mido
 import pytest
 
-from groovemap.midi import GM_NOTES, to_midi
-from groovemap.quantize import quantize
-from groovemap.score import Bar, Hit, Note, Score
+from stickmap.midi import GM_NOTES, to_midi
+from stickmap.quantize import quantize
+from stickmap.score import Bar, Hit, Note, Score
 
 
 def absolute(track):

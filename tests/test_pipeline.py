@@ -3,15 +3,15 @@ import json
 import numpy as np
 import pytest
 
-from groovemap import pipeline
-from groovemap.fetch import SongMeta
-from groovemap.score import Hit, Score
+from stickmap import pipeline
+from stickmap.fetch import SongMeta
+from stickmap.score import Hit, Score
 
 
 @pytest.mark.parametrize("onset_input", ["mix", "drums"])
 @pytest.mark.parametrize("enabled", [True, False])
 def test_ride_runs_after_refinement_before_confidence(tmp_path, monkeypatch, onset_input, enabled):
-    from groovemap import dynamics
+    from stickmap import dynamics
 
     for name in ("activations.mix.npy", "activations.drums-htdemucs.npy", "snare.htdemucs.npy", "attacks.htdemucs.npy"):
         np.save(tmp_path / name, np.zeros((1, 5)))
@@ -73,7 +73,7 @@ def test_sound_names_are_validated_and_ignored_without_a_stem(tmp_path, monkeypa
 
 
 def test_sound_names_rename_hits_before_tom_sizing(tmp_path, monkeypatch):
-    from groovemap import kit
+    from stickmap import kit
 
     for name in ("activations.drums-htdemucs.npy", "activations.mix.npy"):
         np.save(tmp_path / name, np.zeros((1, 5)))

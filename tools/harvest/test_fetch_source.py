@@ -118,7 +118,7 @@ def test_never_touches_harvest_or_detector():
     for forbidden in ('manifest', 'vault', 'harvest-writer'):
         assert forbidden not in text.split('"""', 2)[2].lower(), forbidden
     code = ('import sys; sys.path.insert(0, "tools/harvest"); import fetch_source as f; f.attack_function(); '
-            'bad=[m for m in sys.modules if m.startswith(("groovemap", "adtof", "tools.harvest.score"))]; '
+            'bad=[m for m in sys.modules if m.startswith(("stickmap", "adtof", "tools.harvest.score"))]; '
             'print(bad); raise SystemExit(bool(bad))')
     run = subprocess.run([sys.executable, '-c', code], cwd=fs.ROOT, capture_output=True, text=True)
     assert run.returncode == 0, run.stdout + run.stderr
@@ -135,5 +135,5 @@ def test_attack_function_matches_fills(tmp_path):
     path = tmp_path / 'drums.wav'
     sf.write(path, audio, 44100)
     sys.path.insert(0, str(fs.ROOT / 'src'))
-    from groovemap.fills import attack_times
+    from stickmap.fills import attack_times
     assert np.array_equal(fs.attack_function()(path), attack_times(path))

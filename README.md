@@ -1,4 +1,4 @@
-# groovemap
+# stickmap
 
 곡을 넣으면 드럼 악보 초안(MusicXML · MIDI · PDF)을 만들어 주는 개인용 도구. 웹 앱에서는 영상과 악보를 나란히 놓고 재생 위치를 따라가며 볼 수 있고, 같은 일을 CLI로도 한다.
 
@@ -24,7 +24,7 @@ uv sync
 
 ```bash
 cd web && npm install && npm run build   # 처음 한 번, 그리고 web/을 고친 뒤
-cd .. && uv run groovemap serve --port 8765
+cd .. && uv run stickmap serve --port 8765
 ```
 
 http://127.0.0.1:8765 를 연다(`--open`을 붙이면 브라우저가 열린다). 서버는 `web/dist`가 있으면 그것을 함께 내보내고, 없으면 API만 뜬다.
@@ -51,18 +51,18 @@ http://127.0.0.1:8765 를 연다(`--open`을 붙이면 브라우저가 열린다
 | 캐시 삭제 | 드럼 스템과 분석 결과를 지운다. 원곡·영상·악보는 남는다 |
 | 곡 삭제 | 곡 폴더를 통째로 지운다 |
 
-악보와 분석 캐시마다 그것을 만든 코드의 지문을 남긴다(`options.json`의 `code_version`, `cache.json`). 지문은 함수의 구문 트리에서 뽑고, 그 함수가 실제로 쓰는 코드만 따라가므로 주석이나 상관없는 코드를 고쳐도 바뀌지 않는다. 서버를 새 코드로 다시 띄우면 지문이 다른 곡에 ‘이전 버전’이 붙는다. 다시 채보할 때는 코드가 바뀐 분석 캐시만 새로 만든다. 예를 들어 탐 규칙을 고치면 악보만 다시 만들고, 드럼 분리 코드를 고치면 분리부터 다시 한다. 지문을 남기기 전에 만든 캐시는 어떤 코드로 만들었는지 몰라서 첫 일괄 채보 때 한 번 모델을 다시 돌린다. 패키지에 든 미세조정 가중치(`adtof-groovemap-v2.pt`)는 지문에 들어가고, 다른 모델 가중치나 외부 라이브러리 버전은 들어가지 않는다.
+악보와 분석 캐시마다 그것을 만든 코드의 지문을 남긴다(`options.json`의 `code_version`, `cache.json`). 지문은 함수의 구문 트리에서 뽑고, 그 함수가 실제로 쓰는 코드만 따라가므로 주석이나 상관없는 코드를 고쳐도 바뀌지 않는다. 서버를 새 코드로 다시 띄우면 지문이 다른 곡에 ‘이전 버전’이 붙는다. 다시 채보할 때는 코드가 바뀐 분석 캐시만 새로 만든다. 예를 들어 탐 규칙을 고치면 악보만 다시 만들고, 드럼 분리 코드를 고치면 분리부터 다시 한다. 지문을 남기기 전에 만든 캐시는 어떤 코드로 만들었는지 몰라서 첫 일괄 채보 때 한 번 모델을 다시 돌린다. 패키지에 든 미세조정 가중치(`adtof-stickmap-v2.pt`)는 지문에 들어가고, 다른 모델 가중치나 외부 라이브러리 버전은 들어가지 않는다.
 
 옵션을 바꾸면 모델을 다시 돌리지 않고 캐시에서 악보만 다시 만든다. 캐시를 지운 곡은 ‘다시 채보’를 먼저 해야 한다. HTTP API는 [docs/api.md](docs/api.md)에 있다.
 
 ## CLI
 
 ```bash
-uv run groovemap transcribe "아티스트 곡명"          # YouTube 검색 후 고르기
-uv run groovemap transcribe "https://youtu.be/..."  # URL
-uv run groovemap transcribe ~/Music/song.mp3        # 로컬 파일
-uv run groovemap list                               # 채보한 곡 목록
-uv run groovemap serve                              # 웹 앱 (--host, --port, --out, --open)
+uv run stickmap transcribe "아티스트 곡명"          # YouTube 검색 후 고르기
+uv run stickmap transcribe "https://youtu.be/..."  # URL
+uv run stickmap transcribe ~/Music/song.mp3        # 로컬 파일
+uv run stickmap list                               # 채보한 곡 목록
+uv run stickmap serve                              # 웹 앱 (--host, --port, --out, --open)
 ```
 
 | 옵션 | 설명 |

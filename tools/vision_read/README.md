@@ -39,7 +39,7 @@ instrument identities; rational rhythm plus scan/cursor/registered-scroll
 evidence supplies video-time priors. Unknown Gemini-only instruments remain
 unknown. `align.py`, `bands.py` and `tiers.py` are imported unchanged.
 
-On WSL, set `GROOVEMAP_VISION_DATA="$PWD/scratch/hybrid_solos"` and run
+On WSL, set `STICKMAP_VISION_DATA="$PWD/scratch/hybrid_solos"` and run
 `solos_extract.py --workers 7`. It checks Vault membership before media access,
 inventories the whole five dense videos, and prepares existing-strict visits
 from non-vault Eric `9juoKgimeR4` and Larnell `N0PXFlgigjw` as controls.
@@ -349,7 +349,7 @@ unit tests or head counts.
 
 Do not treat `reading.json` as timed truth. This pilot does not access audio or
 run this step. Transfer only `tools/vision_read/` and
-`.eval-cache/vision_pilot/` into the corresponding WSL Groovemap checkout.
+`.eval-cache/vision_pilot/` into the corresponding WSL Stickmap checkout.
 Keep candidate outputs beneath `.eval-cache/vision_pilot/wsl_handoff/`, outside
 the canonical harvest truth and manifest.
 
@@ -443,7 +443,7 @@ rule. A quota/missing result cannot activate it. It is a rollout plan, not
 permission to turn unreviewed notation into strict truth. Existing protected
 reader/scanner/alignment/tier code remains unchanged.
 
-1. **Extract native frames on WSL.** Use the audio-owning Groovemap checkout and
+1. **Extract native frames on WSL.** Use the audio-owning Stickmap checkout and
    its `.venv/bin/python -B`. For the five exact video IDs `jAMDUcKmjD4`,
    `qLi8dFevOF0`, `n3jYSzj9VX0`, `tK9MGMbPS_w`, `Ly7Pbg4EDug`, resolve the
    canonical song directory from `truth/harvest/manifest.jsonl`. For xiangsong

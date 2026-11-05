@@ -3,7 +3,7 @@
 The detector's misses in fast fills are frames where ADTOF's activation never rises, so no
 peak-picking rule can recover them. Here ADTOF's Frame-RNN is fine-tuned on the harvested
 ground truth (`tools/harvest`, 131 songs from 14 channels, 3.4 h inside accepted systems).
-The result ships as `src/groovemap/adtof-groovemap-v2.pt` and is used on the drum stem only.
+The result ships as `src/stickmap/adtof-stickmap-v2.pt` and is used on the drum stem only.
 
 WSL GPU에서 학습·추론하고 Mac에서 채점하는 절차는 [docs/wsl-gpu.md](../../docs/wsl-gpu.md)에 있다.
 

@@ -7,10 +7,10 @@ import numpy as np
 import pytest
 
 from notation_metric import cached_inputs, measure, rescore
-from groovemap import library, pulse
-from groovemap.musicxml import to_musicxml
-from groovemap.pipeline import Options
-from groovemap.score import Hit
+from stickmap import library, pulse
+from stickmap.musicxml import to_musicxml
+from stickmap.pipeline import Options
+from stickmap.score import Hit
 
 
 @pytest.fixture(scope="module")

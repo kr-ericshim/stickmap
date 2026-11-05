@@ -39,7 +39,7 @@ def sha(path: Path) -> str:
 
 def slugify(text: str) -> str:
     sys.path.insert(0, str(ROOT / 'src'))
-    from groovemap.fetch import slugify as pipeline_slugify  # the pipeline's own folder naming
+    from stickmap.fetch import slugify as pipeline_slugify  # the pipeline's own folder naming
     return pipeline_slugify(text)
 
 
@@ -78,7 +78,7 @@ def plan(channel: str, allow: list[str]) -> list[dict]:
 def import_one(row: dict, channel: str, layout: str, device: str) -> dict:
     import numpy as np
     sys.path.insert(0, str(ROOT / 'src'))
-    from groovemap import models
+    from stickmap import models
     src, folder = row['source'], vault.SONGS / row['slug']
     work = vault.SONGS / f'.import-{row["video"]}'
     shutil.rmtree(work, ignore_errors=True)
